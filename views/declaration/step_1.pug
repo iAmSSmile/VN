@@ -1,0 +1,150 @@
+extends ../_layout/layout
+
+block header
+  #header
+    a.logo-link(href="/")
+      img.logo(src="/img/logotype_blue.svg", alt="")
+    .user-menu
+      a.menu-item(href="/declarations") Ваши декларации
+      a.username #{ user.email }
+      .menu
+        a(href="/declarations") Ваши декларации
+        a.grey(href="/logout") Выход
+    .burger
+      .burger-menu
+        a.button(href="/declarations") Ваши декларации
+        a.button.grey(href="/logout") Выход
+      a.round-button.round-button--white.burger-button(href="#")
+        img.open(src="/img/icons/burger_open.svg")
+        img.close(src="/img/icons/burger_close.svg")
+
+block content
+  .steps
+    a.step.step--current
+      .circle 1
+      .line
+      .small данные о физ. лице
+    a.step.forward(class=!!declaration.STEP_2_FULLNESS.length ? "" : "step--filled" data-redirect='/declaration/' + declaration._id + '/step/2' href='#')
+      .circle 2
+      .line
+      .small данные о работодателе и доходах
+    a.step.forward(class=declaration.STEP_3_FULLNESS.empty ? "" : "step--filled" data-redirect='/declaration/' + declaration._id + '/step/3' href='#')
+      .circle 3
+      .line
+      .small стандартный вычет
+    a.step.forward(class=!declaration.STEP_4_FULLNESS.empty && !declaration.STEP_4_FULLNESS.errors.length?"step--filled":"" data-redirect='/declaration/' + declaration._id + '/step/4' href='#')
+      .circle 4
+      .line
+      .small социальный вычет
+    a.step.forward(class=!declaration.STEP_5_FULLNESS.empty && !declaration.STEP_5_FULLNESS.errors.length?"step--filled":"" data-redirect='/declaration/' + declaration._id + '/step/5' href='#')
+      .circle 5
+      .line
+      .small вычет на продажу имущества
+    .full-line
+  form#step-1-individual
+    .page-header
+      h1 Декларация 3-НДФЛ за&nbsp;
+        select.year(name='year')
+          option(value="2019" selected=(declaration.year === 2019)) 2019
+          option(value="2018" selected=(declaration.year === 2018)) 2018
+          option(value="2017" selected=(declaration.year === 2017)) 2017
+        | &nbsp;г.
+      p В этот раздел необходимо ввести основные данные, ИНН и контактный телефон лица, на которое оформляется налоговый вычет.
+    .step
+      .form-part
+        .form-part-header
+          .header На кого оформляем декларацию?
+        .row
+          .col-xs-12
+            .input-block
+              input.input-field(type="text" name='name' value=declaration.name class=declaration.name ? 'input-filled' : '')
+              .input-label Фамилия, имя, отчество
+          .col-xs-12
+            .input-block
+              input.input-field(type="text" name='birthplace' value=declaration.birthplace class=declaration.birthplace ? 'input-filled' : '')
+              .input-label Где родились?
+          .col-xs-12.col-sm-6.col-md-4
+            .input-block
+              input.datedropper.input-field(type="text" name='birthdate' value=declaration.birthdate class=declaration.birthdate ? 'input-filled' : '')
+              .input-label Дата рождения
+          .col-xs-12.col-sm-6.col-md-4
+            .input-block
+              input.input-field(type="text" name='phone' value=declaration.phone class=declaration.phone ? 'input-filled' : '')
+              .input-label Контактный телефон
+          .col-xs-12.col-sm-6.col-md-4
+            .input-block
+              input.input-field(type="number" name='inn' value=declaration.inn class=declaration.inn ? 'input-filled' : '')
+              .input-label ИНН
+    .form-part
+      .form-part-header
+        .header Паспортные данные
+      .row
+        .col-xs-12.col-sm-6.col-md-4
+          .input-block
+            input.input-field(type="number" name='passport_seria' value=declaration.passport_seria class=declaration.passport_seria ? 'input-filled' : '')
+            .input-label Серия
+        .col-xs-12.col-sm-6.col-md-4
+          .input-block
+            input.input-field(type="number" name='passport_number' value=declaration.passport_number class=declaration.passport_number ? 'input-filled' : '')
+            .input-label Номер
+        .col-xs-12.col-sm-6.col-md-4
+          .input-block
+            input.datedropper.input-field(type="text" name='passport_issue_date' value=declaration.passport_issue_date class=declaration.passport_issue_date ? 'input-filled' : '')
+            .input-label Когда выдан
+        .col-xs-12
+          .input-block
+            input.input-field(type="text" name='passport_issue_place' value=declaration.passport_issue_place class=declaration.passport_issue_place ? 'input-filled' : '')
+            .input-label Кем выдан
+        .col-xs-12.col-sm-10.col-md-10
+          .input-block
+            input.input-field(type="text" name='address' value=declaration.address class=declaration.address ? 'input-filled' : '')
+            .input-label Адрес
+        .col-xs-12.col-sm-2.col-md-2
+          .input-block
+            input.input-field(type="number" name='ifns' value=declaration.ifns class=declaration.ifns ? 'input-filled' : '')
+            a.input-help
+            .input-label Код ИФНС
+    .form-part
+      .form-part-header
+        .header Лицевой счет в банке
+        .description На этот лицевой счет поступят деньги. Лицевой счет обязательно должен быть оформлен на того же человека, на которого оформляется декларация.
+      .row
+        .col-xs-12
+          .input-block
+            input.input-field(type="text" name='bank_name' value=declaration.bank_name class=declaration.bank_name ? 'input-filled' : '')
+            .input-label Наименование банка / отделения
+        .col-xs-12.col-sm-6.col-md-4
+          .input-block
+            input.input-field(type="number" name='bank_inn' value=declaration.bank_inn class=declaration.bank_inn ? 'input-filled' : '')
+            .input-label ИНН банка
+        .col-xs-12.col-sm-6.col-md-4
+          .input-block
+            input.input-field(type="number" name='bank_bik' value=declaration.bank_bik class=declaration.bank_bik ? 'input-filled' : '')
+            .input-label БИК банка
+        .col-xs-12.col-sm-6.col-md-4
+          .input-block
+            input.input-field(type="number" name='bank_kpp' value=declaration.bank_kpp class=declaration.bank_kpp ? 'input-filled' : '')
+            .input-label КПП банка
+        .col-xs-12.col-sm-6
+          .input-block
+            input.input-field(type="number" name='bank_correspondent_account' value=declaration.bank_correspondent_account class=declaration.bank_correspondent_account ? 'input-filled' : '')
+            .input-label Корр. счет банка
+        .col-xs-12.col-sm-6
+          .input-block
+            input.input-field(type="number" name='bank_personal_account' value=declaration.bank_personal_account class=declaration.bank_personal_account ? 'input-filled' : '')
+            .input-label Номер лицевого счета
+  .step-footer
+    a.backward(data-redirect='/declarations')
+      .circle
+        i.far.fa-arrow-left
+      p к списку деклараций
+    .center
+      .circle
+        i.far.fa-exclamation
+        i.far.fa-check
+    a.forward(data-redirect='/declaration/' + declaration._id + '/step/2')
+      p вперед
+      .circle
+        i.far.fa-arrow-right
+block js
+  script(type='text/javascript', src='/js/step-1.js')

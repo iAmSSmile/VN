@@ -1,0 +1,346 @@
+#declarations {
+  .new-declaration-button {
+    font-size: 1.25em;
+    color: @blue;
+    font-weight: bold;
+    position: relative;
+    padding-right: 40px;
+    line-height: 1;
+
+    &:after {
+      content: "\f138";
+      display: inline-block;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 24px;
+      text-rendering: auto;
+      -webkit-font-smoothing: antialiased;
+      font-family: "Font Awesome 5 Pro";
+      color: black;
+      right: 0;
+      position: absolute;
+    }
+  }
+
+  .declarations {
+    width: 100%;
+    padding: 0 80px 0 80px;
+    margin-top: -60px;
+
+    @media only screen and (max-width: @md) {
+      padding: 0 40px 0 40px;
+    }
+
+    @media only screen and (max-width: @sm) {
+      padding: 0 20px 0 20px;
+    }
+
+    @media only screen and (max-width: @xs) {
+      padding: 0;
+    }
+  }
+
+  .declaration {
+    position: relative;
+    margin-bottom: 80px;
+    background-color: white;
+    box-shadow: 0 0 100px rgba(0, 0, 0, 0.1);
+    border-bottom-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-top-left-radius: 25px;
+  }
+
+  .declaration-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 4px black solid;
+    padding: 25px 80px 25px 40px;
+    min-height: 84px;
+
+    h4 {
+      margin: 0;
+    }
+
+    .edit {
+      font-weight: bold;
+      font-size: 0.8em;
+
+      &:before {
+        content: 'редактировалась ';
+        color: @grey;
+        font-weight: normal;
+      }
+    }
+
+    .buy {
+      font-weight: bold;
+      font-size: 0.8em;
+
+      &:before {
+        content: 'оплачена ';
+        color: white;
+        font-weight: normal;
+      }
+    }
+
+    @media only screen and (max-width: @sm) {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 25px 60px 25px 20px;
+
+      .edit, .buy {
+        margin-top: 10px;
+      }
+    }
+  }
+
+  .delete {
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: block;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    background-color: black;
+    color: white;
+
+    &:before {
+      content: "\f00d";
+      display: inline-block;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 24px;
+      text-rendering: auto;
+      -webkit-font-smoothing: antialiased;
+      font-family: "Font Awesome 5 Pro";
+      color: white;
+      left: 0;
+    }
+  }
+
+  .continue-edit {
+    font-size: 1.25em;
+    font-weight: bold;
+    color: @blue;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1;
+    position: relative;
+
+    &:after {
+      content: "\f138";
+      display: inline-block;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 20px;
+      text-rendering: auto;
+      -webkit-font-smoothing: antialiased;
+      font-family: "Font Awesome 5 Pro";
+      color: black;
+      margin-left: 10px;
+    }
+  }
+
+  .declaration-step {
+    padding: 0 40px 0 40px;
+    display: block;
+
+    .content {
+      border-bottom: 1px solid @line;
+      min-height: 80px;
+      padding: 25px 0 25px 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .left {
+      display: flex;
+
+      .legend {
+        color: @grey;
+      }
+
+      i {
+        margin: 5px 20px 0 20px;
+        color: @light-grey;
+      }
+
+      .data {
+        color: black;
+      }
+
+      @media only screen and (max-width: @sm) {
+        flex-direction: column;
+
+        .data {
+          margin-top: 10px;
+        }
+
+        i {
+          display: none;
+        }
+      }
+    }
+
+    &:last-child {
+      .content {
+        border-bottom: none;
+      }
+    }
+
+    &:hover {
+      background-color: @line;
+    }
+
+    @media only screen and (max-width: @sm) {
+      padding: 0 20px 0 20px;
+    }
+  }
+
+  .status {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+
+    .text {
+      font-size: 1em;
+    }
+
+    .icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      margin-left: 10px;
+
+      text-align: center;
+    }
+
+    i {
+      font-size: 16px;
+      line-height: 26px;
+    }
+
+    &--filled {
+      .text {
+        color: @grey;
+        font-weight: normal;
+      }
+
+      .icon {
+        background-color: black;
+        color: white;
+      }
+
+      i {
+        line-height: 28px;
+      }
+    }
+
+    &--not-filled {
+      .text {
+        color: black;
+        font-weight: bold;
+      }
+
+      .icon {
+        border: 1px solid @grey;
+        color: @grey;
+      }
+    }
+
+    &--passed {
+      .text {
+        color: @grey;
+        font-weight: normal;
+      }
+
+      .icon {
+        background-color: @grey;
+        color: white;
+      }
+
+      i {
+        line-height: 28px;
+      }
+    }
+
+    @media only screen and (max-width: @sm) {
+      .text {
+        display: none;
+      }
+    }
+  }
+
+  .declaration-footer {
+    min-height: 84px;
+    border-top: 4px black solid;
+    display: flex;
+    padding: 25px 40px 25px 40px;
+    align-items: center;
+
+    .left {
+      color: @orange;
+    }
+
+    .left + .continue-edit {
+      margin-right: 0;
+    }
+
+    @media only screen and (max-width: @sm) {
+      padding: 25px 20px 25px 20px;
+      flex-direction: column;
+
+      .left + .continue-edit {
+        margin-right: auto;
+        margin-top: 20px;
+      }
+    }
+  }
+
+  .download-pdf {
+    font-size: 1.25em;
+    font-weight: bold;
+    color: white;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1;
+    position: relative;
+    padding-left: 35px;
+
+    &:before {
+      content: "\f1c1";
+      display: inline-block;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 28px;
+      text-rendering: auto;
+      -webkit-font-smoothing: antialiased;
+      font-family: "Font Awesome 5 Pro";
+      color: black;
+      position: absolute;
+      left: 0;
+      top: -6px;
+    }
+  }
+
+  .buyed {
+    background-color: @blue;
+
+    .declaration-header {
+      border-bottom: 4px white solid;
+    }
+
+    .declaration-step {
+      &:hover {
+        background-color: @blue;
+      }
+    }
+
+    .declaration-footer {
+      border-top: 4px white solid;
+    }
+  }
+}

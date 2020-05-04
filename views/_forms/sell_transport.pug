@@ -1,0 +1,51 @@
+form.form(name="sell_transport" id="sell_transport--" + index)
+  a.remove-form
+  .form-part
+    .form-part-header
+      a.header Продажа транспорта
+        .toggle-conditions показать условия
+      ul.conditions
+        li Транспортное средство должно подлежать обязательной государственной регистрации
+        li Вы владели этим траспортным средством менее 3 лет, в противном случае декларация не подается и налог не платится
+    .row
+      .col-xs-12.col-sm-6.col-md-3
+        .input-block
+          input.input-field.input-filled(type="number" name='buy_price' value=(transport.buy_price ? transport.buy_price : "0"))
+          a.input-help.buy-transport-help
+          .input-label Стоимость покупки, руб.
+      .col-xs-12.col-sm-6.col-md-3
+        .input-block
+          input.input-field(type="number" name='sell_price' value=transport.sell_price class=transport.sell_price?'input-filled':'')
+          .input-label Стоимость продажи, руб.
+  .subform-part
+    .form-part-header
+      .header Покупатель
+    .row
+      .col-xs-12
+        .radio-block
+          input(type="radio" id="sell_transport--" + index + "-individual" name="face" value="individual" checked=(transport.face === "individual"))
+          label(for="sell_transport--" + index + "-individual") Физическое лицо
+          input(type="radio" id="sell_transport--" + index + "-entity" name="face" value="entity" checked=(transport.face === "entity"))
+          label(for="sell_transport--" + index + "-entity") Юридическое лицо
+    .row.individual-form(class=transport.face === "entity" ? "hidden" : "")
+      .col-xs-12
+        .input-block
+          input.input-field(type="text" name='individual_name' value=transport.individual_name class=transport.individual_name ? 'input-filled' : '')
+          .input-label ФИО покупателя
+    .row.entity-form(class=transport.face === "individual" ? "hidden" : "")
+      .col-xs-12
+        .input-block
+          input.input-field(type="text" name='entity_name' value=transport.entity_name class=transport.entity_name ? 'input-filled' : '')
+          .input-label Наименование юр. лица
+      .col-xs-12.col-sm-6.col-md-4
+        .input-block
+          input.input-field(type="number" name='entity_oktmo' value=transport.entity_oktmo class=transport.entity_oktmo ? 'input-filled' : '')
+          .input-label Код по ОКТМО
+      .col-xs-12.col-sm-6.col-md-4
+        .input-block
+          input.input-field(type="number" name='entity_inn' value=transport.entity_inn class=transport.entity_inn ? 'input-filled' : '')
+          .input-label ИНН
+      .col-xs-12.col-sm-6.col-md-4
+        .input-block
+          input.input-field(type="number" name='entity_kpp' value=transport.entity_kpp class=transport.entity_kpp ? 'input-filled' : '')
+          .input-label КПП

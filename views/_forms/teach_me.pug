@@ -1,0 +1,15 @@
+form.form(name="teach_me" id="teach_me--" + index)
+  a.remove-form
+  .documents
+  .form-part
+    .form-part-header
+      a.header Затраты на собственное обучение
+        .toggle-conditions показать условия
+      ul.conditions
+        li У учебного заведения должна быть лицензия на осуществление образовательной деятельности
+        li Деньги можно вернуть за очную, заочную, вечернюю или любую другую форму обучения
+    .row
+      .col-xs-12.col-sm-6.col-md-4
+        .input-block
+          input.input-field(type="number" name='amount' value=teach.amount class=teach.amount?'input-filled':'')
+          .input-label Сумма, руб.

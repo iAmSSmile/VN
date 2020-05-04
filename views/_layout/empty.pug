@@ -1,0 +1,20 @@
+doctype html
+html
+  head
+    title= "TOP-TAX - первый, полностью автоматизированный сервис по заполнению налоговой декларации 3-НДФЛ"
+    if env.NODE_ENV === "production"
+      script(type="text/javascript", src='/js/metrika.js')
+      meta(name="yandex-verification" content="ba1109cf0f9e1241")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    link(rel='stylesheet', type='text/css', href='/css/normalize.css')
+    link(rel='stylesheet', type='text/css', href='/css/flexboxgrid.min.css')
+    link(rel='stylesheet', type='text/css', href='/js/vex/vex.css')
+    link(rel='stylesheet', type='text/css', href='/js/vex/vex-theme-wireframe.css')
+    link(rel='stylesheet', type='text/css', href='/css/style.css')
+  body
+    block content
+    include ../_blocks/footer.pug
+    script(type='text/javascript', src='/js/jquery-3.4.1.min.js')
+    script(type='text/javascript', src='/js/vex/vex.combined.min.js')
+    script(type='text/javascript', src='/js/main.js')
+    block js

@@ -1,0 +1,23 @@
+form.form(name="heal_me" id="heal_me--" + index)
+  a.remove-form
+  .documents
+  .form-part
+    .form-part-header
+      a.header Затраты на собственное лечение
+        .toggle-conditions показать условия
+      ul.conditions
+        li Лечебное учреждение должно быть зарегистрировано на территории России и быть лицензированным
+    .row
+      .col-xs-12.col-sm-6.col-md-4
+        .input-block
+          input.input-field(type="number" name='amount' value=heal.amount class=heal.amount?'input-filled':'')
+          .input-label Сумма, руб.
+      .col-xs-12.col-sm-6.col-md-4
+        .input-block
+          input.input-field(type="number" name='expensive' value=heal.expensive class=heal.expensive?'input-filled':'')
+          a.input-help
+          .input-label Дорогостоящие виды лечения, руб.
+      .col-xs-12.col-sm-6.col-md-4
+        .input-block
+          input.input-field(type="number" name='medications' value=heal.medications class=heal.medications?'input-filled':'')
+          .input-label Лекарственные препараты, руб.

@@ -1,0 +1,172 @@
+extends ../_layout/layout
+
+mixin status-filled
+  .status.status--filled
+    .text заполнено
+    .icon
+      i.far.fa-check
+
+mixin status-not-filled
+  .status.status--not-filled
+    .text не заполнено
+    .icon
+      i.far.fa-exclamation
+
+mixin status-passed
+  .status.status--passed
+    .text пропущено
+    .icon
+      i.far.fa-times
+
+block header
+  #header
+    a.logo-link(href="/")
+      img.logo(src="/img/logotype_blue.svg", alt="")
+    if user
+      .user-menu
+        a.menu-item(href="/declaration/new") Новая декларация
+        a.username #{ user.email }
+        .menu
+          a(href="/declaration/new") Новая декларация
+          a.grey(href="/logout") Выход
+    else
+      .authentificate-menu
+        a.button.login(href='/login') Вход
+        a.button.button--blue.signup(href='/signup') Регистрация
+    .burger
+      .burger-menu
+        if user
+          a.button(href="/declaration/new") Новая декларация
+          a.button.grey(href="/logout") Выход
+        else
+          a.button.login(href='/login') Вход
+          a.button.button--blue.signup(href='/signup') Регистрация
+      a.round-button.round-button--white.burger-button(href="#")
+        img.open(src="/img/icons/burger_open.svg")
+        img.close(src="/img/icons/burger_close.svg")
+
+block content
+  #declarations
+    .page-header
+      if declarations.length
+        h1 Ваши декларации
+      else
+        h1 У вас пока нет ни одной декларации
+      if !declarations.length
+        a.new-declaration-button(href="/declaration/new") Новая декларация
+    .declarations
+      each declaration in declarations
+        if !declaration.payment || declaration.payment.status !== "succeeded"
+          .declaration
+            a.delete(data-declaration=declaration._id)
+            .declaration-header
+              h4.bold Декларация 3-НДФЛ
+                if declaration.year
+                  |  за #{ declaration.year } г.
+              .edit !{ declaration.last_edit.toISOString() }
+            .declaration-steps
+              a.declaration-step(href='/declaration/' + declaration._id + '/step/1')
+                .content
+                  .left
+                    .legend Данные о физ. лице
+                    if declaration.name
+                      i.far.fa-long-arrow-right
+                      .data #{ declaration.name }
+                  if declaration.STEP_1_FULLNESS.length
+                    +status-not-filled
+                  else
+                    +status-filled
+              a.declaration-step(href='/declaration/' + declaration._id + '/step/2')
+                .content
+                  .left
+                    .legend Данные о работодателе и доходах
+                    if declaration.employers.length && declaration.employers[0].name
+                      i.far.fa-long-arrow-right
+                      .data #{ declaration.employers[0].name }
+                  if declaration.STEP_2_FULLNESS.length
+                    +status-not-filled
+                  else
+                    +status-filled
+              a.declaration-step(href='/declaration/' + declaration._id + '/step/3')
+                .content
+                  .left
+                    .legend Стандартный вычет
+                    if !declaration.STEP_3_FULLNESS.empty
+                      i.far.fa-long-arrow-right
+                      .data #{ declaration.child_18.length + declaration.child_24.length } #{ declOfNum(declaration.child_18.length + declaration.child_24.length, ["ребенок", "ребенка", "детей"]) }
+                  if declaration.STEP_3_FULLNESS.empty
+                    +status-passed
+                  else
+                    +status-filled
+              a.declaration-step(href='/declaration/' + declaration._id + '/step/4')
+                .content
+                  .left
+                    .legend Социальный вычет
+                    if !declaration.STEP_4_FULLNESS.empty
+                      i.far.fa-long-arrow-right
+                      .data
+                        - teach = !!(declaration.teach_me.length || declaration.teach_child.length || declaration.teach_brother.length)
+                        - heal = !!(declaration.heal_me.length || declaration.heal_child.length || declaration.heal_parent.length)
+                        if teach
+                          | учеба
+                        if teach && heal
+                          | ,&nbsp;
+                        if heal
+                          | лечение
+                  if !declaration.STEP_4_FULLNESS.empty && declaration.STEP_4_FULLNESS.errors.length
+                    +status-not-filled
+                  else if declaration.STEP_4_FULLNESS.empty
+                    +status-passed
+                  else
+                    +status-filled
+              a.declaration-step(href='/declaration/' + declaration._id + '/step/5')
+                .content
+                  .left
+                    .legend Вычет на продажу имущества
+                  if !declaration.STEP_5_FULLNESS.empty && declaration.STEP_5_FULLNESS.errors.length
+                    +status-not-filled
+                  else if declaration.STEP_5_FULLNESS.empty
+                    +status-passed
+                  else
+                    +status-filled
+            .declaration-footer
+              if declaration.FULLNESS.length
+                .left
+                  each info in declaration.FULLNESS
+                    p #{ info }
+              if !declaration.FULLNESS.length
+                if env.NODE_ENV === "production"
+                  a.continue-edit(href='/declaration/' + declaration._id + '/verify') Получить декларацию
+                else
+                  a.continue-edit(href='/declaration/' + declaration._id + '/generate') Тестовая загрузка
+              else
+                a.continue-edit(href='/declaration/' + declaration._id + '/step/' + declaration.NOT_FILLED_STEPS[0]) Продолжить заполнение
+      each declaration in declarations
+        if declaration.payment && declaration.payment.status === "succeeded"
+          .declaration.buyed
+            a.delete(href='/declaration/' + declaration._id + '/delete')
+            .declaration-header
+              h4.bold Декларация 3-НДФЛ за #{ declaration.year } г.
+              .buy #{ declaration.payment.captured_at }
+            .declaration-steps
+              .declaration-step
+                .content
+                  .legend #{ declaration.name }
+              .declaration-step
+                .content #{ declaration.employers[0].name }
+              if !declaration.STEP_3_FULLNESS.empty
+                .declaration-step
+                  .content #{ declaration.child_18.length + declaration.child_24.length } #{ declOfNum(declaration.child_18.length + declaration.child_24.length, ["ребенок", "ребенка", "детей"]) }
+              if !declaration.STEP_4_FULLNESS.empty
+                .declaration-step
+                  .content
+                    - teach = !!(declaration.teach_me.length || declaration.teach_child.length || declaration.teach_brother.length)
+                    - heal = !!(declaration.heal_me.length || declaration.heal_child.length || declaration.heal_parent.length)
+                    if teach
+                      | учеба
+                    if teach && heal
+                      | ,&nbsp;
+                    if heal
+                      | лечение
+            .declaration-footer
+              a.download-pdf(href='/declaration/' + declaration._id + '/generate') Скачать декларацию

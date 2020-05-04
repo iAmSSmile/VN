@@ -1,0 +1,26 @@
+extends ../_layout/empty
+
+block content
+  #login
+    a.logo-link(href="/")
+      img.logo(src="/img/logotype_blue.svg", alt="")
+    h1 Регистрация
+    form(action="#" id='login-form' method='post')
+      if message.length
+        p.message #{ message }
+      .input-block
+        input.input-field.input-filled(type="text" name='email')
+        .input-label Электронная почта
+      .input-block
+        input.input-field.input-filled(type="password" name='password')
+        .input-label Пароль (не менее 6 символов)
+      .input-block
+        input.input-field.input-filled(type="password" name='password2')
+        .input-label Еще раз пароль
+      if env.NODE_ENV === "production"
+        .captcha !{captcha}
+    p.user_agreement Нажимая «Зарегистрироваться», вы принимаете
+      a(href="/user_agreement")  пользовательское соглашение.
+    .buttons
+      button.button.button--blue(type='submit' form='login-form') Зарегистрироваться
+      a.button(href="/login") Войти

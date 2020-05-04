@@ -1,0 +1,16 @@
+form.form(name="teach_brother" id="teach_brother--" + index)
+  a.remove-form
+  .documents
+  .form-part
+    .form-part-header
+      a.header Затраты на обучение брата или сестры, возрастом до 24 лет
+        .toggle-conditions показать условия
+      ul.conditions
+        li У учебного заведения должна быть лицензия на осуществление образовательной деятельности
+        li Брат или сестра должен быть на очной форме обучения (детский сад, школа, очная форма вуза и т.п.)
+        li Договор заключен на ваше имя или на имя вашего супруга/супруги
+        li За учебу платите именно вы и это подтверждено платежными документами. Если в платежных документах стоит не ваше имя, от вас должна быть доверенность на передачу денег
+    .row
+      .col-xs-12.col-sm-6.col-md-4
+        .input-block
+          input.input-field(type="number" name='amount' value=teach.amount class=teach.amount?'input-filled':'')

@@ -1,0 +1,74 @@
+extends ../_layout/layout
+
+block header
+  #header
+    a.logo-link(href="/")
+      img.logo(src="/img/logotype_blue.svg", alt="")
+    .user-menu
+      a.menu-item(href="/declarations") Ваши декларации
+      a.username #{ user.email }
+      .menu
+        a(href="/declarations") Ваши декларации
+        a.grey(href="/logout") Выход
+    .burger
+      .burger-menu
+        a.button(href="/declarations") Ваши декларации
+        a.button.grey(href="/logout") Выход
+      a.round-button.round-button--white.burger-button(href="#")
+        img.open(src="/img/icons/burger_open.svg")
+        img.close(src="/img/icons/burger_close.svg")
+
+block content
+  .steps
+    a.step.forward(class=!!declaration.STEP_1_FULLNESS.length?"":"step--filled" data-redirect='/declaration/' + declaration._id + '/step/1' href='#')
+      .circle 1
+      .line
+      .small данные о физ. лице
+    a.step.forward(class=!!declaration.STEP_2_FULLNESS.length?"":"step--filled" data-redirect='/declaration/' + declaration._id + '/step/2' href='#')
+      .circle 2
+      .line
+      .small данные о работодателе и доходах
+    a.step.step--current
+      .circle 3
+      .line
+      .small стандартный вычет
+    a.step.forward(class=!declaration.STEP_4_FULLNESS.empty && !declaration.STEP_4_FULLNESS.errors.length?"step--filled":"" data-redirect='/declaration/' + declaration._id + '/step/4' href='#')
+      .circle 4
+      .line
+      .small социальный вычет
+    a.step.forward(class=!declaration.STEP_5_FULLNESS.empty && !declaration.STEP_5_FULLNESS.errors.length?"step--filled":"" data-redirect='/declaration/' + declaration._id + '/step/5' href='#')
+      .circle 5
+      .line
+      .small вычет на продажу имущества
+    .full-line
+  #step-3-standart
+    .page-header
+      h1 Стандартный вычет
+      p Пожалуйста, добавьте своих детей возрастом до 18 лет, либо детей возрастом до 24 лет, если они на очной форме обучения, за которых вы хотите получить налоговый вычет
+    .forms
+      each child, index in declaration.child_18
+        include ../_forms/child_18
+      each child, index in declaration.child_24
+        include ../_forms/child_24
+    .add-form
+      a.button.iconic-button.button--white.add-form-button Добавить ребенка
+        i.far.fa-plus-circle
+      .add-form-menu
+        a.menu-link(data-addform='child_18') Ребенок до 18 лет
+        a.menu-link(data-addform='child_24') Ребенок от 18 до 24 лет, учащийся на очной форме
+      .background
+  .step-footer
+    a.backward(data-redirect='/declaration/' + declaration._id + '/step/2')
+      .circle
+        i.far.fa-arrow-left
+      p назад
+    .center
+      .circle
+        i.far.fa-exclamation
+        i.far.fa-check
+    a.forward(data-redirect='/declaration/' + declaration._id + '/step/4')
+      p вперед
+      .circle
+        i.far.fa-arrow-right
+block js
+  script(type='text/javascript', src='/js/step-3.js')

@@ -1,0 +1,385 @@
+//- РАБОТОДАТЕЛЬ
+.form-block
+  form.form(id="employer_formCount" name="employer")
+    .block
+      a.remove-form-block
+        i.far.fa-times
+      .items.row
+        .item.col-xs-12.col-sm-6.col-md-3
+          .item-legend.small.grey Название организации
+          input(type="text" name="employer_formCount__name")
+        .item.col-xs-12.col-sm-6.col-md-3
+          .item-legend.small.grey Телефон
+          input(type="tel" name="employer_formCount__phone")
+        .item.col-xs-12.col-sm-6.col-md-2
+          .item-legend.small.grey ИНН организации
+          input(type="number" name="employer_formCount__inn")
+        .item.col-xs-12.col-sm-6.col-md-2
+          .item-legend.small.grey КПП организации
+          input(type="number" name="employer_formCount__kpp")
+        .item.col-xs-12.col-sm-6.col-md-2
+          .item-legend.small.grey Код по ОКТМО
+          input(type="number" name="employer_formCount__oktmo")
+      .form-items-header.bold Доходы
+      .items.row
+        .item.col-xs-12.col-sm-6.col-md-2
+          .item-legend.small.grey Январь
+          input(type="number" name="employer_formCount__income-1")
+        .item.col-xs-12.col-sm-6.col-md-2
+          .item-legend.small.grey Февраль
+          input(type="number" name="employer_formCount__income-2")
+        .item.col-xs-12.col-sm-6.col-md-2
+          .item-legend.small.grey Март
+          input(type="number" name="employer_formCount__income-3")
+        .item.col-xs-12.col-sm-6.col-md-2
+          .item-legend.small.grey Апрель
+          input(type="number" name="employer_formCount__income-4")
+        .item.col-xs-12.col-sm-6.col-md-2
+          .item-legend.small.grey Май
+          input(type="number" name="employer_formCount__income-5")
+        .item.col-xs-12.col-sm-6.col-md-2
+          .item-legend.small.grey Июнь
+          input(type="number" name="employer_formCount__income-6")
+        .item.col-xs-12.col-sm-6.col-md-2
+          .item-legend.small.grey Июль
+          input(type="number" name="employer_formCount__income-7")
+        .item.col-xs-12.col-sm-6.col-md-2
+          .item-legend.small.grey Август
+          input(type="number" name="employer_formCount__income-8")
+        .item.col-xs-12.col-sm-6.col-md-2
+          .item-legend.small.grey Сентябрь
+          input(type="number" name="employer_formCount__income-9")
+        .item.col-xs-12.col-sm-6.col-md-2
+          .item-legend.small.grey Октябрь
+          input(type="number" name="employer_formCount__income-10")
+        .item.col-xs-12.col-sm-6.col-md-2
+          .item-legend.small.grey Ноябрь
+          input(type="number" name="employer_formCount__income-11")
+        .item.col-xs-12.col-sm-6.col-md-2
+          .item-legend.small.grey Декабрь
+          input(type="number" name="employer_formCount__income-12")
+
+//- СТАНДАРТНЫЕ
+.form-block
+  form.form(id="child-18_formCount" name='child-18')
+    .block
+      a.remove-form-block
+        i.far.fa-times
+      .form-block-name
+        h4.bold Ребенок
+        P возрастом до 18 лет
+      .items.row
+        .item.col-xs-12.col-sm-6.col-md-4
+          .item-legend.small.grey Какой по счету этот ребенок?
+          .input-help
+            select(name="child-18_formCount__child-count")
+              option.first(value="1") первый
+              option.second(value="2") второй
+              option.third(value="3") третий или более
+            a.help-button(href='#')
+              i.far.fa-question-circle
+        .item.col-xs-12.col-sm-6.col-md-4
+          .checkboxes
+            input.checkbox(type="checkbox" id="child-18_formCount__invalid" name="child-18_formCount__invalid" value="invalid")
+            label(for="child-18_formCount__invalid") ребенок-инвалид
+.form-block
+  form.form(id="child-24_formCount" name='child-24')
+    .block
+      a.remove-form-block
+        i.far.fa-times
+      .form-block-name
+        h4.bold Ребенок
+        P возрастом от 18 до 24 лет, учащийся на очной форме
+      .items.row
+        .item.col-xs-12.col-sm-6.col-md-4
+          .item-legend.small.grey Какой по счету этот ребенок?
+          .input-help
+            select(name="child-24_formCount__child-count")
+              option.first(value="1") первый
+              option.second(value="2") второй
+              option.third(value="3") третий или более
+            a.help-button(href='#')
+              i.far.fa-question-circle
+        .item.col-xs-12.col-sm-6.col-md-4
+          .checkboxes
+            input.checkbox(type="checkbox" id="child-24_formCount__invalid" name="child-24_formCount__invalid" value="invalid")
+            label(for="child-24_formCount__invalid") инвалид I или II группы
+
+//- СОЦИАЛЬНЫЕ
+.form-block
+  form.form(id="teach-me_formCount" name='teach-me')
+    .block
+      a.remove-form-block
+        i.far.fa-times
+      .form-block-name
+        h4.bold Затраты на собственное обучение
+      .items.row
+        .item.col-xs-12.col-sm-6.col-md-4
+          .item-legend.small.grey Сумма, руб.
+          .input-help
+            input(type="number" name="teach-me_formCount__amount")
+            a.help-button(href='#')
+              i.far.fa-question-circle
+.form-block
+  form.form(id="teach-child_formCount" name='teach-child')
+    .block
+      a.remove-form-block
+        i.far.fa-times
+      .form-block-name
+        h4.bold Затраты на обучение ребенка
+        P возрастом до 24 лет
+      .items.row
+        .item.col-xs-12.col-sm-6.col-md-4
+          .item-legend.small.grey Сумма, руб.
+          input(type="number" name="teach-child_formCount__amount")
+.form-block
+  form.form(id="teach-brother_formCount" name='teach-brother')
+    .block
+      a.remove-form-block
+        i.far.fa-times
+      .form-block-name
+        h4.bold Затраты на обучение брата или сестры
+        P возрастом до 24 лет
+      .items.row
+        .item.col-xs-12.col-sm-6.col-md-4
+          .item-legend.small.grey Сумма, руб.
+          input(type="number" name="teach-brother_formCount__amount")
+.form-block
+  form.form(id="heal-me_formCount" name='heal-me')
+    .block
+      a.remove-form-block
+        i.far.fa-times
+      .form-block-name
+        h4.bold Затраты на собственное лечение
+      .items.row
+        .item.col-xs-12.col-sm-6.col-md-4
+          .item-legend.small.grey Сумма, руб.
+          .input-help
+            input(type="number" name="heal-me_formCount__amount")
+            a.help-button(href='#')
+              i.far.fa-question-circle
+        .item.col-xs-12.col-sm-6.col-md-4
+          .item-legend.small.grey Дорогостоящие виды лечения, руб.
+          .input-help
+            input(type="number" name="heal-me_formCount__expensive")
+            a.help-button(href='#')
+              i.far.fa-question-circle
+        .item.col-xs-12.col-sm-6.col-md-4
+          .item-legend.small.grey Лекарственные препараты, руб.
+          .input-help
+            input(type="number" name="heal-me_formCount__medications")
+            a.help-button(href='#')
+              i.far.fa-question-circle
+.form-block
+  form.form(id="heal-child_formCount" name='heal-child')
+    .block
+      a.remove-form-block
+        i.far.fa-times
+      .form-block-name
+        h4.bold Затраты на лечение ребенка
+        P возрастом до 18 лет
+      .items.row
+        .item.col-xs-12.col-sm-6.col-md-4
+          .item-legend.small.grey Сумма, руб.
+          .input-help
+            input(type="number" name="heal-child_formCount__amount")
+            a.help-button(href='#')
+              i.far.fa-question-circle
+        .item.col-xs-12.col-sm-6.col-md-4
+          .item-legend.small.grey Дорогостоящие виды лечения, руб.
+          .input-help
+            input(type="number" name="heal-child_formCount__expensive")
+            a.help-button(href='#')
+              i.far.fa-question-circle
+        .item.col-xs-12.col-sm-6.col-md-4
+          .item-legend.small.grey Лекарственные препараты, руб.
+          .input-help
+            input(type="number" name="heal-child_formCount__medications")
+            a.help-button(href='#')
+              i.far.fa-question-circle
+.form-block
+  form.form(id="heal-parent_formCount" name='heal-parent')
+    .block
+      a.remove-form-block
+        i.far.fa-times
+      .form-block-name
+        h4.bold Затраты на лечение родителя или супруга
+      .items.row
+        .item.col-xs-12.col-sm-6.col-md-4
+          .item-legend.small.grey Сумма, руб.
+          .input-help
+            input(type="number" name="heal-parent_formCount__amount")
+            a.help-button(href='#')
+              i.far.fa-question-circle
+        .item.col-xs-12.col-sm-6.col-md-4
+          .item-legend.small.grey Дорогостоящие виды лечения, руб.
+          .input-help
+            input(type="number" name="heal-parent_formCount__expensive")
+            a.help-button(href='#')
+              i.far.fa-question-circle
+        .item.col-xs-12.col-sm-6.col-md-4
+          .item-legend.small.grey Лекарственные препараты, руб.
+          .input-help
+            input(type="number" name="heal-parent_formCount__medications")
+            a.help-button(href='#')
+              i.far.fa-question-circle
+
+//- ИМУЩЕСТВЕННЫЕ
+.form-block
+  form.form(id="buy-house_formCount" name='buy-house')
+    .block
+      a.remove-form-block
+        i.far.fa-times
+      .form-block-name
+        h4.bold Вы купили жилой дом, квартиру или комнату
+      .items.row
+        .item.col-xs-12.col-sm-6.col-md-3
+          .item-legend.small.grey Стоимость покупки, руб.
+          input(type="number" name="buy-house_formCount__price")
+        .item.col-xs-12.col-sm-6.col-md-3
+          .checkboxes
+            input.checkbox(type="checkbox" id="buy-house_formCount__mortgage" name="buy-house_formCount__mortgage" value="mortgage")
+            label(for="buy-house_formCount__mortgage") в кредит
+        .item.col-xs-12.col-sm-6.col-md-3
+          .item-legend.small.grey Проценты по кредиту за 2018г., руб.
+          .input-help
+            input(type="number" name="buy-house_formCount__loan" disabled)
+            a.help-button(href='#')
+              i.far.fa-question-circle
+.form-block
+  form.form(id="buy-land_formCount" name='buy-land')
+    .block
+      a.remove-form-block
+        i.far.fa-times
+      .form-block-name
+        h4.bold Вы купили дачу или земельный участок
+      .items.row
+        .item.col-xs-12.col-sm-6.col-md-3
+          .item-legend.small.grey Стоимость покупки, руб.
+          input(type="number" name="buy-land_formCount__price")
+        .item.col-xs-12.col-sm-6.col-md-3
+          .checkboxes
+            input.checkbox(type="checkbox" id="buy-land_formCount__mortgage" name="buy-land_formCount__mortgage" value="mortgage")
+            label(for="buy-land_formCount__mortgage") в кредит
+        .item.col-xs-12.col-sm-6.col-md-3
+          .item-legend.small.grey Проценты по кредиту за 2018г., руб.
+          .input-help
+            input(type="number" name="buy-land_formCount__loan" disabled)
+            a.help-button(href='#')
+              i.far.fa-question-circle
+.form-block
+  form.form(id="buy-garage_formCount" name='buy-garage')
+    .block
+      a.remove-form-block
+        i.far.fa-times
+      .form-block-name
+        h4.bold Вы купили гараж или сарай
+      .items.row
+        .item.col-xs-12.col-sm-6.col-md-3
+          .item-legend.small.grey Стоимость покупки, руб.
+          input(type="number" name="buy-garage_formCount__price")
+        .item.col-xs-12.col-sm-6.col-md-3
+          .checkboxes
+            input.checkbox(type="checkbox" id="buy-garage_formCount__mortgage" name="buy-garage_formCount__mortgage" value="mortgage")
+            label(for="buy-garage_formCount__mortgage") в кредит
+        .item.col-xs-12.col-sm-6.col-md-3
+          .item-legend.small.grey Проценты по кредиту за 2018г., руб.
+          .input-help
+            input(type="number" name="buy-garage_formCount__loan" disabled)
+            a.help-button(href='#')
+              i.far.fa-question-circle
+.form-block
+  form.form(id="sell-house_formCount" name='sell-house')
+    .block
+      a.remove-form-block
+        i.far.fa-times
+      .form-block-name
+        h4.bold Вы продали жилой дом, квартиру или комнату
+      .items.row
+        .item.col-xs-12.col-sm-6.col-md-3
+          .item-legend.small.grey Стоимость продажи, руб.
+          input(type="number" name="sell-house_formCount__price")
+        .item.col-xs-12.col-sm-6.col-md-3
+          .item-legend.small.grey Сколько лет владели?
+          input(type="number" name="sell-house_formCount__ownership-time")
+        .item.col-xs-12.col-sm-6.col-md-3
+          .item-legend.small.grey Как приобрели?
+          select(name="sell-house_formCount__acquisition")
+            option(value="1") купили
+            option(value="2") получили в дар
+            option(value="3") унаследовали
+        .item.col-xs-12.col-sm-6.col-md-3
+          .item-legend.small.grey Стоимость покупки, руб.
+          input(type="number" name="sell-house_formCount__purchase-price")
+.form-block
+  form.form(id="sell-land_formCount" name='sell-land')
+    .block
+      a.remove-form-block
+        i.far.fa-times
+      .form-block-name
+        h4.bold Вы продали дачу или земельный участок
+      .items.row
+        .item.col-xs-12.col-sm-6.col-md-3
+          .item-legend.small.grey Стоимость продажи, руб.
+          input(type="number" name="sell-land_formCount__price")
+        .item.col-xs-12.col-sm-6.col-md-3
+          .item-legend.small.grey Сколько лет владели?
+          input(type="number" name="sell-land_formCount__ownership-time")
+        .item.col-xs-12.col-sm-6.col-md-3
+          .item-legend.small.grey Как приобрели?
+          select(name="sell-land_formCount__acquisition")
+            option(value="1") купили
+            option(value="2") получили в дар
+            option(value="3") унаследовали
+        .item.col-xs-12.col-sm-6.col-md-3
+          .item-legend.small.grey Стоимость покупки, руб.
+          input(type="number" name="sell-land_formCount__purchase-price")
+.form-block
+  form.form(id="sell-garage_formCount" name='sell-garage')
+    .block
+      a.remove-form-block
+        i.far.fa-times
+      .form-block-name
+        h4.bold Вы продали гараж или сарай
+      .items.row
+        .item.col-xs-12.col-sm-6.col-md-3
+          .item-legend.small.grey Стоимость продажи, руб.
+          input(type="number" name="sell-garage_formCount__price")
+        .item.col-xs-12.col-sm-6.col-md-3
+          .item-legend.small.grey Сколько лет владели?
+          input(type="number" name="sell-garage_formCount__ownership-time")
+        .item.col-xs-12.col-sm-6.col-md-3
+          .item-legend.small.grey Как приобрели?
+          select(name="sell-garage_formCount__acquisition")
+            option(value="1") купили
+            option(value="2") получили в дар
+            option(value="3") унаследовали
+        .item.col-xs-12.col-sm-6.col-md-3
+          .item-legend.small.grey Стоимость покупки, руб.
+          input(type="number" name="sell-garage_formCount__purchase-price")
+.form-block
+  form.form(id="sell-car_formCount" name='sell-car')
+    .block
+      a.remove-form-block
+        i.far.fa-times
+      .form-block-name
+        h4.bold Вы продали автомобиль
+      .items.row
+        .item.col-xs-12.col-sm-6.col-md-3
+          .item-legend.small.grey Стоимость продажи, руб.
+          input(type="number" name="sell-car_formCount__price")
+        .item.col-xs-12.col-sm-6.col-md-3
+          .item-legend.small.grey Сколько лет владели?
+          input(type="number" name="sell-car_formCount__ownership-time")
+        .item.col-xs-12.col-sm-6.col-md-3
+          .item-legend.small.grey Как приобрели?
+          .input-help
+            select(name="sell-car_formCount__acquisition")
+              option(value="1") купили
+              option(value="2") получили в дар
+              option(value="3") унаследовали
+            a.help-button(href='#')
+              i.far.fa-question-circle
+        .item.col-xs-12.col-sm-6.col-md-3
+          .item-legend.small.grey Стоимость покупки, руб.
+          input(type="number" name="sell-car_formCount__purchase-price")

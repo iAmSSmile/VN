@@ -1,0 +1,127 @@
+#verify-declaration {
+
+  .step {
+    border-top: 5px black solid;
+    position: relative;
+    margin-bottom: 80px;
+    padding-top: 40px;
+  }
+
+  .errors {
+    background-color: @orange;
+    padding: 20px 40px 20px 40px;
+    margin: 30px 80px 0 80px;
+    display: flex;
+    align-items: center;
+
+    .continue-edit {
+      font-size: 1em;
+      font-weight: bold;
+      color: white;
+      display: block;
+      margin-left: auto;
+    }
+
+    @media only screen and (max-width: @sm) {
+      margin: 30px 40px 0 40px;
+      padding: 20px;
+      flex-direction: column;
+      align-items: flex-start;
+
+      .continue-edit {
+        margin-top: 10px;
+        margin-left: 0;
+      }
+    }
+
+    @media only screen and (max-width: @xs) {
+      margin: 30px 20px 0 20px;
+      padding: 20px;
+      flex-direction: column;
+      align-items: flex-start;
+
+      .continue-edit {
+        margin-top: 10px;
+        margin-left: 0;
+      }
+    }
+  }
+
+  .form-part {
+    margin-top: 60px;
+  }
+
+  .form-part-header {
+    margin-bottom: 40px;
+  }
+
+  .table-string {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 20px;
+
+    .empty {
+      color: @orange;
+    }
+
+    @media only screen and (max-width: @xs) {
+      .empty, .data {
+        text-align: right;
+        margin-left: 40px;
+      }
+    }
+  }
+
+  table {
+    width: 100%;
+    border: 1px solid @line;
+    border-collapse: collapse;
+    margin-top: 10px;
+
+    th {
+      font-size: 0.8em;
+      font-weight: normal;
+      color: @grey;
+      padding: 5px 10px 5px 10px;
+      border: 1px solid @line;
+    }
+
+    td {
+      border: 1px solid @line;
+      padding: 5px 10px 5px 10px;
+    }
+
+    .amount {
+      text-align: right;
+    }
+  }
+
+  .verify-footer {
+    width: 100%;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 80px;
+    box-shadow: 0 -10px 50px #364e6510;
+
+    a {
+      font-size: 1.25em;
+      color: @blue;
+      font-weight: bold;
+    }
+  }
+
+  .income-mobile {
+    display: none;
+  }
+
+  @media only screen and (max-width: @xs) {
+    .income-mobile {
+      display: block;
+    }
+    .income-desktop {
+      display: none;
+    }
+  }
+}

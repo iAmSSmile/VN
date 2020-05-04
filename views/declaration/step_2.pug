@@ -1,0 +1,71 @@
+extends ../_layout/layout
+
+block header
+  #header
+    a.logo-link(href="/")
+      img.logo(src="/img/logotype_blue.svg", alt="")
+    .user-menu
+      a.menu-item(href="/declarations") Ваши декларации
+      a.username #{ user.email }
+      .menu
+        a(href="/declarations") Ваши декларации
+        a.grey(href="/logout") Выход
+    .burger
+      .burger-menu
+        a.button(href="/declarations") Ваши декларации
+        a.button.grey(href="/logout") Выход
+      a.round-button.round-button--white.burger-button(href="#")
+        img.open(src="/img/icons/burger_open.svg")
+        img.close(src="/img/icons/burger_close.svg")
+
+block content
+  .steps
+    a.step.forward(class=!!declaration.STEP_1_FULLNESS.length?"":"step--filled" data-redirect='/declaration/' + declaration._id + '/step/1' href='#')
+      .circle 1
+      .line
+      .small данные о физ. лице
+    a.step.step--current
+      .circle 2
+      .line
+      .small данные о работодателе и доходах
+    a.step.forward(class=declaration.STEP_3_FULLNESS.empty?"":"step--filled" data-redirect='/declaration/' + declaration._id + '/step/3' href='#')
+      .circle 3
+      .line
+      .small стандартный вычет
+    a.step.forward(class=!declaration.STEP_4_FULLNESS.empty && !declaration.STEP_4_FULLNESS.errors.length?"step--filled":"" data-redirect='/declaration/' + declaration._id + '/step/4' href='#')
+      .circle 4
+      .line
+      .small социальный вычет
+    a.step.forward(class=!declaration.STEP_5_FULLNESS.empty && !declaration.STEP_5_FULLNESS.errors.length?"step--filled":"" data-redirect='/declaration/' + declaration._id + '/step/5' href='#')
+      .circle 5
+      .line
+      .small вычет на продажу имущества
+    .full-line
+  #step-2-employer
+    .page-header
+      h1 Данные о работодателе и доходах за #{declaration.year} г.
+      p
+        a.chocolat-image(href="/img/2ndfl.jpg" title="Красным цветом выделена информация, которую нужно внести в форму") Справку 2-НДФЛ
+        |  за #{declaration.year} г. вам нужно взять в бухгалтерии организации, в которой работаете. Если вы работаете в нескольких местах, возьмите справку 2-НДФЛ в каждом из них.
+    .forms
+      each employer, index in declaration.employers
+        include ../_forms/employer
+    .add-form
+      a.button.iconic-button.button--white.add-form-button Добавить работодателя
+        i.far.fa-plus-circle
+  .step-footer
+    a.backward(data-redirect='/declaration/' + declaration._id + '/step/1')
+      .circle
+        i.far.fa-arrow-left
+      p назад
+    .center
+      .circle
+        i.far.fa-exclamation
+        i.far.fa-check
+    a.forward(data-redirect='/declaration/' + declaration._id + '/step/3')
+      p вперед
+      .circle
+        i.far.fa-arrow-right
+
+block js
+  script(type='text/javascript', src='/js/step-2.js')

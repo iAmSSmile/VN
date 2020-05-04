@@ -1,0 +1,357 @@
+extends ../_layout/layout
+
+block header
+  #header
+    a.logo-link(href="/")
+      img.logo(src="/img/logotype_blue.svg", alt="")
+    .user-menu
+      a.menu-item(href="/declarations") Ваши декларации
+      a.username #{ user.email }
+      .menu
+        a(href="/declarations") Ваши декларации
+        a.grey(href="/logout") Выход
+    .burger
+      .burger-menu
+        a.button(href="/declarations") Ваши декларации
+        a.button.grey(href="/logout") Выход
+      a.round-button.round-button--white.burger-button(href="#")
+        img.open(src="/img/icons/burger_open.svg")
+        img.close(src="/img/icons/burger_close.svg")
+
+block content
+  #verify-declaration
+    .page-header
+      h2 Проверка введенных данных в декларации 3-НДФЛ за #{ declaration.year }г.
+      p Пожалуйста, внимательно проверьте введенные данные перед оплатой
+    .step
+      .form-part
+        .form-part-header
+          .header На кого оформляем декларацию?
+        .table-string
+          p.grey Ф.И.О.
+          if declaration.name
+            p.data #{declaration.name}
+          else
+            .empty не заполнено
+        .table-string
+          p.grey Где родились?
+          if declaration.birthplace
+            p.data #{ declaration.birthplace }
+          else
+            .empty не заполнено
+        .table-string
+          p.grey Дата рождения
+          if declaration.birthdate
+            p.data #{ declaration.birthdate }
+          else
+            .empty не заполнено
+        .table-string
+          p.grey Контактный телефон
+          if declaration.phone
+            p.data #{ declaration.phone }
+          else
+            .empty не заполнено
+        .table-string
+          p.grey ИНН
+          if declaration.inn
+            p.data #{ declaration.inn }
+          else
+            .empty не заполнено
+        .table-string
+          p.grey Категория налогоплательщика
+          if declaration.category === "760"
+            p.data Наемный работник
+          if declaration.category === "720"
+            p.data Индивидуальный предприниматель
+          if declaration.category === "730"
+            p.data Нотариус
+          if declaration.category === "740"
+            p.data Адвокат
+      .form-part
+        .form-part-header
+          .header Паспортные данные
+        .table-string
+          p.grey Серия и номер
+          if declaration.passport_seria && declaration.passport_number
+            p.data #{ declaration.passport_seria } #{ declaration.passport_number }
+          else
+            .empty не заполнено
+        .table-string
+          p.grey Когда выдан
+          if declaration.passport_issue_date
+            p.data #{ declaration.passport_issue_date }
+          else
+            .empty не заполнено
+        .table-string
+          p.grey Кем выдан
+          if declaration.passport_issue_place
+            p.data #{ declaration.passport_issue_place }
+          else
+            .empty не заполнено
+        .table-string
+          p.grey Адрес
+          if declaration.address
+            p.data #{ declaration.address }
+          else
+            .empty не заполнено
+      .form-part
+        .form-part-header
+          .header Лицевой счет в банке
+        .table-string
+          p.grey Название банка
+          if declaration.bank_name
+            p.data #{ declaration.bank_name }
+          else
+            .empty не заполнено
+        .table-string
+          p.grey ИНН банка
+          if declaration.bank_inn
+            p.data #{ declaration.bank_inn }
+          else
+            .empty не заполнено
+        .table-string
+          p.grey БИК банка
+          if declaration.bank_bik
+            p.data #{ declaration.bank_bik }
+          else
+            .empty не заполнено
+        .table-string
+          p.grey КПП банка
+          if declaration.bank_kpp
+            p.data #{ declaration.bank_kpp }
+          else
+            .empty не заполнено
+        .table-string
+          p.grey Корр. счет банка
+          if declaration.bank_correspondent_account
+            p.data #{ declaration.bank_correspondent_account }
+          else
+            .empty не заполнено
+        .table-string
+          p.grey Номер лицевого счета
+          if declaration.bank_personal_account
+            p.data #{ declaration.bank_personal_account }
+          else
+            .empty не заполнено
+      if declaration.STEP_1_FULLNESS.length
+        .errors
+          .content
+            each error in declaration.STEP_1_FULLNESS
+              p #{ error }
+          a.continue-edit(href='/declaration/' + declaration._id + '/step/1') заполнить
+    .step
+      each employer, index in declaration.employers
+        .form-part
+          .form-part-header
+            .header Работодатель №#{index + 1}
+          .table-string
+            p.grey Название организации
+            if employer.name
+              p.data #{ employer.name }
+            else
+              .empty не заполнено
+          .table-string
+            p.grey Телефон
+            if employer.phone
+              p.data #{ employer.phone }
+            else
+              .empty не заполнено
+          .table-string
+            p.grey ИНН организации
+            if employer.inn
+              p.data #{ employer.inn }
+            else
+              .empty не заполнено
+          .table-string
+            p.grey КПП организации
+            if employer.kpp
+              p.data #{ employer.kpp }
+            else
+              .empty не заполнено
+          .table-string
+            p.grey Код по ОКТМО
+            if employer.oktmo
+              p.data #{ employer.oktmo }
+            else
+              .empty не заполнено
+          .table-string
+            p.grey Сумма налога удержанная
+            if employer.tax
+              p.data #{ employer.tax }
+            else
+              .empty не заполнено
+          - half = Math.round(employer.income.length/2)
+          .row.income-desktop
+            .col-xs-6
+              table
+                tr
+                  th Месяц
+                  th Код дохода
+                  th Сумма дохода
+                - for (var x=0; x<half; x++)
+                  tr
+                    td #{employer.income[x].month}
+                    td #{employer.income[x].code}
+                    td.amount #{employer.income[x].amount}
+            .col-xs-6
+              table
+                tr
+                  th Месяц
+                  th Код дохода
+                  th Сумма дохода
+                - for (var x=half; x<employer.income.length; x++)
+                  tr
+                    td #{employer.income[x].month}
+                    td #{employer.income[x].code}
+                    td.amount #{employer.income[x].amount}
+          .row.income-mobile
+            .col-xs-12
+              table
+                tr
+                  th Месяц
+                  th Код дохода
+                  th Сумма дохода
+                each income in employer.income
+                  tr
+                    td #{income.month}
+                    td #{income.code}
+                    td.amount #{income.amount}
+      if declaration.STEP_2_FULLNESS.length
+        .errors
+          .content
+            each error in declaration.STEP_2_FULLNESS
+              p #{ error }
+          a.continue-edit(href='/declaration/' + declaration._id + '/step/2') заполнить
+    if !declaration.STEP_3_FULLNESS.empty
+      .step
+        .form-part
+          each child_18 in declaration.child_18
+            .table-string
+              p.grey Ребенок до 18 лет
+              p.data
+                if child_18.child_count === "1"
+                  | Первый по счету
+                if child_18.child_count === "2"
+                  | Второй по счету
+                if child_18.child_count === "3"
+                  | Третий или более по счету
+                if child_18.invalid
+                  | , инвалид
+          each child_24 in declaration.child_24
+            .table-string
+              p.grey Ребенок от 18 до 24 лет
+              p.data
+                if child_24.child_count === "1"
+                  | Первый по счету
+                if child_24.child_count === "2"
+                  | Второй по счету
+                if child_24.child_count === "3"
+                  | Третий или более по счету
+                if child_24.invalid
+                  | , инвалид
+    if !declaration.STEP_4_FULLNESS.empty
+      .step
+        each teach in declaration.teach_me
+          .form-part
+            .form-part-header
+              .header Затраты на собственное обучение
+            .table-string
+              p.grey Сумма, руб.
+              if teach.amount
+                p.data #{ teach.amount }
+              else
+                .empty не заполнено
+        each teach in declaration.teach_child
+          .form-part
+            .form-part-header
+              .header Затраты на обучение ребенка, возрастом до 24 лет
+            .table-string
+              p.grey Сумма, руб.
+              if teach.amount
+                p.data #{ teach.amount }
+              else
+                .empty не заполнено
+        each teach in declaration.teach_brother
+          .form-part
+            .form-part-header
+              .header Затраты на обучение брата или сестры, возрастом до 24 лет
+            .table-string
+              p.grey Сумма, руб.
+              if teach.amount
+                p.data #{ teach.amount }
+              else
+                .empty не заполнено
+        each heal in declaration.heal_me
+          .form-part
+            .form-part-header
+              .header Затраты на собственное лечение
+            .table-string
+              p.grey Сумма, руб.
+              if heal.amount
+                p.data #{ heal.amount }
+              else
+                .empty не заполнено
+            if heal.expensive
+              .table-string
+                p.grey Дорогостоящие виды лечения, руб.
+                p.data #{ heal.expensive }
+            if heal.medications
+              .table-string
+                p.grey Лекарственные препараты, руб.
+                p.data #{ heal.medications }
+        each heal in declaration.heal_child
+          .form-part
+            .form-part-header
+              .header Затраты на лечение ребенка, возрастом до 18 лет
+            .table-string
+              p.grey Сумма, руб.
+              if heal.amount
+                p.data #{ heal.amount }
+              else
+                .empty не заполнено
+            if heal.expensive
+              .table-string
+                p.grey Дорогостоящие виды лечения, руб.
+                p.data #{ heal.expensive }
+            if heal.medications
+              .table-string
+                p.grey Лекарственные препараты, руб.
+                p.data #{ heal.medications }
+        each heal in declaration.heal_parent
+          .form-part
+            .form-part-header
+              .header Затраты на лечение родителя или супруга
+            .table-string
+              p.grey Сумма, руб.
+              if heal.amount
+                p.data #{ heal.amount }
+              else
+                .empty не заполнено
+            if heal.expensive
+              .table-string
+                p.grey Дорогостоящие виды лечения, руб.
+                p.data #{ heal.expensive }
+            if heal.medications
+              .table-string
+                p.grey Лекарственные препараты, руб.
+                p.data #{ heal.medications }
+        if declaration.STEP_4_FULLNESS.errors.length
+          .errors
+            .content
+              each error in declaration.STEP_4_FULLNESS.errors
+                p #{ error }
+            a.continue-edit(href='/declaration/' + declaration._id + '/step/4') заполнить
+    if declaration.STEP_3_FULLNESS.empty && declaration.STEP_4_FULLNESS.empty
+      .step
+        .errors
+          .content
+            p Для создания декларации необходимо заполнить хотя бы один вычет
+          a.continue-edit(href='/declaration/' + declaration._id + '/step/3') заполнить
+    .verify-footer
+      if !declaration.FULLNESS.length
+        if env.NODE_ENV === "production"
+          a(href='/declaration/' + declaration._id + '/buy') Оплатить и скачать
+        else
+          a(href='/declaration/' + declaration._id + '/generate') Тестовая загрузка
+      else
+        a(href='/declaration/' + declaration._id + '/step/' + declaration.NOT_FILLED_STEPS[0]) Продолжить заполнение

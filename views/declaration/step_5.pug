@@ -1,0 +1,78 @@
+extends ../_layout/layout
+
+block header
+  #header
+    a.logo-link(href="/")
+      img.logo(src="/img/logotype_blue.svg", alt="")
+    .user-menu
+      a.menu-item(href="/declarations") Ваши декларации
+      a.username #{ user.email }
+      .menu
+        a(href="/declarations") Ваши декларации
+        a.grey(href="/logout") Выход
+    .burger
+      .burger-menu
+        a.button(href="/declarations") Ваши декларации
+        a.button.grey(href="/logout") Выход
+      a.round-button.round-button--white.burger-button(href="#")
+        img.open(src="/img/icons/burger_open.svg")
+        img.close(src="/img/icons/burger_close.svg")
+
+block content
+  .steps
+    a.step.forward(class=!!declaration.STEP_1_FULLNESS.length ? "" : "step--filled" data-redirect='/declaration/' + declaration._id + '/step/1' href='#')
+      .circle 1
+      .line
+      .small данные о физ. лице
+    a.step.forward(class=!!declaration.STEP_2_FULLNESS.length ? "" : "step--filled" data-redirect='/declaration/' + declaration._id + '/step/2' href='#')
+      .circle 2
+      .line
+      .small данные о работодателе и доходах
+    a.step.forward(class=declaration.STEP_3_FULLNESS.empty ? "" : "step--filled" data-redirect='/declaration/' + declaration._id + '/step/3' href='#')
+      .circle 3
+      .line
+      .small стандартный вычет
+    a.step.forward(class=declaration.STEP_4_FULLNESS.empty ? "" : "step--filled" data-redirect='/declaration/' + declaration._id + '/step/4' href='#')
+      .circle 4
+      .line
+      .small социальный вычет
+    a.step.step--current
+      .circle 5
+      .line
+      .small вычет на продажу имущества
+    .full-line
+  #step-5-estate
+    .page-header
+      h1 Вычет на продажу имущества
+      p Заполните этот шаг, если вы хотите получить налоговый вычет за продажу недвижимости или транспортного средства. Проданная недвижимость не должна находиться в вашей собственности более 5 лет, если она была куплена, и более 3 лет - если перешла к вам в результате дарения, приватизации, наследства или ренты. Проданное транспортное средство не должно находиться в вашей собственности более 3 лет.
+        br
+        br
+        strong В противных случаях декларация не подается, налог не платится.
+    .forms
+      each estate, index in declaration.sell_estate
+        include ../_forms/sell_estate
+      each transport, index in declaration.sell_transport
+        include ../_forms/sell_transport
+    .add-form
+      a.button.iconic-button.button--white.add-form-button Добавить продажу
+        i.far.fa-plus-circle
+      .add-form-menu
+        a.menu-link(data-addform='sell_estate') Продажа недвижимости
+        a.menu-link(data-addform='sell_transport') Продажа транспорта
+      .background
+  .step-footer
+    a.backward(data-redirect='/declaration/' + declaration._id + '/step/4')
+      .circle
+        i.far.fa-arrow-left
+      p назад
+    .center
+      .circle
+        i.far.fa-exclamation
+        i.far.fa-check
+    a.forward(data-redirect='/declaration/' + declaration._id + '/verify')
+      p вперед
+      .circle
+        i.far.fa-arrow-right
+
+block js
+  script(type='text/javascript', src='/js/step-5.js')

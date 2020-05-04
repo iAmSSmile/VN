@@ -1,0 +1,81 @@
+.select-block {
+  position: relative;
+  margin-top: 60px;
+  display: flex;
+  align-items: flex-end;
+
+  .select-field {
+    position: relative;
+    width: 100%;
+    margin-top: 30px;
+    padding-bottom: 6px;
+    font-size: 1.25em;
+    color: black;
+    border-bottom: 3px solid @line;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding-right: 30px;
+  }
+
+  .select-label {
+    width: 100%;
+    position: absolute;
+    pointer-events: none;
+    color: @grey;
+    font-size: 0.8em;
+    line-height: 1;
+    top: 0;
+    transition: all 0.2s;
+    white-space: normal;
+  }
+
+
+  .select-wrapper {
+    position: relative;
+    width: 100%;
+
+    &:after {
+      content: "\f078";
+      display: inline-block;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 20px;
+      text-rendering: auto;
+      -webkit-font-smoothing: antialiased;
+      font-family: "Font Awesome 5 Pro";
+      color: @grey;
+      position: absolute;
+      right: 0;
+      bottom: 2px;
+      pointer-events: none;
+    }
+
+    &:hover {
+      &:after {
+        color: black;
+      }
+    }
+  }
+
+  .select-help {
+    min-width: 30px;
+    min-height: 40px;
+    border-bottom: 3px solid @line;
+
+    &:before {
+      content: "\f059";
+      display: inline-block;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 20px;
+      text-rendering: auto;
+      -webkit-font-smoothing: antialiased;
+      font-family: "Font Awesome 5 Pro";
+      color: @blue;
+      position: absolute;
+      right: 0;
+      bottom: 4px;
+    }
+  }
+}

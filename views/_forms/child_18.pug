@@ -1,0 +1,18 @@
+form.form(name="child_18" id="child_18--" + index)
+  a.remove-form
+  .form-part
+    .form-part-header
+      .header Ребенок, возрастом до 18 лет
+    .row
+      .col-xs-12.col-sm-6.col-md-4
+        .select-block
+          .select-wrapper
+            select.select-field(name='child_count')
+              option(value="1" selected=( child.child_count === "1" )) первый
+              option(value="2" selected=( child.child_count === "2" )) второй
+              option(value="3" selected=( child.child_count === "3" )) третий или более
+          .select-label Какой по счету ребенок?
+      .col-xs-12.col-sm-6.col-md-4
+        .checkbox-block
+          input.checkbox-field(type="checkbox" id="child_18--" + index + "-invalid" name="invalid:boolean" checked=(child.invalid))
+          label.checkbox-label(for="child_18--" + index + "-invalid") ребенок-инвалид

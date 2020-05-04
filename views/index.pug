@@ -1,0 +1,111 @@
+extends ./_layout/empty
+
+block content
+  #main
+    if !cookie_agree
+      include ./_blocks/cookie-agree
+    .top
+      img.logo(src="/img/logotype_blue.svg", alt="")
+      if user
+        .user-menu
+          a.menu-item(href="/declarations") Ваши декларации
+          a.username #{ user.email }
+          .menu
+            a(href="/declaration/new") Новая декларация
+            a(href="/declarations") Ваши декларации
+            a.grey(href="/logout") Выход
+      else
+        .authentificate-menu
+          a.button.login(href='/login') Вход
+          a.button.button--blue.signup(href='/signup') Регистрация
+      .burger
+        .burger-menu
+          if user
+            a.button(href="/declaration/new") Новая декларация
+            a.button(href="/declarations") Ваши декларации
+            a.button.grey(href="/logout") Выход
+          else
+            a.button.login(href='/login') Вход
+            a.button.button--blue.signup(href='/signup') Регистрация
+        a.round-button.round-button--white.burger-button(href="#")
+          img.open(src="/img/icons/burger_open.svg")
+          img.close(src="/img/icons/burger_close.svg")
+    .children
+      .background-image
+        a.button.button--blue.mobile-signup(href='/signup') Регистрация
+      .disclaimer
+        h3.line-1 Теперь заполнить декларацию
+          br
+          | и получить налоговый вычет сможет
+        .line-2 даже ребенок
+        .line-3 Добро пожаловать на первый, полностью автоматизированный сервис по заполнению налоговой декларации 3-НДФЛ. Больше никаких “личных консультантов”, деклараций с ошибками и долгого ожидания, ведь на заполнение декларации у вас уйдет всего 15 минут.
+    .disclaimer-mobile
+      p.line-1 Теперь заполнить декларацию
+        br
+        | и получить налоговый вычет сможет
+      .line-2 даже ребенок
+      .line-3 Первый, полностью автоматизированный сервис по заполнению налоговой декларации 3-НДФЛ.
+    .subscribe
+      .background-block
+        .icon
+          img(src="./img/icons/attention_big_white.svg")
+        .content
+          .description На данный момент генерация декларации возможна для двух видов вычетов - стандартных вычетов на детей и социальных. Другие виды вычетов будут добавлены в ближайшее время.
+          h4.question Оповещать вас о появлении новых функций и видов вычетов?
+          form(action="#" id='subscribe')
+            .input-block
+              input.input-field(type="text" name='email')
+              .input-label Ваша электронная почта
+          a.button.button--white() Подписаться
+    .why-we
+      h2.head-text Почему мы?
+      .items
+        div.item
+          img(src="./img/icons/why-we/quick.svg", alt="")
+          h4.dark.item-header Быстро
+          .grey.item-text Всего 15 минут вашего времени и декларация у вас в кармане
+        div.item
+          img(src="./img/icons/why-we/simple.svg", alt="")
+          h4.dark.item-header Просто
+          .grey.item-text С помощью нашего интерактивного мастера вы сами оформите декларацию
+        div.item
+          img(src="./img/icons/why-we/cheap.svg", alt="")
+          h4.dark.item-header Дешево
+          .grey.item-text Потратив всего 100 рублей вы сможете получить намного большую сумму
+        div.item
+          img(src="./img/icons/why-we/anonymous.svg", alt="")
+          h4.dark.item-header Анонимно
+          .grey.item-text Все данные хранятся в зашифрованном виде и никто не получит к ним доступ
+
+    .how-it-works
+      h2.head-text Как все работает?
+      .items
+        h4.item Вы регистрируетесь и создаете новую декларацию
+        .divider
+        h4.item Заполняете декларацию
+        p.grey.text С помощью наших интерактивных подсказок это легко и просто.  Мы подскажем, какие документы нужны. Если чего-то не хватает - можно отложить заполнение до момента, когда все необходимые документы будут на руках, частично заполненная декларация никуда не пропадет.
+        .divider
+        h4.item Оплачиваете стоимость предоставления услуги по заполнению декларации и заявления в налоговую инспекцию
+        p.grey.text Стоимость услуги составляет всего 100 рублей! Никаких скрытых и дополнительных платежей!
+        .divider
+        h4.item Скачиваете заполненную декларацию 3-НДФЛ, заявление в налоговую инспекцию и перечень документов, которые необходимо к ним приложить
+        .divider
+        h4.item Сдаете полученные документы в налоговую инспекцию лично, по почте или в электронном виде на сайте ИФНС
+        .divider
+        img.smile(src="/img/icons/smile.svg")
+        h4.item Получаете деньги на указанный вами расчетный счет в банке
+    .ask-question
+      h2.head-text Возник вопрос?
+      form(action="#" id='form')
+        .row
+          .col-xs-12.col-sm-6.col-md-3.col-md-offset-3
+            .input-block
+              input.input-field(type="text" name='name')
+              .input-label Ваше имя
+          .col-xs-12.col-sm-6.col-md-3
+            .input-block
+              input.input-field(type="text" name='email')
+              .input-label Электронная почта
+          .col-xs-12.col-sm-12.col-md-6.col-md-offset-3
+            textarea(name='topic_text', rows='10')
+      a.send(href="#") Отправить

@@ -1,0 +1,100 @@
+.input-block {
+  position: relative;
+  margin-top: 60px;
+  display: flex;
+  align-items: flex-end;
+
+  .input-error {
+    position: absolute;
+    top: 65px;
+    color: @orange;
+    font-size: 0.8em;
+    line-height: 1.45;
+    height: 35px;
+    overflow: hidden;
+  }
+
+  .input-field {
+    width: 100%;
+    margin-top: 30px;
+    padding-bottom: 6px;
+    font-size: 1.25em;
+    color: black;
+    border-bottom: 3px solid black;
+  }
+
+  .input-help {
+    width: 40px;
+    height: 40px;
+    border-bottom: 3px solid black;
+
+    &:before {
+      content: "\f059";
+      display: inline-block;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 20px;
+      text-rendering: auto;
+      -webkit-font-smoothing: antialiased;
+      font-family: "Font Awesome 5 Pro";
+      color: @blue;
+      position: absolute;
+      right: 0;
+      bottom: 4px;
+    }
+  }
+
+  .input-label {
+    width: 100%;
+    position: absolute;
+    font-size: 1.25em;
+    color: black;
+    top: 26px;
+    pointer-events: none;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    text-align: left;
+  }
+
+  .input-help + .input-label {
+    width: calc(100% - 40px);
+  }
+
+  .input-filled,
+  .input-filled ~ .input-help
+  {
+    border-bottom: 3px solid @line;
+  }
+
+  .input-error ~ .input-field,
+  .input-error ~ .input-help
+  {
+    border-bottom: 3px solid @orange;
+  }
+
+  .input-filled ~ .input-label {
+    width: 100%;
+    color: @grey;
+    font-size: 0.8em;
+    line-height: 1;
+    top: 0;
+    transition: all 0.2s;
+    white-space: normal;
+  }
+
+  .input-error ~ .input-label {
+    color: @orange;
+  }
+}
+
+.input-disabled {
+  .input-field {
+    border-bottom: 3px solid @line;
+    pointer-events: none;
+  }
+  .input-label {
+    color: @grey;
+    text-decoration: line-through;
+  }
+}

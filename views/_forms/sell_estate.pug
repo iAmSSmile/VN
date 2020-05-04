@@ -1,0 +1,97 @@
+form.form(name="sell_estate" id="sell_estate--" + index)
+  a.remove-form
+  .form-part
+    .form-part-header
+      .header Продажа недвижимости
+    .row
+      .col-xs-12
+        .radio-block
+          input(type="radio" id="sell_estate--" + index + "-house" name="type" value="house" checked=(estate.type === "house"))
+          label(for="sell_estate--" + index + "-house") Дом, квартира, комната, садовый домик, земельный участок и доли во всем этом
+          input(type="radio" id="sell_estate--" + index + "-garage" name="type" value="garage" checked=(estate.type === "garage"))
+          label(for="sell_estate--" + index + "-garage") Гараж, сарай и прочее недвижимое имущество
+      .col-xs-12.single-form(class=estate.type === "garage" ? "hidden" : "")
+        .checkbox-block
+          input.checkbox-field(type="checkbox" id="sell_estate--" + index + "-single" name="single:boolean" checked=(estate.single))
+          label.checkbox-label.single-label(for="sell_estate--" + index + "-single") Единственное жилье
+          a.checkbox-help.single-help
+  .subform-part
+    .form-part-header
+      .header Как вы приобрели проданную недвижимость, сколько ей владели, ее стоимость
+    .row
+      .col-xs-12
+        .radio-block.radio-vertical
+          input(type="radio" id="sell_estate--" + index + "-buy" name="how_to_buy" value="buy" checked=(estate.how_to_buy === "buy"))
+          label(for="sell_estate--" + index + "-buy") Купили
+          input(type="radio" id="sell_estate--" + index + "-inherit" name="how_to_buy" value="inherit" checked=(estate.how_to_buy === "inherit"))
+          label(for="sell_estate--" + index + "-inherit") Унаследовали, получили в подарок, приватизировали, получили по договору ренты
+    .row
+      .col-xs-12.col-sm-6.col-md-3(class=estate.how_to_buy === "buy" ? "hidden" : "")
+        .input-block
+          input.datedropper.input-field(type="text" name='get_date' value=estate.get_date class=estate.get_date ? 'input-filled':'')
+          a.input-help
+          .input-label Дата начала владения
+      .col-xs-12.col-sm-6.col-md-3(class=estate.how_to_buy === "inherit" ? "hidden" : "")
+        .input-block
+          input.datedropper.input-field(type="text" name='buy_date' value=estate.buy_date class=estate.buy_date ? 'input-filled':'')
+          .input-label Дата покупки
+      .col-xs-12.col-sm-6.col-md-3
+        .input-block
+          input.datedropper.input-field(type="text" name='sell_date' value=estate.sell_date class=estate.sell_date ? 'input-filled':'')
+          .input-label Дата продажи
+      .col-xs-12.last-md.error-date.hidden
+        .error-block Вы владели этой недвижимостью более 3 лет. Вам не нужно подавать декларацию и платить налоги.
+      .col-xs-12.col-sm-6.col-md-3(class=estate.how_to_buy === "inherit" ? "hidden" : "")
+        .input-block
+          input.input-field(type="number" name='buy_price' value=estate.buy_price class=estate.buy_price ? 'input-filled':'')
+          .input-label Стоимость покупки, руб.
+      .col-xs-12.col-sm-6.col-md-3
+        .input-block
+          input.input-field(type="number" name='sell_price' value=estate.sell_price class=estate.sell_price ? 'input-filled':'')
+          .input-label Стоимость продажи, руб.
+  .subform-part.rosreestr
+    .form-part-header
+      .header Информация из Росреестра
+      .description Вам нужно указать кадастровый номер и кадастровую стоимость недвижимости. Заказать выписку или найти данные о недвижимости по ее адресу можно
+        a(href="https://rosreestr.net/uznat-kadastrovuyu-stoimost-nedvijimosti" target="_blank")  здесь.
+    .row
+      .col-xs-12.col-sm-6.col-md-3
+        .input-block
+          input.input-field(type="text" name='kadastr_number' value=estate.kadastr_number class=estate.kadastr_number ? 'input-filled' : '')
+          .input-label Кадастровый номер
+      .col-xs-12.col-sm-6.col-md-3
+        .input-block
+          input.input-field(type="number" name='kadastr_price' value=estate.kadastr_price class=estate.kadastr_price ? 'input-filled' : '')
+          .input-label Кадастровая стоимость, руб.
+  .subform-part.buyer-form(class=estate.how_to_buy === "inherit" ? "hidden" : "")
+    .form-part-header
+      .header Информация о покупателе
+    .row
+      .col-xs-12
+        .radio-block
+          input(type="radio" id="sell_estate--" + index + "-individual" name="face" value="individual" checked=(estate.face === "individual"))
+          label(for="sell_estate--" + index + "-individual") Физическое лицо
+          input(type="radio" id="sell_estate--" + index + "-entity" name="face" value="entity" checked=(estate.face === "entity"))
+          label(for="sell_estate--" + index + "-entity") Юридическое лицо
+    .row.individual-form(class=estate.face === "entity" ? "hidden" : "")
+      .col-xs-12
+        .input-block
+          input.input-field(type="text" name='individual_name' value=estate.individual_name class=estate.individual_name ? 'input-filled' : '')
+          .input-label ФИО покупателя
+    .row.entity-form(class=estate.face === "individual" ? "hidden" : "")
+      .col-xs-12
+        .input-block
+          input.input-field(type="text" name='entity_name' value=estate.entity_name class=estate.entity_name ? 'input-filled' : '')
+          .input-label Наименование юр. лица
+      .col-xs-12.col-sm-6.col-md-4
+        .input-block
+          input.input-field(type="number" name='entity_oktmo' value=estate.entity_oktmo class=estate.entity_oktmo ? 'input-filled' : '')
+          .input-label Код по ОКТМО
+      .col-xs-12.col-sm-6.col-md-4
+        .input-block
+          input.input-field(type="number" name='entity_inn' value=estate.entity_inn class=estate.entity_inn ? 'input-filled' : '')
+          .input-label ИНН
+      .col-xs-12.col-sm-6.col-md-4
+        .input-block
+          input.input-field(type="number" name='entity_kpp' value=estate.entity_kpp class=estate.entity_kpp ? 'input-filled' : '')
+          .input-label КПП

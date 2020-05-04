@@ -1,0 +1,11 @@
+extends ../_layout/admin
+
+block content
+  #admin
+    .users
+      h1 Зарегистрированные пользователи
+      table
+        each user in users
+          tr
+            td.bold #{ user.username }
+            td.date #{ user.registration_date ? user.registration_date.toISOString() : 'отсутствует дата регистрации'}

@@ -1,0 +1,124 @@
+extends ./_layout/layout
+
+block header
+  #header
+    a.logo-link(href="/")
+      img.logo(src="/img/logotype_blue.svg", alt="")
+    if user
+      .user-menu
+        a.menu-item(href="/declarations") Ваши декларации
+        a.username #{ user.email }
+        .menu
+          a(href="/declaration/new") Новая декларация
+          a(href="/declarations") Ваши декларации
+          a.grey(href="/logout") Выход
+    else
+      .authentificate-menu
+        a.button.login(href='/login') Вход
+        a.button.button--blue.signup(href='/signup') Регистрация
+    .burger
+      .burger-menu
+        if user
+          a.button(href="/declaration/new") Новая декларация
+          a.button(href="/declarations") Ваши декларации
+          a.button.grey(href="/logout") Выход
+        else
+          a.button.login(href='/login') Вход
+          a.button.button--blue.signup(href='/signup') Регистрация
+      a.round-button.round-button--white.burger-button(href="#")
+        img.open(src="/img/icons/burger_open.svg")
+        img.close(src="/img/icons/burger_close.svg")
+
+block content
+  #article.legal
+    h2 Юридическая информация
+    h4.bold Уставные документы
+    .row
+      .col-xs-12.col-sm-3.col-md-2
+        a.chocolat-image(href="/img/ustav/foundation.jpg")
+          img(src="/img/ustav/foundation.jpg")
+      .col-xs-12.col-sm-3.col-md-2
+        a.chocolat-image(href="/img/ustav/prikaz.jpg")
+          img(src="/img/ustav/prikaz.jpg")
+      .col-xs-12.col-sm-3.col-md-2
+        a.chocolat-image(href="/img/ustav/registration_certificate.jpg")
+          img(src="/img/ustav/registration_certificate.jpg")
+      .col-xs-12.col-sm-3.col-md-2
+        a.chocolat-image(href="/img/ustav/1.jpg")
+          img(src="/img/ustav/1.jpg")
+      .col-xs-12.col-sm-3.col-md-2
+        a.chocolat-image(href="/img/ustav/2.jpg")
+          img(src="/img/ustav/2.jpg")
+      .col-xs-12.col-sm-3.col-md-2
+        a.chocolat-image(href="/img/ustav/3.jpg")
+          img(src="/img/ustav/3.jpg")
+      .col-xs-12.col-sm-3.col-md-2
+        a.chocolat-image(href="/img/ustav/4.jpg")
+          img(src="/img/ustav/4.jpg")
+      .col-xs-12.col-sm-3.col-md-2
+        a.chocolat-image(href="/img/ustav/5.jpg")
+          img(src="/img/ustav/5.jpg")
+      .col-xs-12.col-sm-3.col-md-2
+        a.chocolat-image(href="/img/ustav/6.jpg")
+          img(src="/img/ustav/6.jpg")
+      .col-xs-12.col-sm-3.col-md-2
+        a.chocolat-image(href="/img/ustav/7.jpg")
+          img(src="/img/ustav/7.jpg")
+      .col-xs-12.col-sm-3.col-md-2
+        a.chocolat-image(href="/img/ustav/8.jpg")
+          img(src="/img/ustav/8.jpg")
+      .col-xs-12.col-sm-3.col-md-2
+        a.chocolat-image(href="/img/ustav/9.jpg")
+          img(src="/img/ustav/9.jpg")
+      .col-xs-12.col-sm-3.col-md-2
+        a.chocolat-image(href="/img/ustav/10.jpg")
+          img(src="/img/ustav/10.jpg")
+      .col-xs-12.col-sm-3.col-md-2
+        a.chocolat-image(href="/img/ustav/11.jpg")
+          img(src="/img/ustav/11.jpg")
+    h4.bold Публичное предложение (оферта) к заключению договора на оказание услуг на сайте
+    .row
+      .col-xs-12.col-sm-3.col-md-2
+        a.chocolat-image(href="/img/oferta/1.jpg")
+          img(src="/img/oferta/1.jpg")
+      .col-xs-12.col-sm-3.col-md-2
+        a.chocolat-image(href="/img/oferta/2.jpg")
+          img(src="/img/oferta/2.jpg")
+      .col-xs-12.col-sm-3.col-md-2
+        a.chocolat-image(href="/img/oferta/3.jpg")
+          img(src="/img/oferta/3.jpg")
+      .col-xs-12.col-sm-3.col-md-2
+        a.chocolat-image(href="/img/oferta/4.jpg")
+          img(src="/img/oferta/4.jpg")
+      .col-xs-12.col-sm-3.col-md-2
+        a.chocolat-image(href="/img/oferta/5.jpg")
+          img(src="/img/oferta/5.jpg")
+      .col-xs-12.col-sm-3.col-md-2
+        a.chocolat-image(href="/img/oferta/6.jpg")
+          img(src="/img/oferta/6.jpg")
+      .col-xs-12.col-sm-3.col-md-2
+        a.chocolat-image(href="/img/oferta/7.jpg")
+          img(src="/img/oferta/7.jpg")
+      .col-xs-12.col-sm-3.col-md-2
+        a.chocolat-image(href="/img/oferta/prikaz.jpg")
+          img(src="/img/oferta/prikaz.jpg")
+    h4.bold Политика обработки и защиты персональных данных
+    .row
+      .col-xs-12.col-sm-3.col-md-2
+        a.chocolat-image(href="/img/politica/1.jpg")
+          img(src="/img/politica/1.jpg")
+      .col-xs-12.col-sm-3.col-md-2
+        a.chocolat-image(href="/img/politica/2.jpg")
+          img(src="/img/politica/2.jpg")
+      .col-xs-12.col-sm-3.col-md-2
+        a.chocolat-image(href="/img/politica/3.jpg")
+          img(src="/img/politica/3.jpg")
+      .col-xs-12.col-sm-3.col-md-2
+        a.chocolat-image(href="/img/politica/4.jpg")
+          img(src="/img/politica/4.jpg")
+      .col-xs-12.col-sm-3.col-md-2
+        a.chocolat-image(href="/img/politica/5.jpg")
+          img(src="/img/politica/5.jpg")
+      .col-xs-12.col-sm-3.col-md-2
+        a.chocolat-image(href="/img/politica/prikaz.jpg")
+          img(src="/img/oferta/prikaz.jpg")

@@ -1,0 +1,105 @@
+.steps {
+  position: relative;
+  margin: 40px 40px 0 40px;
+  display: flex;
+  justify-content: space-between;
+
+  @media only screen and (max-width: @xs) {
+    margin: 40px 20px 40px 20px;
+  }
+
+  .step {
+    z-index: 1;
+    margin: 0 10px 0 10px;
+    width: 25%;
+    text-align: center;
+
+    @media only screen and (max-width: @xs) {
+      width: auto;
+      margin: 0;
+    }
+
+    .circle {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px @line solid;
+      text-align: center;
+      line-height: 36px;
+      color: @grey;
+      font-size: 14px;
+      font-weight: 700;
+      background-color: white;
+
+      @media only screen and (max-width: @xs) {
+        display: block;
+      }
+    }
+
+    .line {
+      background-color: @line;
+      width: 100%;
+      height: 2px;
+
+      @media only screen and (max-width: @xs) {
+        display: none;
+      }
+    }
+
+    .small {
+      margin-top: 5px;
+      color: @grey;
+
+      @media only screen and (max-width: @xs) {
+        display: none;
+      }
+    }
+
+    &--current {
+      .circle {
+        border-color: black;
+        background-color: black;
+        color: white;
+      }
+
+      .line {
+        background-color: black;
+      }
+
+      .small {
+        font-weight: bold;
+        color: black;
+      }
+    }
+
+    &--filled {
+      .circle {
+        border-color: @blue;
+        color: @blue;
+      }
+
+      .line {
+        background-color: @blue;
+      }
+
+      .small {
+        color: @grey;
+      }
+    }
+  }
+    
+  .full-line {
+    z-index: 0;
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: @light-grey;
+    top: 19px;
+
+    @media only screen and (max-width: @xs) {
+      display: block;
+    }
+  }
+}

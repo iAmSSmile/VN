@@ -1,0 +1,46 @@
+#header {
+  padding: 0 40px 0 40px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: fixed;
+  height: 72px;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  box-shadow: 0 10px 50px #364e6510;
+
+  @media only screen and (max-width: @sm) {
+    padding: 0 10px 0 20px;
+  }
+
+  a.logo-link {
+    height: 46px;
+
+    .logo {
+      width: 40px;
+    }
+  }
+
+  .authentificate-menu {
+
+  }
+
+  .user-menu {
+
+  }
+
+  .burger {
+    display: none;
+
+    .round-button {
+      box-shadow: none;
+    }
+
+    @media only screen and (max-width: @sm) {
+      display: block;
+    }
+  }
+}

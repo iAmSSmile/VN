@@ -1,0 +1,91 @@
+extends ../_layout/layout
+
+block header
+  #header
+    a.logo-link(href="/")
+      img.logo(src="/img/logotype_blue.svg", alt="")
+    .user-menu
+      a.menu-item(href="/declarations") Ваши декларации
+      a.username #{ user.email }
+      .menu
+        a(href="/declarations") Ваши декларации
+        a.grey(href="/logout") Выход
+    .burger
+      .burger-menu
+        a.button(href="/declarations") Ваши декларации
+        a.button.grey(href="/logout") Выход
+      a.round-button.round-button--white.burger-button(href="#")
+        img.open(src="/img/icons/burger_open.svg")
+        img.close(src="/img/icons/burger_close.svg")
+
+block content
+  .steps
+    a.step.forward(class=!!declaration.STEP_1_FULLNESS.length?"":"step--filled" data-redirect='/declaration/' + declaration._id + '/step/1' href='#')
+      .circle 1
+      .line
+      .small данные о физ. лице
+    a.step.forward(class=!!declaration.STEP_2_FULLNESS.length?"":"step--filled" data-redirect='/declaration/' + declaration._id + '/step/2' href='#')
+      .circle 2
+      .line
+      .small данные о работодателе и доходах
+    a.step.forward(class=declaration.STEP_3_FULLNESS.empty?"":"step--filled" data-redirect='/declaration/' + declaration._id + '/step/3' href='#')
+      .circle 3
+      .line
+      .small стандартный вычет
+    a.step.step--current
+      .circle 4
+      .line
+      .small социальный вычет
+    a.step.forward(class=!declaration.STEP_5_FULLNESS.empty && !declaration.STEP_5_FULLNESS.errors.length ? "step--filled":"" data-redirect='/declaration/' + declaration._id + '/step/5' href='#')
+      .circle 5
+      .line
+      .small вычет на продажу имущества
+    .full-line
+  #step-4-social
+    .page-header
+      h1 Социальный вычет
+      p Здесь вы добавляете свои затраты в #{ declaration.year } г. на собственное обучение или лечение, обучение или лечение своих детей, обучение сестер и братьев, а также лечение супругов и родителей.
+    .forms
+      each heal, index in declaration.heal_me
+        include ../_forms/heal_me
+      each heal, index in declaration.heal_child
+        include ../_forms/heal_child
+      each heal, index in declaration.heal_parent
+        include ../_forms/heal_parent
+      each teach, index in declaration.teach_me
+        include ../_forms/teach_me
+      each teach, index in declaration.teach_child
+        include ../_forms/teach_child
+      each teach, index in declaration.teach_brother
+        include ../_forms/teach_brother
+    .add-form
+      a.button.iconic-button.button--white.add-form-button Добавить затраты
+        i.far.fa-plus-circle
+      .add-form-menu
+        .menu-link(data-submenu='submenu-1') Затраты на обучение
+          .submenu.submenu-1
+            a.submenu-link(data-addform='teach_me') свое
+            a.submenu-link(data-addform='teach_child') ребенка возрастом до 24 лет
+            a.submenu-link(data-addform='teach_brother') брата или сестры возрастом до 24 лет
+        .menu-link(data-submenu='submenu-2') Затраты на лечение
+          .submenu.submenu-2
+            a.submenu-link(data-addform='heal_me') свое
+            a.submenu-link(data-addform='heal_child') ребенка возрастом до 18 лет
+            a.submenu-link(data-addform='heal_parent') родителя или супруга
+      .background
+  .step-footer
+    a.backward(data-redirect='/declaration/' + declaration._id + '/step/3')
+      .circle
+        i.far.fa-arrow-left
+      p назад
+    .center
+      .circle
+        i.far.fa-exclamation
+        i.far.fa-check
+    a.forward(data-redirect='/declaration/' + declaration._id + '/step/5')
+      p вперед
+      .circle
+        i.far.fa-arrow-right
+
+block js
+  script(type='text/javascript', src='/js/step-4.js')

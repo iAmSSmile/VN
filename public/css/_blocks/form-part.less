@@ -1,0 +1,135 @@
+.form-part, .subform-part {
+  position: relative;
+  padding: 0 80px 0 80px;
+  margin-top: 150px;
+
+  .form-part-header {
+
+    .header {
+      font-size: 1.25em;
+      color: black;
+      font-weight: bold;
+
+      .toggle-conditions {
+        color: @blue;
+        font-weight: normal;
+        display: inline-block;
+        position: relative;
+        margin-left: 20px;
+        padding-left: 25px;
+
+        &:before {
+          content: "\f138";
+          display: inline-block;
+          font-style: normal;
+          font-weight: 400;
+          font-size: 15px;
+          text-rendering: auto;
+          -webkit-font-smoothing: antialiased;
+          font-family: "Font Awesome 5 Pro";
+          color: black;
+          position: absolute;
+          left: 0;
+          top: 4px;
+        }
+
+        @media only screen and (max-width: @sm) {
+          display: block;
+          margin-left: 0;
+          margin-top: 10px;
+        }
+      }
+    }
+
+    .conditions {
+      margin-top: 20px;
+      display: none;
+      font-weight: normal;
+      color: black;
+      list-style-type: square;
+      margin-left: 18px;
+    }
+
+    a.header.conditions-open {
+      .toggle-conditions {
+        color: @grey;
+
+        &:before {
+          content: "\f13a";
+        }
+      }
+    }
+
+    a.header.conditions-open + .conditions {
+      color: black;
+      display: block;
+    }
+
+    .description {
+      margin-top: 20px;
+      color: black;
+      font-weight: normal;
+      line-height: 1.65;
+    }
+
+    &:before {
+      content: '';
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      top: 7px;
+      left: 0;
+      background-color: @blue;
+    }
+
+    @media only screen and (max-width: @sm) {
+      &:before {
+        content: '';
+        position: absolute;
+        width: 5px;
+        height: 15px;
+        top: 4px;
+        left: 0;
+        background-color: @blue;
+      }
+    }
+  }
+
+  .error-block {
+    margin-top: 40px;
+    width: 100%;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: @orange;
+    color: white;
+    font-weight: bold;
+    font-size: 1em;
+    padding: 20px;
+  }
+
+  @media only screen and (max-width: @sm) {
+    padding: 0 40px 0 40px;
+  }
+
+  @media only screen and (max-width: @xs) {
+    padding: 0 20px 0 20px;
+  }
+}
+
+.subform-part {
+  margin-top: 120px;
+
+  .form-part-header {
+    .header {
+      font-size: 1em;
+    }
+
+    &:before {
+      background-color: @grey;
+      top: 4px;
+    }
+  }
+}

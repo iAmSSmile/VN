@@ -1,0 +1,61 @@
+form.form(name="employer")
+  a.remove-form
+  .form-part
+    .form-part-header
+      .header Работодатель №#{ index + 1 }
+    .row
+      .col-xs-12.col-sm-6.col-md-9
+        .input-block
+          input.input-field(type="text" name='name' value=employer.name class=employer.name?'input-filled':'')
+          .input-label Налоговый агент
+      .col-xs-12.col-sm-6.col-md-3
+        .input-block
+          input.input-field(type="text" name='phone' value=employer.phone class=employer.phone?'input-filled':'')
+          .input-label Телефон
+      .col-xs-12.col-sm-6.col-md-3
+        .input-block
+          input.input-field(type="number" name='oktmo' value=employer.oktmo class=employer.oktmo?'input-filled':'')
+          .input-label Код по ОКТМО
+      .col-xs-12.col-sm-6.col-md-3
+        .input-block
+          input.input-field(type="number" name='inn' value=employer.inn class=employer.inn?'input-filled':'')
+          .input-label ИНН
+      .col-xs-12.col-sm-6.col-md-3
+        .input-block
+          input.input-field(type="number" name='kpp' value=employer.kpp class=employer.kpp?'input-filled':'')
+          .input-label КПП
+      .col-xs-12.col-sm-6.col-md-3
+        .input-block
+          input.input-field(type="number" name='tax' value=employer.tax class=employer.tax ? 'input-filled':'')
+          .input-label Сумма налога удержанная
+  .subform-part.incomes-part
+    .form-part-header
+      .header Доходы, облагаемые по ставке 13%
+    .incomes
+      .legend
+        .month Месяц
+        .code Код дохода
+        .amount Сумма дохода
+      .lines
+        each income, index in employer.income
+          .line
+            .month
+              select.income-input(name='income[][month]')
+                option(value="01" selected=( income.month === "01" )) 01
+                option(value="02" selected=( income.month === "02" )) 02
+                option(value="03" selected=( income.month === "03" )) 03
+                option(value="04" selected=( income.month === "04" )) 04
+                option(value="05" selected=( income.month === "05" )) 05
+                option(value="06" selected=( income.month === "06" )) 06
+                option(value="07" selected=( income.month === "07" )) 07
+                option(value="08" selected=( income.month === "08" )) 08
+                option(value="09" selected=( income.month === "09" )) 09
+                option(value="10" selected=( income.month === "10" )) 10
+                option(value="11" selected=( income.month === "11" )) 11
+                option(value="12" selected=( income.month === "12" )) 12
+            .code
+              input.income-input(type="number" name='income[][code]' value=income.code)
+            .amount
+              input.income-input(type="number" name='income[][amount]:number' value=income.amount)
+            a.remove-line
+      a.add-income-button Добавить строку

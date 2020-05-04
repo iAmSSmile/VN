@@ -1,0 +1,19 @@
+#!/usr/bin/env node
+
+const app = require('../app');
+const httpApp = require('../httpApp');
+const http = require('http');
+const https = require('https');
+const fs = require('fs');
+const config = require('config');
+
+const options = {
+  key: fs.readFileSync(config.get('ssl.key')),
+  cert: fs.readFileSync(config.get('ssl.certificate'))
+};
+
+app.set('port', 443);
+httpApp.set('port', 80);
+
+http.createServer(httpApp).listen(httpApp.get('port'));
+https.createServer(options, app).listen(app.get('port'));
