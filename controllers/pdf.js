@@ -96,7 +96,6 @@ async function modifyPdf(declaration) {
   var position, field;
 
 
-
   /*
   ПЕРВАЯ СТРАНИЦА
   */
@@ -177,7 +176,6 @@ async function modifyPdf(declaration) {
   first.drawText(declaration.dadata.name.patronymic.toUpperCase(), {x: 20, y: height - 687});
 
 
-
   /*
   РАЗДЕЛ 1.
   Сведения о суммах налога, подлежащих уплате (доплате) в бюджет / возврату из бюджета
@@ -212,7 +210,6 @@ async function modifyPdf(declaration) {
     position = (13 - String(item.string_050).length) * 14.1;
     section_1.drawText(String(item.string_050), {x: 296 + position, y: height - 320 - (205.5 * index)});
   });
-
 
 
   /*
@@ -286,13 +283,12 @@ async function modifyPdf(declaration) {
   section_2.drawText(declaration.SECTION_2_160, {x: 353 + position, y: height - 680});
 
 
-
   /*
   ПРИЛОЖЕНИЕ 1.
   Доходы от источников в Российской Федерации
   */
   appendix_1 = [];
-  for(let i=0; i<Math.ceil((declaration.employers.length + declaration.sell_estate.length + declaration.sell_transport.length)/3); i++) {
+  for (let i = 0; i < Math.ceil(declaration.APPENDIX_1.length / 3); i++) {
     [appendix_1[i]] = await pdfDoc.copyPages(srcDoc, [3]);
     pdfDoc.addPage(appendix_1[i]);
     appendix_1[i].setFont(courier);
@@ -316,17 +312,26 @@ async function modifyPdf(declaration) {
 
   let appendix_index = 0, appendix_position = 0;
 
-  declaration.APPENDIX_1_ITEMS.forEach((item) => {
+  declaration.APPENDIX_1.forEach((item) => {
     //010 НАЛОГОВАЯ СТАВКА
     appendix_1[appendix_index].drawText(item.s010, {x: 119, y: height - 127.5 - (228.5 * appendix_position)});
     //020 КОД ВИДА ДОХОДА
     appendix_1[appendix_index].drawText(item.s020, {x: 550, y: height - 127.5 - (228.5 * appendix_position)});
     //030 ИНН ИСТОЧНИКА ВЫПЛАТЫ ДОХОДА
-    if (item.s030) appendix_1[appendix_index].drawText(item.s030, {x: 15, y: height - 167.8 - (228.5 * appendix_position)});
+    if (item.s030) appendix_1[appendix_index].drawText(item.s030, {
+      x: 15,
+      y: height - 167.8 - (228.5 * appendix_position)
+    });
     //040 КПП
-    if (item.s040) appendix_1[appendix_index].drawText(item.s040, {x: 227, y: height - 167.8 - (228.5 * appendix_position)});
+    if (item.s040) appendix_1[appendix_index].drawText(item.s040, {
+      x: 227,
+      y: height - 167.8 - (228.5 * appendix_position)
+    });
     //050 КОД ПО ОКТМО
-    if (item.s050) appendix_1[appendix_index].drawText(item.s050, {x: 400, y: height - 167.8 - (228.5 * appendix_position)});
+    if (item.s050) appendix_1[appendix_index].drawText(item.s050, {
+      x: 400,
+      y: height - 167.8 - (228.5 * appendix_position)
+    });
     //060 НАИМЕНОВАНИЕ ИСТОЧНИКА ВЫПЛАТЫ ДОХОДА
     breakToStrings(item.s060, 40).forEach((line, line_index) => {
       appendix_1[appendix_index].drawText(line.toUpperCase(), {
@@ -337,18 +342,23 @@ async function modifyPdf(declaration) {
     //070 СУММА ДОХОДА
     let field = breakNumber(item.s070);
     position = (13 - field[0].length) * 14.1;
-    appendix_1[appendix_index].drawText(field[0], {x: 15 + position, y: height - 318.5 - (228.5 * appendix_position)});
+    appendix_1[appendix_index].drawText(field[0], {
+      x: 15 + position,
+      y: height - 318.5 - (228.5 * appendix_position)
+    });
     appendix_1[appendix_index].drawText(field[1], {x: 213, y: height - 318.5 - (228.5 * appendix_position)});
     //080 СУММА НАЛОГА УДЕРЖАННАЯ
     position = (13 - item.s080.length) * 14.1;
-    appendix_1[appendix_index].drawText(item.s080, {x: 315 + position, y: height - 318.5 - (228.5 * appendix_position)});
+    appendix_1[appendix_index].drawText(item.s080, {
+      x: 315 + position,
+      y: height - 318.5 - (228.5 * appendix_position)
+    });
     appendix_position++;
     if (appendix_position === 3) {
       appendix_position = 0;
       appendix_index++;
     }
   });
-
 
 
   /*
@@ -407,7 +417,6 @@ async function modifyPdf(declaration) {
     appendix_4.drawText(field[0], {x: 395 + position, y: height - 753});
     appendix_4.drawText(field[1], {x: 550, y: height - 753});
   }
-
 
 
   /*
@@ -509,6 +518,88 @@ async function modifyPdf(declaration) {
   }
 
 
+  /*
+  РАСЧЕТ К ПРИЛОЖЕНИЮ 1.
+  Расчет дохода от продажи объектов недвижимого имущества
+  */
+  appendix_1_calculation = [];
+  for (let i = 0; i < Math.ceil(declaration.APPENDIX_1_CALCULATION.length / 4); i++) {
+    [appendix_1_calculation[i]] = await pdfDoc.copyPages(srcDoc, [11]);
+    pdfDoc.addPage(appendix_1_calculation[i]);
+    appendix_1_calculation[i].setFont(courier);
+    appendix_1_calculation[i].setFontColor(rgb(0, 0, 0));
+    appendix_1_calculation[i].setFontSize(15);
+    height = appendix_1_calculation[i].getHeight();
+    //ИНН, ФАМИЛИЯ, ИМЯ, ОТЧЕСТВО
+    appendix_1_calculation[i].drawText(declaration.inn, {x: 184.5, y: height - 28.1});
+    appendix_1_calculation[i].drawText(declaration.dadata.name.surname, {
+      x: 130,
+      y: height - 70,
+      font: courier_normal
+    });
+    appendix_1_calculation[i].drawText(declaration.dadata.name.name.slice(0, 1) + ".", {
+      x: 475,
+      y: height - 70,
+      font: courier_normal
+    });
+    if (declaration.dadata.name.patronymic) appendix_1_calculation[i].drawText(declaration.dadata.name.patronymic.slice(0, 1) + ".", {
+      x: 530,
+      y: height - 70,
+      font: courier_normal
+    });
+  }
+
+  appendix_index = 0;
+  appendix_position = 0;
+
+  declaration.APPENDIX_1_CALCULATION.forEach((item) => {
+    //010 Кадастровый номер отчужденного объекта недвижимого имущества
+    breakToStrings(item.s010, 40).forEach((line, line_index) => {
+      appendix_1_calculation[appendix_index].drawText(line.toUpperCase(), {
+        x: 15,
+        y: height - 120.5 - (169 * appendix_position) - (line_index * 23)
+      });
+    });
+    //020 Кадастровая стоимость объекта недвижимого имущества
+    field = breakNumber(item.s020);
+    position = (13 - field[0].length) * 14.1;
+    appendix_1_calculation[appendix_index].drawText(field[0], {
+      x: 15 + position,
+      y: height - 197.5 - (169 * appendix_position)
+    });
+    appendix_1_calculation[appendix_index].drawText(field[1], {x: 213, y: height - 197.5 - (169 * appendix_position)});
+    //030 Сумма дохода от продажи объекта недвижимого имущества
+    field = breakNumber(item.s030);
+    position = (13 - field[0].length) * 14.1;
+    appendix_1_calculation[appendix_index].drawText(field[0], {
+      x: 335 + position,
+      y: height - 197.5 - (169 * appendix_position)
+    });
+    appendix_1_calculation[appendix_index].drawText(field[1], {x: 533, y: height - 197.5 - (169 * appendix_position)});
+    //040 Кадастровая стоимость, указанная в строке 020, с учетом коэффициента
+    field = breakNumber(item.s040);
+    position = (13 - field[0].length) * 14.1;
+    appendix_1_calculation[appendix_index].drawText(field[0], {
+      x: 15 + position,
+      y: height - 251 - (169 * appendix_position)
+    });
+    appendix_1_calculation[appendix_index].drawText(field[1], {x: 213, y: height - 251 - (169 * appendix_position)});
+    //050 Сумма дохода от продажи объекта недвижимого имущества в целях налогообложения налогом на доходы физических лиц
+    field = breakNumber(item.s050);
+    position = (13 - field[0].length) * 14.1;
+    appendix_1_calculation[appendix_index].drawText(field[0], {
+      x: 335 + position,
+      y: height - 251 - (169 * appendix_position)
+    });
+    appendix_1_calculation[appendix_index].drawText(field[1], {x: 533, y: height - 251 - (169 * appendix_position)});
+
+    appendix_position++;
+    if (appendix_position === 4) {
+      appendix_position = 0;
+      appendix_index++;
+    }
+  });
+
 
   /*
   ГЕНЕРАЦИЯ ЗАЯВЛЕНИЯ
@@ -572,7 +663,6 @@ async function modifyPdf(declaration) {
     thickness: 0.5,
     color: rgb(0.75, 0.75, 0.75)
   });
-
 
 
   // ДОБАВЛЯЮ НОМЕРА СТРАНИЦ

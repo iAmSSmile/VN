@@ -1,5 +1,5 @@
 const moment = require('moment');
-const { DateTime } = require('luxon');
+const {DateTime} = require('luxon');
 moment.locale('ru');
 
 const mongoose = require('mongoose');
@@ -399,7 +399,7 @@ declarationSchema.virtual('EMPLOYERS_TAX').get(function () {
 /*
 ОТДАЕТ МАССИВ ЗАПИСЕЙ ДЛЯ ПРИЛОЖЕНИЯ 1
 */
-declarationSchema.virtual('APPENDIX_1_ITEMS').get(function () {
+declarationSchema.virtual('APPENDIX_1').get(function () {
   let result = [];
   this.employers.forEach((employer, index) => {
     let item = {};
@@ -416,13 +416,13 @@ declarationSchema.virtual('APPENDIX_1_ITEMS').get(function () {
   this.sell_estate.forEach((estate, index) => {
     let item = {};
     item.s010 = "13";
-    let startDate = DateTime.fromFormat(estate.how_to_buy === "buy"? estate.buy_date : estate.get_date, "dd.MM.yyyy");
+    let startDate = DateTime.fromFormat(estate.how_to_buy === "buy" ? estate.buy_date : estate.get_date, "dd.MM.yyyy");
     if (startDate < DateTime.local(2016, 1, 1)) {
-      item.s020 = estate.type === "house"? "01" : "11";
+      item.s020 = estate.type === "house" ? "01" : "11";
       item.s070 = estate.sell_price;
     } else {
-      item.s020 = estate.type === "house"? "02" : "12";
-      item.s070 = estate.sell_price < (estate.kadastr_price * 0.7) ? (estate.kadastr_price * 0.7) : estate.sell_price;
+      item.s020 = estate.type === "house" ? "02" : "12";
+      item.s070 = estate.sell_price < (estate.kadastr_price / 100) * 70 ? (estate.kadastr_price / 100) * 70 : estate.sell_price;
     }
     if (estate.face === "entity") {
       item.s030 = estate.entity_inn;
@@ -449,6 +449,24 @@ declarationSchema.virtual('APPENDIX_1_ITEMS').get(function () {
     }
     item.s070 = transport.sell_price;
     item.s080 = "0";
+    result.push(item);
+  });
+  return result;
+});
+
+
+/*
+ОТДАЕТ МАССИВ ЗАПИСЕЙ ДЛЯ РАСЧЕТА К ПРИЛОЖЕНИЮ 1
+*/
+declarationSchema.virtual('APPENDIX_1_CALCULATION').get(function () {
+  let result = [];
+  this.sell_estate.forEach((estate, index) => {
+    let item = {};
+    item.s010 = estate.kadastr_number;
+    item.s020 = estate.kadastr_price;
+    item.s030 = estate.sell_price;
+    item.s040 = estate.kadastr_price ? (estate.kadastr_price / 100) * 70 : null;
+    item.s050 = item.s030 > item.s040 ? item.s030 : item.s040;
     result.push(item);
   });
   return result;
@@ -652,7 +670,7 @@ declarationSchema.virtual('SECTION_2_160').get(function () {
 */
 declarationSchema.virtual('APPENDIX_5_030').get(function () {
   let result = this.child_18.concat(this.child_24).reduce((sum, child) => {
-    return sum + ( child.child_count === "3" ? 3000 : 1400 );
+    return sum + (child.child_count === "3" ? 3000 : 1400);
   }, 0);
   return String(result * standart_coefficient(this.employers));
 });
