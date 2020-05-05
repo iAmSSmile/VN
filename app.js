@@ -38,7 +38,14 @@ app.use(expressSession({
     path : './sessions'
   }),
   secret: 'connect39',
-  maxAge : Date().now + (60 * 1000 * 30),
+  maxAge: () => {
+    if (process.env.NODE_ENV === "development") {
+      return Date().now + (60 * 1000 * 1440)
+    } else {
+      return Date().now + (60 * 1000 * 30)
+    }
+  },
+  // maxAge : Date().now + (60 * 1000 * 30),
   saveUninitialized: true,
   resave: true
 }));

@@ -880,7 +880,6 @@ declarationSchema.virtual('ESTATE_150').get(function () {
   return String(result);
 });
 
-
 /*
 ОСТАТОК ИМУЩЕСТВЕННОГО НАЛОГОВОГО ВЫЧЕТА
 10-170 Остаток имущественного налогового вычета (без учета процентов по займам (кредитам), переходящий на следующий налоговый период
@@ -892,5 +891,24 @@ declarationSchema.virtual('ESTATE_170').get(function () {
   return String(result);
 });
 
+/*
+ПРИЛОЖЕНИЕ 6
+Расчет имущественных налоговых вычетов по доходам от продажи
+имущества и имущественных прав, а также налоговых вычетов, установленных абзацем
+вторым подпункта 2 пункта 2 статьи 220 Налогового кодекса Российской Федерации
+*/
+declarationSchema.virtual('APPENDIX_6').get(function () {
+  let result = {};
+  let estates_type_1 = this.sell_estate.filter(estate => estate.type === "house");
+  let estates_type_2 = this.sell_estate.filter(estate => estate.type === "garage");
+  result.s020 = estates_type_1.reduce((sum, estate) => sum + estate.buy_price, 0);
+  result.s010 = result.s020 > 1000000 ? 1000000 : result.s020;
+  result.s060 = estates_type_2.reduce((sum, estate) => sum + estate.buy_price, 0);
+  result.s050 = result.s060 > 250000 ? 250000 : result.s060;
+  result.s070 = this.sell_transport.reduce((sum, transport) => sum + transport.buy_price, 0);
+  result.s080 = result.s070 > 250000 ? 250000 : result.s070;
+  result.s160 = result.s010 + result.s020 + result.s050 + result.s060 + result.s070 + result.s080;
+  return result;
+});
 
 module.exports = mongoose.model('Declaration', declarationSchema);

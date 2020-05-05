@@ -602,6 +602,91 @@ async function modifyPdf(declaration) {
 
 
   /*
+  ПРИЛОЖЕНИЕ 6.
+  Расчет имущественных налоговых вычетов по доходам от продажи
+  имущества и имущественных прав, а также налоговых вычетов, установленных абзацем
+  вторым подпункта 2 пункта 2 статьи 220 Налогового кодекса Российской Федерации
+  */
+  if (Object.entries(declaration.APPENDIX_6).length) {
+    const [appendix_6] = await pdfDoc.copyPages(srcDoc, [8]);
+    pdfDoc.addPage(appendix_6);
+    appendix_6.setFont(courier);
+    appendix_6.setFontColor(rgb(0, 0, 0));
+    appendix_6.setFontSize(15);
+    height = appendix_6.getHeight();
+
+    //ИНН, ФАМИЛИЯ, ИМЯ, ОТЧЕСТВО
+    appendix_6.drawText(declaration.inn, {x: 184.5, y: height - 28.1});
+    appendix_6.drawText(declaration.dadata.name.surname, {x: 130, y: height - 70, font: courier_normal});
+    appendix_6.drawText(declaration.dadata.name.name.slice(0, 1) + ".", {
+      x: 475,
+      y: height - 70,
+      font: courier_normal
+    });
+    if (declaration.dadata.name.patronymic) appendix_6.drawText(declaration.dadata.name.patronymic.slice(0, 1) + ".", {
+      x: 530,
+      y: height - 70,
+      font: courier_normal
+    });
+
+    //010 Сумма имущественного налогового вычета по доходам от продажи имущества (за исключением доли (долей) в указанном имуществе)
+    if (declaration.APPENDIX_6.s010) {
+      field = breakNumber(declaration.APPENDIX_6.s010);
+      position = (7 - field[0].length) * 14.1;
+      appendix_6.drawText(field[0], {x: 437 + position, y: height - 157});
+      appendix_6.drawText(field[1], {x: 550, y: height - 157});
+    }
+
+    //020 Сумма фактически произведенных и документально подтвержденных расходов, связанных с приобретением имущества (за исключением доли (долей) в указанном имуществе)
+    if (declaration.APPENDIX_6.s020) {
+      field = breakNumber(declaration.APPENDIX_6.s020);
+      position = (9 - field[0].length) * 14.1;
+      appendix_6.drawText(field[0], {x: 409 + position, y: height - 183});
+      appendix_6.drawText(field[1], {x: 550, y: height - 183});
+    }
+
+    //050 Сумма имущественного налогового вычета по доходам от продажи имущества
+    if (declaration.APPENDIX_6.s050) {
+      field = breakNumber(declaration.APPENDIX_6.s050);
+      position = (6 - field[0].length) * 14.1;
+      appendix_6.drawText(field[0], {x: 451 + position, y: height - 283});
+      appendix_6.drawText(field[1], {x: 550, y: height - 283});
+    }
+
+    //060 Сумма фактически произведенных и документально подтвержденных расходов, связанных с приобретением имущества
+    if (declaration.APPENDIX_6.s060) {
+      field = breakNumber(declaration.APPENDIX_6.s060);
+      position = (9 - field[0].length) * 14.1;
+      appendix_6.drawText(field[0], {x: 409 + position, y: height - 309});
+      appendix_6.drawText(field[1], {x: 550, y: height - 309});
+    }
+
+    //070 Сумма имущественного налогового вычета по доходам от продажи имущества
+    if (declaration.APPENDIX_6.s070) {
+      field = breakNumber(declaration.APPENDIX_6.s070);
+      position = (6 - field[0].length) * 14.1;
+      appendix_6.drawText(field[0], {x: 451 + position, y: height - 350});
+      appendix_6.drawText(field[1], {x: 550, y: height - 350});
+    }
+
+    //080 Сумма фактически произведенных и документально подтвержденных расходов, связанных с приобретением имущества
+    if (declaration.APPENDIX_6.s080) {
+      field = breakNumber(declaration.APPENDIX_6.s080);
+      position = (9 - field[0].length) * 14.1;
+      appendix_6.drawText(field[0], {x: 409 + position, y: height - 375});
+      appendix_6.drawText(field[1], {x: 550, y: height - 375});
+    }
+
+    //160 Общая сумма имущественных налоговых вычетов и расходов, принимаемых к вычету (руб. коп.)
+    if (declaration.APPENDIX_6.s160) {
+      field = breakNumber(declaration.APPENDIX_6.s160);
+      position = (9 - field[0].length) * 14.1;
+      appendix_6.drawText(field[0], {x: 409 + position, y: height - 745});
+      appendix_6.drawText(field[1], {x: 550, y: height - 745});
+    }
+  }
+
+  /*
   ГЕНЕРАЦИЯ ЗАЯВЛЕНИЯ
   */
   const [empty] = await pdfDoc.copyPages(srcDoc, [13]);
