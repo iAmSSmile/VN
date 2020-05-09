@@ -86,13 +86,13 @@ $(document).ready(function () {
 
   $(document).on("change", `input[type="radio"][name="how_to_buy"]`, function (event) {
     if ($(this).val() === "inherit") {
-      $(this).parents('form').find(`.buyer-form`).addClass("hidden");
-      enableIndividualForm($(this).parents('form'));
+      // $(this).parents('form').find(`.buyer-form`).addClass("hidden");
+      // enableIndividualForm($(this).parents('form'));
       $(this).parents('form').find(`input[name="buy_price"]`).val("").removeClass("input-filled").parent().parent().addClass("hidden");
       $(this).parents('form').find(`input[name="buy_date"]`).val("").removeClass("input-filled").parent().parent().addClass("hidden");
       $(this).parents('form').find(`input[name="get_date"]`).val("").removeClass("input-filled").parent().parent().removeClass("hidden");
     } else {
-      $(this).parents('form').find(`.buyer-form`).removeClass("hidden");
+      // $(this).parents('form').find(`.buyer-form`).removeClass("hidden");
       $(this).parents('form').find(`input[name="buy_price"]`).val("").removeClass("input-filled").parent().parent().removeClass("hidden");
       $(this).parents('form').find(`input[name="buy_date"]`).val("").removeClass("input-filled").parent().parent().removeClass("hidden");
       $(this).parents('form').find(`input[name="get_date"]`).val("").removeClass("input-filled").parent().parent().addClass("hidden");

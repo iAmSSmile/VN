@@ -899,15 +899,46 @@ declarationSchema.virtual('ESTATE_170').get(function () {
 */
 declarationSchema.virtual('APPENDIX_6').get(function () {
   let result = {};
-  let estates_type_1 = this.sell_estate.filter(estate => estate.type === "house");
-  let estates_type_2 = this.sell_estate.filter(estate => estate.type === "garage");
-  result.s020 = estates_type_1.reduce((sum, estate) => sum + estate.buy_price, 0);
-  result.s010 = result.s020 > 1000000 ? 1000000 : result.s020;
-  result.s060 = estates_type_2.reduce((sum, estate) => sum + estate.buy_price, 0);
-  result.s050 = result.s060 > 250000 ? 250000 : result.s060;
-  result.s070 = this.sell_transport.reduce((sum, transport) => sum + transport.buy_price, 0);
-  result.s080 = result.s070 > 250000 ? 250000 : result.s070;
-  result.s160 = result.s010 + result.s020 + result.s050 + result.s060 + result.s070 + result.s080;
+  if (this.sell_estate.length + this.sell_transport.length) {
+    result = {s010: 0, s020: 0, s050: 0, s060: 0, s070: 0, s080: 0, s160: 0};
+    this.sell_estate.filter(estate => estate.type === "house").forEach((estate) => {
+      if (estate.buy_price && estate.buy_price > 1000000) {
+        result.s020 += estate.buy_price;
+      } else {
+        if (estate.sell_price > 1000000) {
+          result.s010 += 1000000;
+        } else {
+          result.s010 += estate.sell_price;
+        }
+      }
+    });
+    if (result.s010 > 1000000) result.s010 = 1000000;
+    this.sell_estate.filter(estate => estate.type === "garage").forEach((estate) => {
+      if (estate.buy_price && estate.buy_price > 250000) {
+        result.s060 += estate.buy_price;
+      } else {
+        if (estate.sell_price > 250000) {
+          result.s050 += 250000;
+        } else {
+          result.s050 += estate.sell_price;
+        }
+      }
+    });
+    if (result.s050 > 250000) result.s050 = 250000;
+    this.sell_transport.forEach((transport) => {
+      if (transport.buy_price > 250000) {
+        result.s080 += transport.buy_price;
+      } else {
+        if (transport.sell_price > 250000) {
+          result.s070 += 250000;
+        } else {
+          result.s070 += transport.sell_price;
+        }
+      }
+    });
+    if (result.s070 > 250000) result.s070 = 250000;
+    result.s160 = result.s010 + result.s020 + result.s050 + result.s060 + result.s070 + result.s080;
+  }
   return result;
 });
 

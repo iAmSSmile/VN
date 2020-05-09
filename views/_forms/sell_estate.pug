@@ -63,7 +63,7 @@ form.form(name="sell_estate" id="sell_estate--" + index)
         .input-block
           input.input-field(type="number" name='kadastr_price' value=estate.kadastr_price class=estate.kadastr_price ? 'input-filled' : '')
           .input-label Кадастровая стоимость, руб.
-  .subform-part.buyer-form(class=estate.how_to_buy === "inherit" ? "hidden" : "")
+  .subform-part.buyer-form
     .form-part-header
       .header Информация о покупателе
     .row
