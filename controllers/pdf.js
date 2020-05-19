@@ -645,6 +645,22 @@ async function modifyPdf(declaration) {
       appendix_6.drawText(field[1], {x: 550, y: height - 183});
     }
 
+    //030 Сумма имущественного налогового вычета по доходам от продажи доли (долей) имущества
+    if (declaration.APPENDIX_6.s030) {
+      field = breakNumber(declaration.APPENDIX_6.s030);
+      position = (7 - field[0].length) * 14.1;
+      appendix_6.drawText(field[0], {x: 437 + position, y: height - 209});
+      appendix_6.drawText(field[1], {x: 550, y: height - 209});
+    }
+
+    //040 Сумма фактически произведенных и документально подтвержденных расходов, связанных с приобретением доли (долей) имущества
+    if (declaration.APPENDIX_6.s040) {
+      field = breakNumber(declaration.APPENDIX_6.s040);
+      position = (9 - field[0].length) * 14.1;
+      appendix_6.drawText(field[0], {x: 409 + position, y: height - 235});
+      appendix_6.drawText(field[1], {x: 550, y: height - 235});
+    }
+
     //050 Сумма имущественного налогового вычета по доходам от продажи имущества
     if (declaration.APPENDIX_6.s050) {
       field = breakNumber(declaration.APPENDIX_6.s050);

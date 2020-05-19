@@ -5,7 +5,6 @@ $(document).ready(function () {
 
   $("form").each(function (index) {
     addTooltips($(this));
-    // addDatedropper($(this));
     addMasks($(this));
     check_dates($(this));
   });
@@ -18,13 +17,11 @@ $(document).ready(function () {
       disableMobile: true
     });
   }
-
   function addMasks($form) {
     $form.find('input[name*="entity_inn"]').mask("000000000000");
     $form.find('input[name*="entity_kpp"]').mask("000000000");
     $form.find('input[name*="entity_oktmo"]').mask("00000000000");
   }
-
   function addTooltips($form) {
     let formID = $($form).attr("id");
     let formName = formID.split('--')[0];
@@ -75,60 +72,101 @@ $(document).ready(function () {
   }
 
   $(document).on("change", `input[type="radio"][name="type"]`, function (event) {
+    let form = $(this).parents('form');
     if ($(this).val() === "garage") {
-      $(this).parents('form').find(`.single-form`).addClass("hidden");
-      $(this).parents('form').find(`input[name="single:boolean"]`).prop("checked", false);
+      switchFractionCheckbox(form, false);
+      switchFractionForm(form, false);
+      switchSingleCheckbox(form, false);
     } else {
-      $(this).parents('form').find(`.single-form`).removeClass("hidden");
-      $(this).parents('form').find(`input[name="single:boolean"]`).prop("checked", false);
+      switchSingleCheckbox(form, true);
+      switchFractionCheckbox(form, true);
     }
   });
-
+  $(document).on("change", `input[type="checkbox"][name="fraction:boolean"]`, function (event) {
+    let form = $(this).parents('form');
+    if ($(this).prop("checked")) {
+      switchFractionForm(form, true);
+    } else {
+      switchFractionForm(form, false);
+    }
+  });
   $(document).on("change", `input[type="radio"][name="how_to_buy"]`, function (event) {
+    let form = $(this).parents('form');
     if ($(this).val() === "inherit") {
-      // $(this).parents('form').find(`.buyer-form`).addClass("hidden");
-      // enableIndividualForm($(this).parents('form'));
-      $(this).parents('form').find(`input[name="buy_price"]`).val("").removeClass("input-filled").parent().parent().addClass("hidden");
-      $(this).parents('form').find(`input[name="buy_date"]`).val("").removeClass("input-filled").parent().parent().addClass("hidden");
-      $(this).parents('form').find(`input[name="get_date"]`).val("").removeClass("input-filled").parent().parent().removeClass("hidden");
+      switchHowToBuyForm(form, "inherit");
     } else {
-      // $(this).parents('form').find(`.buyer-form`).removeClass("hidden");
-      $(this).parents('form').find(`input[name="buy_price"]`).val("").removeClass("input-filled").parent().parent().removeClass("hidden");
-      $(this).parents('form').find(`input[name="buy_date"]`).val("").removeClass("input-filled").parent().parent().removeClass("hidden");
-      $(this).parents('form').find(`input[name="get_date"]`).val("").removeClass("input-filled").parent().parent().addClass("hidden");
+      switchHowToBuyForm(form, "buy");
     }
     check_fullness();
   });
-
   $(document).on("change", `input[type="radio"][name="face"]`, function (event) {
+    let form = $(this).parents('form');
     if ($(this).val() === "individual") {
-      enableIndividualForm($(this).parents('form'));
+      switchFaceForm(form, "individual");
     } else {
-      enableEntityForm($(this).parents('form'));
+      switchFaceForm(form, "entity");
     }
     check_fullness();
   });
-
-  function enableIndividualForm($form) {
-    $form.find(`.individual-form`).removeClass("hidden");
-    $form.find(`input[name="face"][value="individual"]`).prop("checked", true);
-    $form.find(`.entity-form`).addClass("hidden");
-    $form.find(`input[name="entity_name"]`).val("").removeClass("input-filled");
-    $form.find(`input[name="entity_oktmo"]`).val("").removeClass("input-filled");
-    $form.find(`input[name="entity_inn"]`).val("").removeClass("input-filled");
-    $form.find(`input[name="entity_kpp"]`).val("").removeClass("input-filled");
-  }
-
-  function enableEntityForm($form) {
-    $form.find(`.entity-form`).removeClass("hidden");
-    $form.find(`input[name="face"][value="entity"]`).prop("checked", true);
-    $form.find(`.individual-form`).addClass("hidden");
-    $form.find(`input[name="individual_name"]`).val("").removeClass("input-filled");
-  }
-
   $(document).on("change", `input[name="single:boolean"], input[name="get_date"], input[name="buy_date"], input[name="sell_date"]`, function (event) {
     check_dates($(this).parents('form'));
   });
+
+  function switchFaceForm($form, state) {
+    if (state === "individual") {
+      $form.find(`input[name="entity_name"]`).val("").removeClass("input-filled");
+      $form.find(`input[name="entity_oktmo"]`).val("").removeClass("input-filled");
+      $form.find(`input[name="entity_inn"]`).val("").removeClass("input-filled");
+      $form.find(`input[name="entity_kpp"]`).val("").removeClass("input-filled");
+      $form.find(`.entity-form`).addClass("hidden");
+      $form.find(`input[name="face"][value="individual"]`).prop("checked", true);
+      $form.find(`.individual-form`).removeClass("hidden");
+    } else {
+      $form.find(`input[name="individual_name"]`).val("").removeClass("input-filled");
+      $form.find(`.individual-form`).addClass("hidden");
+      $form.find(`input[name="face"][value="entity"]`).prop("checked", true);
+      $form.find(`.entity-form`).removeClass("hidden");
+    }
+  }
+  function switchHowToBuyForm($form, state) {
+    if (state === "buy") {
+      $form.find(`input[name="get_date"]`).val("").removeClass("input-filled").parent().parent().addClass("hidden");
+      $form.find(`input[name="mortgage"]`).parent().parent().removeClass("hidden");
+      $form.find(`input[name="buy_price"]`).parent().parent().removeClass("hidden");
+      $form.find(`input[name="buy_date"]`).parent().parent().removeClass("hidden");
+    } else {
+      $form.find(`input[name="mortgage"]`).val("0").addClass("input-filled").parent().parent().addClass("hidden");
+      $form.find(`input[name="buy_price"]`).val("").removeClass("input-filled").parent().parent().addClass("hidden");
+      $form.find(`input[name="buy_date"]`).val("").removeClass("input-filled").parent().parent().addClass("hidden");
+      $form.find(`input[name="get_date"]`).parent().parent().removeClass("hidden");
+    }
+  }
+  function switchSingleCheckbox($form, state) {
+    if (state) {
+      $form.find(`input[name="single:boolean"]`).parent().removeClass("hidden");
+    } else {
+      $form.find(`input[name="single:boolean"]`).prop("checked", false);
+      $form.find(`input[name="single:boolean"]`).parent().addClass("hidden");
+    }
+  }
+  function switchFractionCheckbox($form, state) {
+    if (state) {
+      $form.find(`input[name="fraction:boolean"]`).parent().removeClass("hidden");
+    } else {
+      $form.find(`input[name="fraction:boolean"]`).prop("checked", false);
+      $form.find(`input[name="fraction:boolean"]`).parent().addClass("hidden");
+    }
+  }
+  function switchFractionForm($form, state) {
+    if (state) {
+      $form.find(`.fraction-form input[name="contract"][value="multi"]`).prop("checked", true);
+      $form.find(`.fraction-form`).removeClass("hidden");
+    } else {
+      $form.find(`.fraction-form input[name="contract"][value="multi"]`).prop("checked", true);
+      $form.find(`.fraction-form input[name="fraction_size"]`).val("100").addClass("input-filled");
+      $form.find(`.fraction-form`).addClass("hidden");
+    }
+  }
 
   function check_dates($form) {
     $form.find(`.error-date`).addClass("hidden");
@@ -226,7 +264,7 @@ $(document).ready(function () {
     switch (formName) {
       case "sell_estate":
         $(".forms").append(
-          `<form class="form" name="sell_estate" id="${formID}"><a class="remove-form"></a><div class="form-part"><div class="form-part-header"><div class="header">Продажа недвижимости</div></div><div class="row"><div class="col-xs-12"><div class="radio-block"><input type="radio" id="${formID}-house" name="type" value="house" checked><label for="${formID}-house">Дом, квартира, комната, садовый домик, земельный участок и доли во всем этом</label><input type="radio" id="${formID}-garage" name="type" value="garage"><label for="${formID}-garage">Гараж, сарай и прочее недвижимое имущество</label></div></div><div class="col-xs-12 single-form"><div class="checkbox-block"><input class="checkbox-field" type="checkbox" id="${formID}-single" name="single:boolean"><label class="checkbox-label single-label" for="${formID}-single">Единственное жилье</label><a class="checkbox-help single-help"></a></div></div></div></div><div class="subform-part"><div class="form-part-header"><div class="header">Как вы приобрели проданную недвижимость, сколько ей владели, ее стоимость</div></div><div class="row"><div class="col-xs-12"><div class="radio-block radio-vertical"><input type="radio" id="${formID}-buy" name="how_to_buy" value="buy" checked=""><label for="${formID}-buy">Купили</label><input type="radio" id="${formID}-inherit" name="how_to_buy" value="inherit"><label for="${formID}-inherit">Унаследовали, получили в подарок, приватизировали, получили по договору ренты</label></div></div></div><div class="row"><div class="col-xs-12 col-sm-6 col-md-3 hidden"><div class="input-block"><input class="datedropper input-field" type="text" name="get_date"><a class="input-help"></a><div class="input-label">Дата начала владения</div></div></div><div class="col-xs-12 col-sm-6 col-md-3"><div class="input-block"><input class="datedropper input-field" type="text" name="buy_date"><div class="input-label">Дата покупки</div></div></div><div class="col-xs-12 col-sm-6 col-md-3"><div class="input-block"><input class="datedropper input-field" type="text" name="sell_date"><div class="input-label">Дата продажи</div></div></div><div class="col-xs-12 last-md error-date hidden"><div class="error-block">Вы владели этой недвижимостью более 3 лет. Вам не нужно подавать декларацию и платить налоги.</div></div><div class="col-xs-12 col-sm-6 col-md-3"><div class="input-block"><input class="input-field" type="number" name="buy_price"><div class="input-label">Стоимость покупки, руб.</div></div></div><div class="col-xs-12 col-sm-6 col-md-3"><div class="input-block"><input class="input-field" type="number" name="sell_price"><div class="input-label">Стоимость продажи, руб.</div></div></div></div></div><div class="subform-part rosreestr"><div class="form-part-header"><div class="header">Информация из Росреестра</div><div class="description">Вам нужно указать кадастровый номер и кадастровую стоимость недвижимости. Заказать выписку или найти данные о недвижимости по ее адресу можно <a href="https://rosreestr.net/uznat-kadastrovuyu-stoimost-nedvijimosti" target="_blank">здесь.</a></div></div><div class="row"><div class="col-xs-12 col-sm-6 col-md-3"><div class="input-block"><input class="input-field" type="text" name="kadastr_number" value=""><div class="input-label">Кадастровый номер</div></div></div><div class="col-xs-12 col-sm-6 col-md-3"><div class="input-block"><input class="input-field" type="number" name="kadastr_price"><div class="input-label">Кадастровая стоимость, руб.</div></div></div></div></div><div class="subform-part buyer-form"><div class="form-part-header"><div class="header">Информация о покупателе</div></div><div class="row"><div class="col-xs-12"><div class="radio-block"><input type="radio" id="${formID}-individual" name="face" value="individual" checked><label for="${formID}-individual">Физическое лицо</label><input type="radio" id="${formID}-entity" name="face" value="entity"><label for="${formID}-entity">Юридическое лицо</label></div></div></div><div class="row individual-form"><div class="col-xs-12"><div class="input-block"><input class="input-field" type="text" name="individual_name"><div class="input-label">ФИО покупателя</div></div></div></div><div class="row entity-form hidden"><div class="col-xs-12"><div class="input-block"><input class="input-field" type="text" name="entity_name"><div class="input-label">Наименование юр. лица</div></div></div><div class="col-xs-12 col-sm-6 col-md-4"><div class="input-block"><input class="input-field" type="number" name="entity_oktmo"><div class="input-label">Код по ОКТМО</div></div></div><div class="col-xs-12 col-sm-6 col-md-4"><div class="input-block"><input class="input-field" type="number" name="entity_inn"><div class="input-label">ИНН</div></div></div><div class="col-xs-12 col-sm-6 col-md-4"><div class="input-block"><input class="input-field" type="number" name="entity_kpp"><div class="input-label">КПП</div></div></div></div></div></form>`
+          `<form class="form" name="sell_estate" id="${formID}"><a class="remove-form"></a><div class="form-part"><div class="form-part-header"><div class="header">Продажа недвижимости</div></div><div class="row"><div class="col-xs-12"><div class="radio-block"><input type="radio" id="${formID}-house" name="type" value="house" checked=""><label for="${formID}-house">Дом, квартира, комната, садовый домик, земельный участок</label><input type="radio" id="${formID}-garage" name="type" value="garage"><label for="${formID}-garage">Гараж, сарай и прочее недвижимое имущество</label></div></div><div class="col-xs-12"><div class="checkbox-block"><input class="checkbox-field" type="checkbox" id="${formID}-single" name="single:boolean"><label class="checkbox-label single-label" for="${formID}-single">Единственное жилье</label><a class="checkbox-help single-help"></a></div><div class="checkbox-block"><input class="checkbox-field" type="checkbox" id="${formID}-fraction" name="fraction:boolean"><label class="checkbox-label single-label" for="${formID}-fraction">Доля в недвижимости</label><a class="checkbox-help fraction-help"></a></div></div></div></div><div class="subform-part fraction-form hidden"><div class="form-part-header"><div class="header">Информация о доле</div></div><div class="row"><div class="col-xs-12"><div class="radio-block"><input type="radio" id="${formID}-multi_contract" name="contract" value="multi" checked><label for="${formID}-multi_contract">Эта доля продана отдельным контрактом</label><input type="radio" id="${formID}-single_contract" name="contract" value="single"><label for="${formID}-single_contract">Все доли проданы одним контрактом</label></div></div><div class="col-xs-12 col-sm-6 col-md-3"><div class="input-block"><input class="input-field input-filled" type="number" name="fraction_size" value="100"><div class="input-label">Размер доли, %</div></div></div></div></div><div class="subform-part"><div class="form-part-header"><div class="header">Как вы приобрели проданную недвижимость, сколько ей владели, ее стоимость</div></div><div class="row"><div class="col-xs-12"><div class="radio-block radio-vertical"><input type="radio" id="${formID}-buy" name="how_to_buy" value="buy" checked><label for="${formID}-buy">Купили</label><input type="radio" id="${formID}-inherit" name="how_to_buy" value="inherit"><label for="${formID}-inherit">Унаследовали, получили в подарок, приватизировали, получили по договору ренты</label></div></div></div><div class="row"><div class="col-xs-12 col-sm-6 col-md-3 hidden"><div class="input-block"><input class="datedropper input-field" type="text" name="get_date"><a class="input-help"></a><div class="input-label">Дата начала владения</div></div></div><div class="col-xs-12 col-sm-6 col-md-3"><div class="input-block"><input class="datedropper input-field" type="text" name="buy_date"><div class="input-label">Дата покупки</div></div></div><div class="col-xs-12 col-sm-6 col-md-3"><div class="input-block"><input class="datedropper input-field" type="text" name="sell_date"><div class="input-label">Дата продажи</div></div></div></div><div class="row"><div class="col-xs-12 last-md error-date hidden"><div class="error-block">Вы владели этой недвижимостью более 3 лет. Вам не нужно подавать декларацию и платить налоги.</div></div><div class="col-xs-12 col-sm-6 col-md-3"><div class="input-block"><input class="input-field" type="number" name="buy_price"><div class="input-label">Стоимость покупки, руб.</div></div></div><div class="col-xs-12 col-sm-6 col-md-3"><div class="input-block"><input class="input-field" type="number" name="sell_price"><div class="input-label">Стоимость продажи, руб.</div></div></div><div class="col-xs-12 col-sm-6 col-md-3"><div class="input-block"><input class="input-field input-filled" type="number" name="mortgage" value="0"><div class="input-label">Сумма выплаченных процентов по ипотеке</div></div></div></div></div><div class="subform-part rosreestr"><div class="form-part-header"><div class="header">Информация из Росреестра</div><div class="description">Вам нужно указать кадастровый номер и кадастровую стоимость недвижимости. Заказать выписку или найти данные о недвижимости по ее адресу можно <a href="https://rosreestr.net/uznat-kadastrovuyu-stoimost-nedvijimosti" target="_blank">здесь.</a></div></div><div class="row"><div class="col-xs-12 col-sm-6 col-md-3"><div class="input-block"><input class="input-field" type="text" name="kadastr_number" value=""><div class="input-label">Кадастровый номер</div></div></div><div class="col-xs-12 col-sm-6 col-md-3"><div class="input-block"><input class="input-field" type="number" name="kadastr_price"><div class="input-label">Кадастровая стоимость, руб.</div></div></div></div></div><div class="subform-part buyer-form"><div class="form-part-header"><div class="header">Информация о покупателе</div></div><div class="row"><div class="col-xs-12"><div class="radio-block"><input type="radio" id="${formID}-individual" name="face" value="individual" checked><label for="${formID}-individual">Физическое лицо</label><input type="radio" id="${formID}-entity" name="face" value="entity"><label for="${formID}-entity">Юридическое лицо</label></div></div></div><div class="row individual-form"><div class="col-xs-12"><div class="input-block"><input class="input-field" type="text" name="individual_name"><div class="input-label">ФИО покупателя</div></div></div></div><div class="row entity-form hidden"><div class="col-xs-12"><div class="input-block"><input class="input-field" type="text" name="entity_name"><div class="input-label">Наименование юр. лица</div></div></div><div class="col-xs-12 col-sm-6 col-md-4"><div class="input-block"><input class="input-field" type="number" name="entity_oktmo"><div class="input-label">Код по ОКТМО</div></div></div><div class="col-xs-12 col-sm-6 col-md-4"><div class="input-block"><input class="input-field" type="number" name="entity_inn"><div class="input-label">ИНН</div></div></div><div class="col-xs-12 col-sm-6 col-md-4"><div class="input-block"><input class="input-field" type="number" name="entity_kpp"><div class="input-label">КПП</div></div></div></div></div></form>`
         );
         break;
       case "sell_transport":
@@ -256,7 +294,12 @@ $(document).ready(function () {
 
   function check_fullness() {
     let empty = $(`
+        input[name="get_date"]:visible,
+        input[name="buy_date"]:visible,
+        input[name="sell_date"],
         input[name="buy_price"]:visible,
+        input[name="part"],
+        input[name="mortgage"]:visible,
         input[name="sell_price"],
         input[name="kadastr_number"],
         input[name="kadastr_price"],

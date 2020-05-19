@@ -48,12 +48,18 @@ const healSchema = new Schema({
   medications: Number
 });
 const sellEstateSchema = new Schema({
-  type: String,
+  type: {
+    type: String,
+    enum: ['house', 'garage']
+  },
   single: {
     type: Boolean,
     default: false
   },
-  how_to_buy: String,
+  how_to_buy: {
+    type: String,
+    enum: ['buy', 'inherit']
+  },
   get_date: {
     type: String,
     match: [/\d{2}.\d{2}.\d{4}/, "Неверная дата"]
@@ -68,6 +74,24 @@ const sellEstateSchema = new Schema({
   },
   buy_price: Number,
   sell_price: Number,
+  fraction: {
+    type: Boolean,
+    default: false
+  },
+  contract: {
+    type: String,
+    enum: ['single', 'multi']
+  },
+  fraction_size: {
+    type: Number,
+    default: 100,
+    min: [0, 'Доля указывается про процентах от 0 до 100'],
+    max: [100, 'Доля указывается про процентах от 0 до 100']
+  },
+  mortgage: {
+    type: Number,
+    default: 0
+  },
   kadastr_number: String,
   kadastr_price: Number,
   face: String,
@@ -900,22 +924,57 @@ declarationSchema.virtual('ESTATE_170').get(function () {
 declarationSchema.virtual('APPENDIX_6').get(function () {
   let result = {};
   if (this.sell_estate.length + this.sell_transport.length) {
-    result = {s010: 0, s020: 0, s050: 0, s060: 0, s070: 0, s080: 0, s160: 0};
-    this.sell_estate.filter(estate => estate.type === "house").forEach((estate) => {
+    result = {s010: 0, s020: 0, s030: 0, s040: 0, s050: 0, s060: 0, s070: 0, s080: 0, s160: 0};
+    this.sell_estate.filter(estate => estate.type === "house").filter(estate => !estate.fraction).forEach((estate) => {
       if (estate.buy_price && estate.buy_price > 1000000) {
-        result.s020 += estate.buy_price;
+        if (estate.buy_price > estate.sell_price) {
+          result.s020 += estate.sell_price;
+        } else {
+          result.s020 += estate.buy_price;
+        }
       } else {
-        if (estate.sell_price > 1000000) {
+        if (estate.sell_price >= 1000000) {
           result.s010 += 1000000;
         } else {
           result.s010 += estate.sell_price;
         }
       }
     });
+    this.sell_estate.filter(estate => estate.type === "house").filter(estate => estate.fraction).forEach((estate) => {
+      if (estate.buy_price && estate.buy_price > 1000000) {
+        if (estate.buy_price > estate.sell_price) {
+          result.s040 += estate.sell_price;
+        } else {
+          result.s040 += estate.buy_price;
+        }
+      } else {
+        if (estate.sell_price >= 1000000) {
+          if (estate.contract === "single") {
+            result.s030 += 10000 * estate.fraction_size;
+          } else {
+            result.s030 += 1000000;
+          }
+        } else {
+          result.s030 += estate.sell_price;
+        }
+      }
+    });
     if (result.s010 > 1000000) result.s010 = 1000000;
+    if (result.s030 > 1000000) result.s030 = 1000000;
+    if (result.s010 + result.s030 > 1000000) {
+      let r010 = result.s010 / ((result.s010 + result.s030)/100);
+      let r030 = result.s030 / ((result.s010 + result.s030)/100);
+      let over = ((result.s010 + result.s030) - 1000000)/100;
+      result.s010 -= r010 * over;
+      result.s030 -= r030 * over;
+    }
     this.sell_estate.filter(estate => estate.type === "garage").forEach((estate) => {
       if (estate.buy_price && estate.buy_price > 250000) {
-        result.s060 += estate.buy_price;
+        if (estate.buy_price > estate.sell_price) {
+          result.s060 += estate.sell_price;
+        } else {
+          result.s060 += estate.buy_price;
+        }
       } else {
         if (estate.sell_price > 250000) {
           result.s050 += 250000;
@@ -937,7 +996,7 @@ declarationSchema.virtual('APPENDIX_6').get(function () {
       }
     });
     if (result.s070 > 250000) result.s070 = 250000;
-    result.s160 = result.s010 + result.s020 + result.s050 + result.s060 + result.s070 + result.s080;
+    result.s160 = result.s010 + result.s020 + result.s030 + result.s040 + result.s050 + result.s060 + result.s070 + result.s080;
   }
   return result;
 });
