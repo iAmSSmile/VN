@@ -2,76 +2,45 @@ form.form(name="sell_estate" id="sell_estate--" + index)
   a.remove-form
   .form-part
     .form-part-header
-      .header Продажа недвижимости
+      a.header Продажа недвижимости
+        .toggle-conditions показать условия
+      ul.conditions
+        li Вы владели этой недвижимостью менее 3 лет, в противном случае декларация не подается и налог не платится
     .row
       .col-xs-12
-        .radio-block
+        .radio-block.radio-vertical
           input(type="radio" id="sell_estate--" + index + "-house" name="type" value="house" checked=(estate.type === "house"))
-          label(for="sell_estate--" + index + "-house") Дом, квартира, комната, садовый домик, земельный участок
+          label(for="sell_estate--" + index + "-house") Продажа дома, квартиры, комнаты, садового домика, земельного участка
+          input(type="radio" id="sell_estate--" + index + "-fraction" name="type" value="fraction" checked=(estate.type === "fraction"))
+          label(for="sell_estate--" + index + "-fraction") Продажа доли в доме, квартире, земельном участке
           input(type="radio" id="sell_estate--" + index + "-garage" name="type" value="garage" checked=(estate.type === "garage"))
-          label(for="sell_estate--" + index + "-garage") Гараж, сарай и прочее недвижимое имущество
-      .col-xs-12
-        .checkbox-block(class=estate.type === "garage" ? "hidden" : "")
-          input.checkbox-field(type="checkbox" id="sell_estate--" + index + "-single" name="single:boolean" checked=(estate.single))
-          label.checkbox-label.single-label(for="sell_estate--" + index + "-single") Единственное жилье
-          a.checkbox-help.single-help
-        .checkbox-block(class=estate.type === "garage" ? "hidden" : "")
-          input.checkbox-field(type="checkbox" id="sell_estate--" + index + "-fraction" name="fraction:boolean" checked=(estate.fraction))
-          label.checkbox-label.single-label(for="sell_estate--" + index + "-fraction") Доля в недвижимости
-          a.checkbox-help.fraction-help
-  .subform-part.fraction-form(class=estate.fraction ? "" : "hidden")
-    .form-part-header
-      .header Информация о доле
+          label(for="sell_estate--" + index + "-garage") Продажа гаража, сарая и прочего недвижимого имущества
     .row
+      .col-xs-12.col-sm-6.col-md-3
+        .input-block
+          input.input-field(type="number" name='buy_price' value=estate.buy_price class=estate.buy_price != null ? 'input-filled' : '')
+          a.input-help.buy-estate-help
+          .input-label Стоимость покупки, руб.
+      .col-xs-12.col-sm-6.col-md-3
+        .input-block
+          input.input-field(type="number" name='sell_price' value=estate.sell_price class=estate.sell_price ? 'input-filled' : '')
+          .input-label Стоимость продажи, руб.
+      .col-xs-12.col-sm-6.col-md-3(class=estate.type === "fraction" ? "" : "hidden")
+        .input-block
+          input.input-field(type="number" name='fraction_size' value=estate.fraction_size class=estate.fraction_size ? 'input-filled' : '')
+          .input-label Размер доли, %
+      .col-xs-12.col-sm-6.col-md-3(class=estate.type === "garage" ? "hidden" : "")
+        .input-block
+          input.input-field(type="number" name='mortgage' value=estate.mortgage class=estate.mortgage != null ? 'input-filled' : '')
+          a.input-help.mortrage-help
+          .input-label Сумма выплаченных процентов по ипотеке
+    .row.contract-form(class=estate.type === "fraction" ? "" : "hidden")
       .col-xs-12
         .radio-block
           input(type="radio" id="sell_estate--" + index + "-multi_contract" name="contract" value="multi" checked=(estate.contract === "multi"))
           label(for="sell_estate--" + index + "-multi_contract") Эта доля продана отдельным контрактом
           input(type="radio" id="sell_estate--" + index + "-single_contract" name="contract" value="single" checked=(estate.contract === "single"))
           label(for="sell_estate--" + index + "-single_contract") Все доли проданы одним контрактом
-      .col-xs-12.col-sm-6.col-md-3
-        .input-block
-          input.input-field(type="number" name='fraction_size' value=estate.fraction_size class=estate.fraction_size ? 'input-filled' : '')
-          .input-label Размер доли, %
-  .subform-part
-    .form-part-header
-      .header Как вы приобрели проданную недвижимость, сколько ей владели, ее стоимость
-    .row
-      .col-xs-12
-        .radio-block.radio-vertical
-          input(type="radio" id="sell_estate--" + index + "-buy" name="how_to_buy" value="buy" checked=(estate.how_to_buy === "buy"))
-          label(for="sell_estate--" + index + "-buy") Купили
-          input(type="radio" id="sell_estate--" + index + "-inherit" name="how_to_buy" value="inherit" checked=(estate.how_to_buy === "inherit"))
-          label(for="sell_estate--" + index + "-inherit") Унаследовали, получили в подарок, приватизировали, получили по договору ренты
-    .row
-      .col-xs-12.col-sm-6.col-md-3(class=estate.how_to_buy === "buy" ? "hidden" : "")
-        .input-block
-          input.datedropper.input-field(type="text" name='get_date' value=estate.get_date class=estate.get_date ? 'input-filled':'')
-          a.input-help
-          .input-label Дата начала владения
-      .col-xs-12.col-sm-6.col-md-3(class=estate.how_to_buy === "inherit" ? "hidden" : "")
-        .input-block
-          input.datedropper.input-field(type="text" name='buy_date' value=estate.buy_date class=estate.buy_date ? 'input-filled':'')
-          .input-label Дата покупки
-      .col-xs-12.col-sm-6.col-md-3
-        .input-block
-          input.datedropper.input-field(type="text" name='sell_date' value=estate.sell_date class=estate.sell_date ? 'input-filled':'')
-          .input-label Дата продажи
-    .row
-      .col-xs-12.last-md.error-date.hidden
-        .error-block Вы владели этой недвижимостью более 3 лет. Вам не нужно подавать декларацию и платить налоги.
-      .col-xs-12.col-sm-6.col-md-3(class=estate.how_to_buy === "inherit" ? "hidden" : "")
-        .input-block
-          input.input-field(type="number" name='buy_price' value=estate.buy_price class=estate.buy_price ? 'input-filled':'')
-          .input-label Стоимость покупки, руб.
-      .col-xs-12.col-sm-6.col-md-3
-        .input-block
-          input.input-field(type="number" name='sell_price' value=estate.sell_price class=estate.sell_price ? 'input-filled':'')
-          .input-label Стоимость продажи, руб.
-      .col-xs-12.col-sm-6.col-md-3(class=estate.how_to_buy === "inherit" ? "hidden" : "")
-        .input-block
-          input.input-field.input-filled(type="number" name='mortgage' value=estate.mortgage)
-          .input-label Сумма выплаченных процентов по ипотеке
   .subform-part.rosreestr
     .form-part-header
       .header Информация из Росреестра
@@ -86,7 +55,7 @@ form.form(name="sell_estate" id="sell_estate--" + index)
         .input-block
           input.input-field(type="number" name='kadastr_price' value=estate.kadastr_price class=estate.kadastr_price ? 'input-filled' : '')
           .input-label Кадастровая стоимость, руб.
-  .subform-part.buyer-form
+  .subform-part
     .form-part-header
       .header Информация о покупателе
     .row

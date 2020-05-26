@@ -50,41 +50,12 @@ const healSchema = new Schema({
 const sellEstateSchema = new Schema({
   type: {
     type: String,
-    enum: ['house', 'garage']
-  },
-  single: {
-    type: Boolean,
-    default: false
-  },
-  how_to_buy: {
-    type: String,
-    enum: ['buy', 'inherit']
-  },
-  get_date: {
-    type: String,
-    match: [/\d{2}.\d{2}.\d{4}/, "Неверная дата"]
-  },
-  buy_date: {
-    type: String,
-    match: [/\d{2}.\d{2}.\d{4}/, "Неверная дата"]
-  },
-  sell_date: {
-    type: String,
-    match: [/\d{2}.\d{2}.\d{4}/, "Неверная дата"]
+    enum: ['house', 'fraction', 'garage']
   },
   buy_price: Number,
   sell_price: Number,
-  fraction: {
-    type: Boolean,
-    default: false
-  },
-  contract: {
-    type: String,
-    enum: ['single', 'multi']
-  },
   fraction_size: {
     type: Number,
-    default: 100,
     min: [0, 'Доля указывается про процентах от 0 до 100'],
     max: [100, 'Доля указывается про процентах от 0 до 100']
   },
@@ -92,9 +63,16 @@ const sellEstateSchema = new Schema({
     type: Number,
     default: 0
   },
+  contract: {
+    type: String,
+    enum: ['single', 'multi']
+  },
   kadastr_number: String,
   kadastr_price: Number,
-  face: String,
+  face: {
+    type: String,
+    enum: ['individual', 'entity']
+  },
   individual_name: String,
   entity_name: String,
   entity_oktmo: {
@@ -116,7 +94,10 @@ const sellEstateSchema = new Schema({
 const sellTransportSchema = new Schema({
   sell_price: Number,
   buy_price: Number,
-  face: String,
+  face: {
+    type: String,
+    enum: ['individual', 'entity']
+  },
   individual_name: String,
   entity_name: String,
   entity_oktmo: {
@@ -338,10 +319,43 @@ declarationSchema.virtual('STEP_4_FULLNESS').get(function () {
 });
 
 declarationSchema.virtual('STEP_5_FULLNESS').get(function () {
-  let errors = {
-    empty: true,
-    errors: []
-  };
+  let errors = {empty: false, errors: []};
+  let fields = [];
+  this.sell_estate.forEach(estate => {
+    fields.push(estate.buy_price);
+    fields.push(estate.sell_price);
+    if (estate.type === "fraction") fields.push(estate.fraction_size);
+    if (estate.type !== "garage") fields.push(estate.mortgage);
+    fields.push(estate.kadastr_number);
+    fields.push(estate.kadastr_price);
+    if (estate.face === "individual") fields.push(estate.individual_name);
+    if (estate.face === "entity") {
+      fields.push(estate.entity_name);
+      fields.push(estate.entity_oktmo);
+      fields.push(estate.entity_inn);
+      fields.push(estate.entity_kpp);
+    }
+  });
+  this.sell_transport.forEach(transport => {
+    fields.push(transport.buy_price);
+    fields.push(transport.sell_price);
+    if (transport.face === "individual") fields.push(transport.individual_name);
+    if (transport.face === "entity") {
+      fields.push(transport.entity_name);
+      fields.push(transport.entity_oktmo);
+      fields.push(transport.entity_inn);
+      fields.push(transport.entity_kpp);
+    }
+  });
+  let full = fields.every(field => {
+    return String(field) !== "";
+  });
+  if (!fields.length) {
+    errors.empty = true;
+    errors.errors.push('отсутствуют операции с недвижимостью и транспортом');
+  } else {
+    if (!full) errors.errors.push('Заполнены не все поля');
+  }
   return errors;
 });
 
@@ -354,11 +368,14 @@ declarationSchema.virtual('FULLNESS').get(function () {
   } else if (this.STEP_2_FULLNESS.length) {
     result.push("Необходимо заполнить данные о работодателе и доходах");
   }
-  if (this.STEP_3_FULLNESS.empty && this.STEP_4_FULLNESS.empty) {
+  if (this.STEP_3_FULLNESS.empty && this.STEP_4_FULLNESS.empty && this.STEP_5_FULLNESS.empty) {
     result.push("Необходимо заполнить один из вычетов");
   }
   if (this.STEP_4_FULLNESS.errors.length && !this.STEP_4_FULLNESS.empty) {
     result.push(`Необходимо заполнить поля "сумма" в социальном вычете`);
+  }
+  if (this.STEP_5_FULLNESS.errors.length && !this.STEP_5_FULLNESS.empty) {
+    result.push(`Необходимо заполнить все поля в вычете на продажу имущества`);
   }
   return result;
 });
@@ -371,11 +388,17 @@ declarationSchema.virtual('NOT_FILLED_STEPS').get(function () {
   if (this.STEP_2_FULLNESS.length) {
     result.push(2);
   }
-  if (this.STEP_3_FULLNESS.empty) {
+  if (this.STEP_3_FULLNESS.errors.length && !this.STEP_3_FULLNESS.empty) {
     result.push(3);
   }
-  if (this.STEP_4_FULLNESS.empty || (this.STEP_4_FULLNESS.errors.length && !this.STEP_3_FULLNESS.empty)) {
+  if (this.STEP_4_FULLNESS.errors.length && !this.STEP_4_FULLNESS.empty) {
     result.push(4);
+  }
+  if (this.STEP_5_FULLNESS.errors.length && !this.STEP_5_FULLNESS.empty) {
+    result.push(5);
+  }
+  if (this.STEP_3_FULLNESS.empty && this.STEP_4_FULLNESS.empty && this.STEP_5_FULLNESS.empty) {
+    result.push(3);
   }
   return result;
 });
@@ -440,14 +463,14 @@ declarationSchema.virtual('APPENDIX_1').get(function () {
   this.sell_estate.forEach((estate, index) => {
     let item = {};
     item.s010 = "13";
-    let startDate = DateTime.fromFormat(estate.how_to_buy === "buy" ? estate.buy_date : estate.get_date, "dd.MM.yyyy");
-    if (startDate < DateTime.local(2016, 1, 1)) {
-      item.s020 = estate.type === "house" ? "01" : "11";
-      item.s070 = estate.sell_price;
-    } else {
-      item.s020 = estate.type === "house" ? "02" : "12";
-      item.s070 = estate.sell_price < (estate.kadastr_price / 100) * 70 ? (estate.kadastr_price / 100) * 70 : estate.sell_price;
-    }
+    // let startDate = DateTime.fromFormat(estate.how_to_buy === "buy" ? estate.buy_date : estate.get_date, "dd.MM.yyyy");
+    // if (startDate < DateTime.local(2016, 1, 1)) {
+    //   item.s020 = estate.type === "house" ? "01" : "11";
+    //   item.s070 = estate.sell_price;
+    // } else {
+    item.s020 = estate.type === "garage" ? "12" : "02";
+    item.s070 = estate.sell_price < (estate.kadastr_price / 100) * 70 ? (estate.kadastr_price / 100) * 70 : estate.sell_price;
+    // }
     if (estate.face === "entity") {
       item.s030 = estate.entity_inn;
       item.s040 = estate.entity_kpp;
@@ -925,12 +948,12 @@ declarationSchema.virtual('APPENDIX_6').get(function () {
   let result = {};
   if (this.sell_estate.length + this.sell_transport.length) {
     result = {s010: 0, s020: 0, s030: 0, s040: 0, s050: 0, s060: 0, s070: 0, s080: 0, s160: 0};
-    this.sell_estate.filter(estate => estate.type === "house").filter(estate => !estate.fraction).forEach((estate) => {
-      if (estate.buy_price && estate.buy_price > 1000000) {
-        if (estate.buy_price > estate.sell_price) {
+    this.sell_estate.filter(estate => estate.type === "house").forEach((estate) => {
+      if ((estate.buy_price + estate.mortgage) >= 1000000) {
+        if ((estate.buy_price + estate.mortgage) > estate.sell_price) {
           result.s020 += estate.sell_price;
         } else {
-          result.s020 += estate.buy_price;
+          result.s020 += (estate.buy_price + estate.mortgage);
         }
       } else {
         if (estate.sell_price >= 1000000) {
@@ -940,12 +963,12 @@ declarationSchema.virtual('APPENDIX_6').get(function () {
         }
       }
     });
-    this.sell_estate.filter(estate => estate.type === "house").filter(estate => estate.fraction).forEach((estate) => {
-      if (estate.buy_price && estate.buy_price > 1000000) {
-        if (estate.buy_price > estate.sell_price) {
+    this.sell_estate.filter(estate => estate.type === "fraction").forEach((estate) => {
+      if ((estate.buy_price + estate.mortgage) >= 1000000) {
+        if ((estate.buy_price + estate.mortgage) > estate.sell_price) {
           result.s040 += estate.sell_price;
         } else {
-          result.s040 += estate.buy_price;
+          result.s040 += (estate.buy_price + estate.mortgage);
         }
       } else {
         if (estate.sell_price >= 1000000) {
@@ -969,7 +992,7 @@ declarationSchema.virtual('APPENDIX_6').get(function () {
       result.s030 -= r030 * over;
     }
     this.sell_estate.filter(estate => estate.type === "garage").forEach((estate) => {
-      if (estate.buy_price && estate.buy_price > 250000) {
+      if (estate.buy_price > 250000) {
         if (estate.buy_price > estate.sell_price) {
           result.s060 += estate.sell_price;
         } else {

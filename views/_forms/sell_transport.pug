@@ -10,7 +10,7 @@ form.form(name="sell_transport" id="sell_transport--" + index)
     .row
       .col-xs-12.col-sm-6.col-md-3
         .input-block
-          input.input-field.input-filled(type="number" name='buy_price' value=(transport.buy_price ? transport.buy_price : "0"))
+          input.input-field(type="number" name='buy_price' value=transport.buy_price class=transport.buy_price != null ? 'input-filled' : '')
           a.input-help.buy-transport-help
           .input-label Стоимость покупки, руб.
       .col-xs-12.col-sm-6.col-md-3
