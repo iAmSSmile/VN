@@ -9,6 +9,7 @@ $(document).ready(function () {
     $form.find('input[name*="entity_inn"]').mask("000000000000");
     $form.find('input[name*="entity_kpp"]').mask("000000000");
     $form.find('input[name*="entity_oktmo"]').mask("00000000000");
+    $form.find('input[name*="fraction_size"]').mask("00");
   }
 
   function addTooltips($form) {
