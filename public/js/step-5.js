@@ -17,8 +17,8 @@ $(document).ready(function () {
     switch (formName) {
       case "sell_estate":
         new jBox('Tooltip', {
-          attach: `form#${formID} .single-help`,
-          target: `form#${formID} .single-label`,
+          attach: `form#${formID} .buy-estate-help`,
+          target: `form#${formID} input[name="buy_price"]`,
           theme: 'TooltipBorder',
           trigger: 'click',
           responsiveWidth: true,
@@ -33,7 +33,26 @@ $(document).ready(function () {
           },
           outside: 'y',
           pointer: 'left:108',
-          content: `Проданная недвижимость являлась вашим единственным жильем на момент продажи или за 90 дней до продажи. Т.е. в течение 90 дней перед продажей квартиры вы могли купить другую, но продаваемая квартира все равно считалась бы единственным жильем.`
+          content: `Если проданную недвижимость вы не покупали, она досталось вам по наследству, в подарок, приватизирована - цена покупки должна быть равна 0`
+        });
+        new jBox('Tooltip', {
+          attach: `form#${formID} .mortrage-help`,
+          target: `form#${formID} input[name="mortgage"]`,
+          theme: 'TooltipBorder',
+          trigger: 'click',
+          responsiveWidth: true,
+          maxWidth: 500,
+          adjustTracker: true,
+          closeOnClick: 'body',
+          closeOnEsc: true,
+          animation: 'move',
+          position: {
+            x: 'center',
+            y: 'bottom'
+          },
+          outside: 'y',
+          pointer: 'left:108',
+          content: `Если вы не покупали проданную недвижимость в ипотеку - поставьте в этом поле 0`
         });
         break;
       case "sell_transport":

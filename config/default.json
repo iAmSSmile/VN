@@ -2,5 +2,9 @@
   "captcha": {
     "key": "6LfEOuQUAAAAACYf5iy16RwgMcHXWxila-Yi2Np9",
     "secret": "6LfEOuQUAAAAAARFGawSWygl0BziTH_ixr1HkGKB"
+  },
+  "TopTaxBot": {
+    "secret": "1151779142:AAE4vIqUN5wA8Q61u9E-vnKXvKMTorXhlkI",
+    "session": "-446060834:457749923"
   }
 }

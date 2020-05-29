@@ -4,8 +4,12 @@ form.form(name="sell_estate" id="sell_estate--" + index)
     .form-part-header
       a.header Продажа недвижимости
         .toggle-conditions показать условия
-      ul.conditions
-        li Вы владели этой недвижимостью менее 3 лет, в противном случае декларация не подается и налог не платится
+      .conditions
+        p Недвижимость делится на две категории. 1 категория - дома, квартиры, комнаты, садовые домики, земельные участки и доли во всем этом. 2 категория - гаражи, сараи и прочее недвижимое имущество. Для категорий установлены разные сроки сладения. Если вы владели имуществом дольше установленного максимального срока, то декларация на продажу этого имущества не подается и налоги не платятся.
+        ul
+          li Для 2 категории максимальный срок владения 5 лет
+          li Если имущество 1 категории было куплено, то максимальный срок владения 5 лет
+          li Если имущество 1 категории было унаследовано от близких родственников, приватизировано или являлось единственным жильем, то максимальный срок владения 3 года
     .row
       .col-xs-12
         .radio-block.radio-vertical
@@ -28,7 +32,7 @@ form.form(name="sell_estate" id="sell_estate--" + index)
       .col-xs-12.col-sm-6.col-md-3(class=estate.type === "fraction" ? "" : "hidden")
         .input-block
           input.input-field(type="number" name='fraction_size' value=estate.fraction_size class=estate.fraction_size ? 'input-filled' : '')
-          .input-label Размер доли, %
+          .input-label Размер доли, от 0 до 99%
       .col-xs-12.col-sm-6.col-md-3(class=estate.type === "garage" ? "hidden" : "")
         .input-block
           input.input-field(type="number" name='mortgage' value=estate.mortgage class=estate.mortgage != null ? 'input-filled' : '')
