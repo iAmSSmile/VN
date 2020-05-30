@@ -1,8 +1,9 @@
-const config = require('config');
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
 const nodemailer = require('nodemailer');
+const bot = require('../bot');
+const config = require('config');
 
 const Recaptcha = require('express-recaptcha').RecaptchaV2;
 const recaptcha = new Recaptcha(config.get('captcha.key'), config.get('captcha.secret'));
@@ -115,6 +116,7 @@ module.exports = function (passport) {
             console.log('Error in Saving user: ' + err);
             throw err;
           }
+          bot.telegram.sendMessage(config.get('TopTaxBot.session'),"Зарегистрировался: " + user.username);
           res.redirect('/');
         });
       } else {
@@ -194,6 +196,8 @@ module.exports = function (passport) {
         console.log('Error in sending email: ' + err);
       }
     });
+
+    bot.telegram.sendMessage(config.get('TopTaxBot.session'),`Нам пишут:\n\nИмя: ${req.body.name}\nПочта: ${req.body.email}\n\n${req.body.topic_text}`);
   });
 
   return router;

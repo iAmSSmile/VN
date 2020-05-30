@@ -1,4 +1,6 @@
 const Subscriber = require('../models/subscriber');
+const bot = require('../bot');
+const config = require('config');
 
 module.exports = function (req, res, next) {
   Subscriber.findOne({email: req.body.email}, (err, subscriber) => {
@@ -10,11 +12,13 @@ module.exports = function (req, res, next) {
     } else {
       let newSubscriber = new Subscriber();
       newSubscriber.email = req.body.email;
+      newSubscriber.date = new Date();
       newSubscriber.save(function (err) {
         if (err) {
           res.json({"message": 'Неправильный адрес электронной почты'});
         } else {
           res.json({"message": 'Поздравляем! Мы будем своевременно оповещать вас о появлении новых функций на нашем сайте'});
+          bot.telegram.sendMessage(config.get('TopTaxBot.session'),"Подписался на новости: " + newSubscriber.email);
         }
       });
     }

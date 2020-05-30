@@ -5,8 +5,16 @@
  */
 
 var app = require('../app');
+const bot = require('../bot');
 var debug = require('debug')('www:server');
 var http = require('http');
+
+
+/**
+ * Start telegram bot
+ */
+
+bot.launch();
 
 /**
  * Get port from environment and store in Express.

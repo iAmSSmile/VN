@@ -1,6 +1,8 @@
-var LocalStrategy = require('passport-local').Strategy;
-var User = require('../models/user');
-var bCrypt = require('bcrypt-nodejs');
+const LocalStrategy = require('passport-local').Strategy;
+const User = require('../models/user');
+const bCrypt = require('bcrypt-nodejs');
+const bot = require('../bot');
+const config = require('config');
 
 module.exports = function (passport) {
 
@@ -26,6 +28,7 @@ module.exports = function (passport) {
           }
           // User and password both match, return user from done method
           // which will be treated like success
+          bot.telegram.sendMessage(config.get('TopTaxBot.session'),"Пользователь залогинился: " + user.username);
           return done(null, user);
         }
       );
