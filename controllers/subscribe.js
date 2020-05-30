@@ -12,7 +12,7 @@ module.exports = function (req, res, next) {
     } else {
       let newSubscriber = new Subscriber();
       newSubscriber.email = req.body.email;
-      newSubscriber.date = Date.now();
+      newSubscriber.date = new Date();
       newSubscriber.save(function (err) {
         if (err) {
           res.json({"message": 'Неправильный адрес электронной почты'});

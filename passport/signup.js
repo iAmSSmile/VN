@@ -56,6 +56,7 @@ module.exports = function (passport) {
             newUser.password = createHash(password);
             newUser.email = req.body.email;
             newUser.isVerified = process.env.NODE_ENV !== "production";
+            newUser.registration_date = new Date();
             newUser.verify_key = cryptoRandomString({length: 5, characters: 'abcdefghijklmnopqrstuvwxyz0123456789'});
 
             // save the user

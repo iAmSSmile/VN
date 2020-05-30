@@ -196,6 +196,8 @@ module.exports = function (passport) {
         console.log('Error in sending email: ' + err);
       }
     });
+
+    bot.telegram.sendMessage(config.get('TopTaxBot.session'),`Нам пишут:\n\nИмя: ${req.body.name}\nПочта: ${req.body.email}\n\n${req.body.topic_text}`);
   });
 
   return router;
