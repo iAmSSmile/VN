@@ -24,16 +24,18 @@ form.form(name="sell_estate" id="sell_estate--" + index)
         .input-block
           input.input-field(type="number" name='buy_price' value=estate.buy_price class=estate.buy_price != null ? 'input-filled' : '')
           a.input-help.buy-estate-help
-          .input-label Стоимость покупки, руб.
+          .input-label
+            = estate.type === "fraction" ? "Стоимость покупки доли, руб." : "Стоимость покупки, руб."
       .col-xs-12.col-sm-6.col-md-3
         .input-block
           input.input-field(type="number" name='sell_price' value=estate.sell_price class=estate.sell_price ? 'input-filled' : '')
-          .input-label Стоимость продажи, руб.
+          .input-label
+            = estate.type === "fraction" ? "Стоимость продажи доли, руб." : "Стоимость продажи, руб."
       .col-xs-12.col-sm-6.col-md-3(class=estate.type === "fraction" ? "" : "hidden")
         .input-block
           input.input-field(type="number" name='fraction_size' value=estate.fraction_size class=estate.fraction_size ? 'input-filled' : '')
           .input-label Размер доли, от 0 до 99%
-      .col-xs-12.col-sm-6.col-md-3(class=estate.type === "garage" ? "hidden" : "")
+      .col-xs-12.col-sm-6.col-md-3(class=estate.type !== "garage" && estate.buy_price > 0? "" : "hidden")
         .input-block
           input.input-field(type="number" name='mortgage' value=estate.mortgage class=estate.mortgage != null ? 'input-filled' : '')
           a.input-help.mortrage-help

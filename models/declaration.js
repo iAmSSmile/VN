@@ -462,6 +462,7 @@ declarationSchema.virtual('APPENDIX_1').get(function () {
   });
   this.sell_estate.forEach((estate, index) => {
     let item = {};
+    let sell_type = estate.type === "fraction" ? " (продажа доли в недвижимом имуществе)" : " (продажа недвижимого имущества)";
     item.s010 = "13";
     // let startDate = DateTime.fromFormat(estate.how_to_buy === "buy" ? estate.buy_date : estate.get_date, "dd.MM.yyyy");
     // if (startDate < DateTime.local(2016, 1, 1)) {
@@ -475,9 +476,9 @@ declarationSchema.virtual('APPENDIX_1').get(function () {
       item.s030 = estate.entity_inn;
       item.s040 = estate.entity_kpp;
       item.s050 = estate.entity_oktmo;
-      item.s060 = estate.entity_name + " (продажа недвижимого имущества)"
+      item.s060 = estate.entity_name + sell_type;
     } else {
-      item.s060 = estate.individual_name + " (продажа недвижимого имущества)"
+      item.s060 = estate.individual_name + sell_type;
     }
     item.s080 = "0";
     result.push(item);
@@ -948,38 +949,25 @@ declarationSchema.virtual('APPENDIX_6').get(function () {
   let result = {};
   if (this.sell_estate.length + this.sell_transport.length) {
     result = {s010: 0, s020: 0, s030: 0, s040: 0, s050: 0, s060: 0, s070: 0, s080: 0, s160: 0};
-    this.sell_estate.filter(estate => estate.type === "house").forEach((estate) => {
-      if ((estate.buy_price + estate.mortgage) >= 1000000) {
-        if ((estate.buy_price + estate.mortgage) > estate.sell_price) {
-          result.s020 += estate.sell_price;
-        } else {
-          result.s020 += (estate.buy_price + estate.mortgage);
-        }
+    this.sell_estate.filter(estate => estate.type !== "garage").forEach((estate) => {
+      //максимальная сумма вычета
+      let deduction = estate.type === "fraction" && estate.contract === "single" ? 10000 * estate.fraction_size : 1000000;
+      //кадастровая стоимость недвижимости
+      let kadastr_price = estate.type === "fraction" ? (estate.kadastr_price * estate.fraction_size * 7) / 1000 : (estate.kadastr_price * 7) / 10;
+      //поле для записи вычета и расходов
+      let deduction_field = 0, expense_field = 0;
+      if ((estate.buy_price + estate.mortgage) >= deduction) {
+        expense_field = (estate.buy_price + estate.mortgage) > estate.sell_price ? estate.sell_price : estate.buy_price + estate.mortgage;
       } else {
-        if (estate.sell_price >= 1000000) {
-          result.s010 += 1000000;
-        } else {
-          result.s010 += estate.sell_price;
-        }
+        let my_deduction = estate.sell_price <= kadastr_price ? kadastr_price : estate.sell_price;
+        deduction_field = my_deduction > deduction ? deduction : my_deduction;
       }
-    });
-    this.sell_estate.filter(estate => estate.type === "fraction").forEach((estate) => {
-      if ((estate.buy_price + estate.mortgage) >= 1000000) {
-        if ((estate.buy_price + estate.mortgage) > estate.sell_price) {
-          result.s040 += estate.sell_price;
-        } else {
-          result.s040 += (estate.buy_price + estate.mortgage);
-        }
+      if (estate.type === "fraction") {
+        result.s030 = deduction_field;
+        result.s040 = expense_field;
       } else {
-        if (estate.sell_price >= 1000000) {
-          if (estate.contract === "single") {
-            result.s030 += 10000 * estate.fraction_size;
-          } else {
-            result.s030 += 1000000;
-          }
-        } else {
-          result.s030 += estate.sell_price;
-        }
+        result.s010 = deduction_field;
+        result.s020 = expense_field;
       }
     });
     if (result.s010 > 1000000) result.s010 = 1000000;
@@ -993,29 +981,17 @@ declarationSchema.virtual('APPENDIX_6').get(function () {
     }
     this.sell_estate.filter(estate => estate.type === "garage").forEach((estate) => {
       if (estate.buy_price > 250000) {
-        if (estate.buy_price > estate.sell_price) {
-          result.s060 += estate.sell_price;
-        } else {
-          result.s060 += estate.buy_price;
-        }
+        result.s060 += estate.buy_price > estate.sell_price ? estate.sell_price : estate.buy_price;
       } else {
-        if (estate.sell_price > 250000) {
-          result.s050 += 250000;
-        } else {
-          result.s050 += estate.sell_price;
-        }
+        result.s050 += estate.sell_price;
       }
     });
     if (result.s050 > 250000) result.s050 = 250000;
     this.sell_transport.forEach((transport) => {
-      if (transport.buy_price > 250000) {
-        result.s080 += transport.buy_price;
+      if (transport.buy_price >= 250000) {
+        result.s080 += transport.buy_price > transport.sell_price ? transport.sell_price : transport.buy_price;
       } else {
-        if (transport.sell_price > 250000) {
-          result.s070 += 250000;
-        } else {
-          result.s070 += transport.sell_price;
-        }
+        result.s070 += transport.sell_price;
       }
     });
     if (result.s070 > 250000) result.s070 = 250000;

@@ -95,23 +95,52 @@ $(document).ready(function () {
     check_fullness();
   });
 
-  function switchTypeForm($form, state) {
-    if (state === "fraction") {
+  $(document).on("keyup", `input[name="buy_price"]`, function (event) {
+    let form = $(this).parents('form');
+    let buy_price = Number($(this).val());
+    console.log($(this).val());
+    if(buy_price > 0) {
+      switchMortgageField(form, true);
+    } else {
+      switchMortgageField(form, false);
+    }
+  });
+
+  function switchMortgageField($form, state) {
+    if (state) {
       $form.find(`input[name="mortgage"]`).parent().parent().removeClass("hidden");
+    } else {
+      $form.find(`input[name="mortgage"]`).val("").removeClass("input-filled").parent().parent().addClass("hidden");
+    }
+  }
+
+  function switchTypeForm($form, state) {
+    let buy_price = Number($form.find(`input[name="buy_price"]`).val());
+    if (state === "fraction") {
+      if(buy_price > 0) {
+        $form.find(`input[name="mortgage"]`).parent().parent().removeClass("hidden");
+      }
+      $form.find(`input[name="sell_price"] + .input-label`).text("Стоимость продажи доли, руб.");
+      $form.find(`input[name="buy_price"] + .input-label`).text("Стоимость покупки доли, руб.");
       $form.find(`input[name="fraction_size"]`).parent().parent().removeClass("hidden");
       $form.find(`.contract-form`).removeClass("hidden");
     } else if (state === "house") {
-      $form.find(`input[name="mortgage"]`).parent().parent().removeClass("hidden");
+      if(buy_price > 0) {
+        $form.find(`input[name="mortgage"]`).parent().parent().removeClass("hidden");
+      }
+      $form.find(`input[name="sell_price"] + .input-label`).text("Стоимость продажи, руб.");
+      $form.find(`input[name="buy_price"] + .input-label`).text("Стоимость покупки, руб.");
       $form.find(`input[name="fraction_size"]`).val("").removeClass("input-filled").parent().parent().addClass("hidden");
       $form.find(`input[name="contract"][value="multi"]`).prop("checked", true);
       $form.find(`.contract-form`).addClass("hidden");
     } else if (state === "garage") {
+      $form.find(`input[name="sell_price"] + .input-label`).text("Стоимость продажи, руб.");
+      $form.find(`input[name="buy_price"] + .input-label`).text("Стоимость покупки, руб.");
       $form.find(`input[name="mortgage"]`).val("").removeClass("input-filled").parent().parent().addClass("hidden");
       $form.find(`input[name="fraction_size"]`).val("").removeClass("input-filled").parent().parent().addClass("hidden");
       $form.find(`input[name="contract"][value="multi"]`).prop("checked", true);
       $form.find(`.contract-form`).addClass("hidden");
     }
-
   }
 
   function switchFaceForm($form, state) {
@@ -171,7 +200,7 @@ $(document).ready(function () {
     switch (formName) {
       case "sell_estate":
         $(".forms").append(
-          `<form class="form" name="sell_estate" id="${formID}"><a class="remove-form"></a><div class="form-part"><div class="form-part-header"><a class="header">Продажа недвижимости<div class="toggle-conditions">показать условия</div></a><div class="conditions"><p>Недвижимость делится на две категории. 1 категория - дома, квартиры, комнаты, садовые домики, земельные участки и доли во всем этом. 2 категория - гаражи, сараи и прочее недвижимое имущество. Для категорий установлены разные сроки сладения. Если вы владели имуществом дольше установленного максимального срока, то декларация на продажу этого имущества не подается и налоги не платятся.</p><ul><li>Для 2 категории максимальный срок владения 5 лет</li><li>Если имущество 1 категории было куплено, то максимальный срок владения 5 лет</li><li>Если имущество 1 категории было унаследовано от близких родственников, приватизировано или являлось единственным жильем, то максимальный срок владения 3 года</li></ul></div></div><div class="row"><div class="col-xs-12"><div class="radio-block radio-vertical"><input type="radio" id="${formID}-house" name="type" value="house" checked><label for="${formID}-house">Дом, квартира, комната, садовый домик, земельный участок</label><input type="radio" id="${formID}-fraction" name="type" value="fraction"><label for="${formID}-fraction">Доля в доме, квартире, земельном участке</label><input type="radio" id="${formID}-garage" name="type" value="garage"><label for="${formID}-garage">Гараж, сарай и прочее недвижимое имущество</label></div></div></div><div class="row"><div class="col-xs-12 col-sm-6 col-md-3"><div class="input-block"><input class="input-field" type="number" name="buy_price"><a class="input-help buy-estate-help"></a><div class="input-label">Стоимость покупки, руб.</div></div></div><div class="col-xs-12 col-sm-6 col-md-3"><div class="input-block"><input class="input-field" type="number" name="sell_price"><div class="input-label">Стоимость продажи, руб.</div></div></div><div class="col-xs-12 col-sm-6 col-md-3 hidden"><div class="input-block"><input class="input-field" type="number" name="fraction_size"><div class="input-label">Размер доли, %</div></div></div><div class="col-xs-12 col-sm-6 col-md-3"><div class="input-block"><input class="input-field" type="number" name="mortgage"><a class="input-help mortrage-help"></a><div class="input-label">Сумма выплаченных процентов по ипотеке</div></div></div></div><div class="row contract-form hidden"><div class="col-xs-12"><div class="radio-block"><input type="radio" id="${formID}-multi_contract" name="contract" value="multi" checked=""><label for="${formID}-multi_contract">Эта доля продана отдельным контрактом</label><input type="radio" id="${formID}-single_contract" name="contract" value="single"><label for="${formID}-single_contract">Все доли проданы одним контрактом</label></div></div></div></div><div class="subform-part rosreestr"><div class="form-part-header"><div class="header">Информация из Росреестра</div><div class="description">Вам нужно указать кадастровый номер и кадастровую стоимость недвижимости. Заказать выписку или найти данные о недвижимости по ее адресу можно<a href="https://rosreestr.net/uznat-kadastrovuyu-stoimost-nedvijimosti" target="_blank"> здесь.</a></div></div><div class="row"><div class="col-xs-12 col-sm-6 col-md-3"><div class="input-block"><input class="input-field" type="text" name="kadastr_number"><div class="input-label">Кадастровый номер</div></div></div><div class="col-xs-12 col-sm-6 col-md-3"><div class="input-block"><input class="input-field" type="number" name="kadastr_price"><div class="input-label">Кадастровая стоимость, руб.</div></div></div></div></div><div class="subform-part"><div class="form-part-header"><div class="header">Информация о покупателе</div></div><div class="row"><div class="col-xs-12"><div class="radio-block"><input type="radio" id="${formID}-individual" name="face" value="individual" checked><label for="${formID}-individual">Физическое лицо</label><input type="radio" id="${formID}-entity" name="face" value="entity"><label for="${formID}-entity">Юридическое лицо</label></div></div></div><div class="row individual-form"><div class="col-xs-12"><div class="input-block"><input class="input-field" type="text" name="individual_name" value=""><div class="input-label">ФИО покупателя</div></div></div></div><div class="row entity-form hidden"><div class="col-xs-12"><div class="input-block"><input class="input-field" type="text" name="entity_name"><div class="input-label">Наименование юр. лица</div></div></div><div class="col-xs-12 col-sm-6 col-md-4"><div class="input-block"><input class="input-field" type="number" name="entity_oktmo"><div class="input-label">Код по ОКТМО</div></div></div><div class="col-xs-12 col-sm-6 col-md-4"><div class="input-block"><input class="input-field" type="number" name="entity_inn"><div class="input-label">ИНН</div></div></div><div class="col-xs-12 col-sm-6 col-md-4"><div class="input-block"><input class="input-field" type="number" name="entity_kpp"><div class="input-label">КПП</div></div></div></div></div></form>`
+          `<form class="form" name="sell_estate" id="${formID}"><a class="remove-form"></a><div class="form-part"><div class="form-part-header"><a class="header">Продажа недвижимости<div class="toggle-conditions">показать условия</div></a><div class="conditions"><p>Недвижимость делится на две категории. 1 категория - дома, квартиры, комнаты, садовые домики, земельные участки и доли во всем этом. 2 категория - гаражи, сараи и прочее недвижимое имущество. Для категорий установлены разные сроки сладения. Если вы владели имуществом дольше установленного максимального срока, то декларация на продажу этого имущества не подается и налоги не платятся.</p><ul><li>Для 2 категории максимальный срок владения 5 лет</li><li>Если имущество 1 категории было куплено, то максимальный срок владения 5 лет</li><li>Если имущество 1 категории было унаследовано от близких родственников, приватизировано или являлось единственным жильем, то максимальный срок владения 3 года</li></ul></div></div><div class="row"><div class="col-xs-12"><div class="radio-block radio-vertical"><input type="radio" id="${formID}-house" name="type" value="house" checked><label for="${formID}-house">Дом, квартира, комната, садовый домик, земельный участок</label><input type="radio" id="${formID}-fraction" name="type" value="fraction"><label for="${formID}-fraction">Доля в доме, квартире, земельном участке</label><input type="radio" id="${formID}-garage" name="type" value="garage"><label for="${formID}-garage">Гараж, сарай и прочее недвижимое имущество</label></div></div></div><div class="row"><div class="col-xs-12 col-sm-6 col-md-3"><div class="input-block"><input class="input-field" type="number" name="buy_price"><a class="input-help buy-estate-help"></a><div class="input-label">Стоимость покупки, руб.</div></div></div><div class="col-xs-12 col-sm-6 col-md-3"><div class="input-block"><input class="input-field" type="number" name="sell_price"><div class="input-label">Стоимость продажи, руб.</div></div></div><div class="col-xs-12 col-sm-6 col-md-3 hidden"><div class="input-block"><input class="input-field" type="number" name="fraction_size"><div class="input-label">Размер доли, %</div></div></div><div class="col-xs-12 col-sm-6 col-md-3 hidden"><div class="input-block"><input class="input-field" type="number" name="mortgage"><a class="input-help mortrage-help"></a><div class="input-label">Сумма выплаченных процентов по ипотеке</div></div></div></div><div class="row contract-form hidden"><div class="col-xs-12"><div class="radio-block"><input type="radio" id="${formID}-multi_contract" name="contract" value="multi" checked=""><label for="${formID}-multi_contract">Эта доля продана отдельным контрактом</label><input type="radio" id="${formID}-single_contract" name="contract" value="single"><label for="${formID}-single_contract">Все доли проданы одним контрактом</label></div></div></div></div><div class="subform-part rosreestr"><div class="form-part-header"><div class="header">Информация из Росреестра</div><div class="description">Вам нужно указать кадастровый номер и кадастровую стоимость недвижимости. Заказать выписку или найти данные о недвижимости по ее адресу можно<a href="https://rosreestr.net/uznat-kadastrovuyu-stoimost-nedvijimosti" target="_blank"> здесь.</a></div></div><div class="row"><div class="col-xs-12 col-sm-6 col-md-3"><div class="input-block"><input class="input-field" type="text" name="kadastr_number"><div class="input-label">Кадастровый номер</div></div></div><div class="col-xs-12 col-sm-6 col-md-3"><div class="input-block"><input class="input-field" type="number" name="kadastr_price"><div class="input-label">Кадастровая стоимость, руб.</div></div></div></div></div><div class="subform-part"><div class="form-part-header"><div class="header">Информация о покупателе</div></div><div class="row"><div class="col-xs-12"><div class="radio-block"><input type="radio" id="${formID}-individual" name="face" value="individual" checked><label for="${formID}-individual">Физическое лицо</label><input type="radio" id="${formID}-entity" name="face" value="entity"><label for="${formID}-entity">Юридическое лицо</label></div></div></div><div class="row individual-form"><div class="col-xs-12"><div class="input-block"><input class="input-field" type="text" name="individual_name" value=""><div class="input-label">ФИО покупателя</div></div></div></div><div class="row entity-form hidden"><div class="col-xs-12"><div class="input-block"><input class="input-field" type="text" name="entity_name"><div class="input-label">Наименование юр. лица</div></div></div><div class="col-xs-12 col-sm-6 col-md-4"><div class="input-block"><input class="input-field" type="number" name="entity_oktmo"><div class="input-label">Код по ОКТМО</div></div></div><div class="col-xs-12 col-sm-6 col-md-4"><div class="input-block"><input class="input-field" type="number" name="entity_inn"><div class="input-label">ИНН</div></div></div><div class="col-xs-12 col-sm-6 col-md-4"><div class="input-block"><input class="input-field" type="number" name="entity_kpp"><div class="input-label">КПП</div></div></div></div></div></form>`
         );
         break;
       case "sell_transport":
