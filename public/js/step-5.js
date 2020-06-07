@@ -97,9 +97,10 @@ $(document).ready(function () {
 
   $(document).on("keyup", `input[name="buy_price"]`, function (event) {
     let form = $(this).parents('form');
+    let type = form.find(`input[type="radio"][name="type"]:checked`).val();
+    console.log(type);
     let buy_price = Number($(this).val());
-    console.log($(this).val());
-    if(buy_price > 0) {
+    if(buy_price > 0 && type !== "garage") {
       switchMortgageField(form, true);
     } else {
       switchMortgageField(form, false);
@@ -107,7 +108,7 @@ $(document).ready(function () {
   });
 
   function switchMortgageField($form, state) {
-    if (state) {
+    if (state ) {
       $form.find(`input[name="mortgage"]`).parent().parent().removeClass("hidden");
     } else {
       $form.find(`input[name="mortgage"]`).val("").removeClass("input-filled").parent().parent().addClass("hidden");
@@ -118,7 +119,7 @@ $(document).ready(function () {
     let buy_price = Number($form.find(`input[name="buy_price"]`).val());
     if (state === "fraction") {
       if(buy_price > 0) {
-        $form.find(`input[name="mortgage"]`).parent().parent().removeClass("hidden");
+        switchMortgageField($form, true);
       }
       $form.find(`input[name="sell_price"] + .input-label`).text("Стоимость продажи доли, руб.");
       $form.find(`input[name="buy_price"] + .input-label`).text("Стоимость покупки доли, руб.");
@@ -126,7 +127,7 @@ $(document).ready(function () {
       $form.find(`.contract-form`).removeClass("hidden");
     } else if (state === "house") {
       if(buy_price > 0) {
-        $form.find(`input[name="mortgage"]`).parent().parent().removeClass("hidden");
+        switchMortgageField($form, true);
       }
       $form.find(`input[name="sell_price"] + .input-label`).text("Стоимость продажи, руб.");
       $form.find(`input[name="buy_price"] + .input-label`).text("Стоимость покупки, руб.");
@@ -136,7 +137,7 @@ $(document).ready(function () {
     } else if (state === "garage") {
       $form.find(`input[name="sell_price"] + .input-label`).text("Стоимость продажи, руб.");
       $form.find(`input[name="buy_price"] + .input-label`).text("Стоимость покупки, руб.");
-      $form.find(`input[name="mortgage"]`).val("").removeClass("input-filled").parent().parent().addClass("hidden");
+      switchMortgageField($form, false);
       $form.find(`input[name="fraction_size"]`).val("").removeClass("input-filled").parent().parent().addClass("hidden");
       $form.find(`input[name="contract"][value="multi"]`).prop("checked", true);
       $form.find(`.contract-form`).addClass("hidden");

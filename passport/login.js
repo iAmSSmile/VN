@@ -28,7 +28,7 @@ module.exports = function (passport) {
           }
           // User and password both match, return user from done method
           // which will be treated like success
-          bot.telegram.sendMessage(config.get('TopTaxBot.session'),"Пользователь залогинился: " + user.username);
+          if (process.env.NODE_ENV !== "development") bot.telegram.sendMessage(config.get('TopTaxBot.session'),"Пользователь залогинился: " + user.username);
           return done(null, user);
         }
       );

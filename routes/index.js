@@ -116,7 +116,7 @@ module.exports = function (passport) {
             console.log('Error in Saving user: ' + err);
             throw err;
           }
-          bot.telegram.sendMessage(config.get('TopTaxBot.session'),"Зарегистрировался: " + user.username);
+          if (process.env.NODE_ENV !== "development") bot.telegram.sendMessage(config.get('TopTaxBot.session'),"Зарегистрировался: " + user.username);
           res.redirect('/');
         });
       } else {
