@@ -39,7 +39,7 @@ app.use(expressSession({
   }),
   secret: 'connect39',
   cookie: {
-    maxAge: process.env.NODE_ENV === "development" ? 1800000 : 86400000,
+    maxAge: process.env.NODE_ENV === "development" ? 86400000 : 1800000,
   },
   saveUninitialized: true,
   resave: true

@@ -1,5 +1,5 @@
 const moment = require('moment');
-const {DateTime} = require('luxon');
+// const {DateTime} = require('luxon');
 moment.locale('ru');
 
 const mongoose = require('mongoose');
@@ -614,7 +614,7 @@ declarationSchema.virtual('APPENDIX_4_120').get(function () {
   result += Number(this.APPENDIX_4_040);
   result += Number(this.APPENDIX_4_050);
   result += Number(this.APPENDIX_4_100);
-  return String(result);
+  return result;
 });
 
 /*
@@ -661,11 +661,33 @@ declarationSchema.virtual('SECTION_1_050').get(function () {
 });
 
 /*
+Общая сумма доходов, за исключением доходов в виде сумм прибыли контролируемых иностранных компаний
+*/
+declarationSchema.virtual('SECTION_2_010').get(function () {
+  let result = 0;
+  result += this.APPENDIX_1.reduce((sum, item) => sum + Number(item.s070), 0) || 0;
+  return result;
+});
+
+/*
+ Общая сумма доходов, за исключением доходов в виде сумм прибыли контролируемых иностранных компаний, не подлежащая налогообложению
+*/
+declarationSchema.virtual('SECTION_2_020').get(function () {
+  let result = 0;
+  let appendix_4_120 = this.APPENDIX_4_120 || 0;
+  result += appendix_4_120;
+  return result;
+});
+
+/*
 Общая сумма доходов, за исключением доходов в виде сумм прибыли контролируемых иностранных компаний, подлежащая налогообложению
 */
 declarationSchema.virtual('SECTION_2_030').get(function () {
-  let result = Number(this.EMPLOYERS_INCOME) - Number(this.APPENDIX_4_120);
-  return String(result);
+  let result = 0;
+  let section_2_010 = this.SECTION_2_010 || 0;
+  let section_2_020 = this.SECTION_2_020 || 0;
+  result += section_2_010 - section_2_020;
+  return result;
 });
 
 /*
@@ -673,8 +695,12 @@ declarationSchema.virtual('SECTION_2_030').get(function () {
 */
 declarationSchema.virtual('SECTION_2_040').get(function () {
   let result = 0;
-  result += Number(this.APPENDIX_5_200);
-  return String(result);
+  let appendix_5_200 = Number(this.APPENDIX_5_200) || 0;
+  let appendix_6_160 = this.APPENDIX_6.s160 || 0;
+  let section_2_030 = this.SECTION_2_030 || 0;
+  result += appendix_5_200 + appendix_6_160;
+  if (result > section_2_030) result = section_2_030;
+  return result;
 });
 
 /*
@@ -683,9 +709,13 @@ declarationSchema.virtual('SECTION_2_040').get(function () {
 строка 060
 */
 declarationSchema.virtual('SECTION_2_060').get(function () {
-  let result = Number(this.SECTION_2_030) - Number(this.APPENDIX_5_200);
-  if (result < 0) result = 0;
-  return String(result);
+  let result = 0;
+  let section_2_030 = this.SECTION_2_030 || 0;
+  let section_2_040 = this.SECTION_2_040 || 0;
+  result += section_2_030 - section_2_040;
+  // let result = Number(this.SECTION_2_030) - Number(this.APPENDIX_5_200);
+  // if (result < 0) result = 0;
+  return result;
 });
 
 /*
@@ -694,8 +724,10 @@ declarationSchema.virtual('SECTION_2_060').get(function () {
 строка 070
 */
 declarationSchema.virtual('SECTION_2_070').get(function () {
-  let result = Math.round(Number(this.SECTION_2_060) * 0.13);
-  return String(result);
+  let result = 0;
+  let section_2_060 = this.SECTION_2_060 || 0;
+  result += Math.round((section_2_060 * 13) / 100);
+  return result;
 });
 
 /*
@@ -999,9 +1031,9 @@ declarationSchema.virtual('APPENDIX_6').get(function () {
     if (result.s030 > 1000000) result.s030 = 1000000;
     if (result.s050 > 250000) result.s050 = 250000;
     if (result.s010 + result.s030 > 1000000) {
-      let r010 = result.s010 / ((result.s010 + result.s030)/100);
-      let r030 = result.s030 / ((result.s010 + result.s030)/100);
-      let over = ((result.s010 + result.s030) - 1000000)/100;
+      let r010 = result.s010 / ((result.s010 + result.s030) / 100);
+      let r030 = result.s030 / ((result.s010 + result.s030) / 100);
+      let over = ((result.s010 + result.s030) - 1000000) / 100;
       result.s010 -= r010 * over;
       result.s030 -= r030 * over;
     }

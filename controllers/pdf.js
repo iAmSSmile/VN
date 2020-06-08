@@ -240,13 +240,14 @@ async function modifyPdf(declaration) {
   //002 Вид дохода
   section_2.drawText("3", {x: 286, y: height - 131});
   //010 Общая сумма доходов, за исключением доходов в виде сумм прибыли контролируемых иностранных компаний
-  field = breakNumber(declaration.EMPLOYERS_INCOME);
+  // field = breakNumber(declaration.EMPLOYERS_INCOME);
+  field = breakNumber(declaration.SECTION_2_010);
   position = (13 - field[0].length) * 14.1;
   section_2.drawText(field[0], {x: 353 + position, y: height - 166});
   section_2.drawText(field[1], {x: 550, y: height - 166});
   //020 Общая сумма доходов, за исключением доходов в виде сумм прибыли контролируемых иностранных компаний, не подлежащая налогообложению
-  if (declaration.APPENDIX_4_120 !== "0") {
-    field = breakNumber(declaration.APPENDIX_4_120);
+  if (declaration.SECTION_2_020 !== 0) {
+    field = breakNumber(declaration.SECTION_2_020);
     position = (13 - field[0].length) * 14.1;
     section_2.drawText(field[0], {x: 353 + position, y: height - 196});
     section_2.drawText(field[1], {x: 550, y: height - 196});
@@ -273,8 +274,8 @@ async function modifyPdf(declaration) {
   section_2.drawText(field[0], {x: 353 + position, y: height - 364});
   section_2.drawText(field[1], {x: 550, y: height - 364});
   //070 Общая сумма налога, исчисленная к уплате
-  position = (13 - declaration.SECTION_2_070.length) * 14.1;
-  section_2.drawText(declaration.SECTION_2_070, {x: 353 + position, y: height - 415});
+  position = (13 - String(declaration.SECTION_2_070).length) * 14.1;
+  section_2.drawText(String(declaration.SECTION_2_070), {x: 353 + position, y: height - 415});
   //080 Общая сумма налога, удержанная у источника выплаты
   position = (13 - declaration.EMPLOYERS_TAX.length) * 14.1;
   section_2.drawText(declaration.EMPLOYERS_TAX, {x: 353 + position, y: height - 440});
