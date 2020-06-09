@@ -277,11 +277,20 @@ async function modifyPdf(declaration) {
   position = (13 - String(declaration.SECTION_2_070).length) * 14.1;
   section_2.drawText(String(declaration.SECTION_2_070), {x: 353 + position, y: height - 415});
   //080 Общая сумма налога, удержанная у источника выплаты
-  position = (13 - declaration.EMPLOYERS_TAX.length) * 14.1;
-  section_2.drawText(declaration.EMPLOYERS_TAX, {x: 353 + position, y: height - 440});
+  position = (13 - String(declaration.SECTION_2_080).length) * 14.1;
+  section_2.drawText(String(declaration.SECTION_2_080), {x: 353 + position, y: height - 440});
+  //150 Сумма налога, подлежащая уплате (доплате) в бюджет
+  if (declaration.SECTION_2_150) {
+    position = (13 - String(declaration.SECTION_2_150).length) * 14.1;
+    section_2.drawText(String(declaration.SECTION_2_150), {x: 353 + position, y: height - 654});
+  }
   //160 Сумма налога, подлежащая возврату из бюджета
-  position = (13 - declaration.SECTION_2_160.length) * 14.1;
-  section_2.drawText(declaration.SECTION_2_160, {x: 353 + position, y: height - 680});
+  if (declaration.SECTION_2_160) {
+    position = (13 - String(declaration.SECTION_2_160).length) * 14.1;
+    section_2.drawText(String(declaration.SECTION_2_160), {x: 353 + position, y: height - 680});
+  }
+  //   position = (13 - declaration.SECTION_2_160.length) * 14.1;
+  // section_2.drawText(declaration.SECTION_2_160, {x: 353 + position, y: height - 680});
 
 
   /*

@@ -729,11 +729,39 @@ declarationSchema.virtual('SECTION_2_070').get(function () {
 });
 
 /*
+ОБЩАЯ СУММА НАЛОГА, ИСЧИСЛЕННАЯ К УПЛАТЕ
+Раздел 2. Расчет налоговой базы и суммы налога по доходам, облагаемым по ставке
+строка 070
+*/
+declarationSchema.virtual('SECTION_2_080').get(function () {
+  let result = 0;
+  let employers_tax = Number(this.EMPLOYERS_TAX) || 0;
+  result += employers_tax;
+  return result;
+});
+
+/*
+Сумма налога, подлежащая возврату из бюджета
+*/
+declarationSchema.virtual('SECTION_2_150').get(function () {
+  let result = 0;
+  let section_2_070 = this.SECTION_2_070 || 0;
+  let section_2_080 = this.SECTION_2_080 || 0;
+  result += (section_2_070 - section_2_080) > 0 ? section_2_070 - section_2_080 : 0;
+  return result;
+});
+
+/*
 Сумма налога, подлежащая возврату из бюджета
 */
 declarationSchema.virtual('SECTION_2_160').get(function () {
-  let result = Number(this.EMPLOYERS_TAX) - Number(this.SECTION_2_070);
-  return String(result);
+  let result = 0;
+  let section_2_070 = this.SECTION_2_070 || 0;
+  let section_2_080 = this.SECTION_2_080 || 0;
+  result += (section_2_070 - section_2_080) <= 0 ? Math.abs(section_2_070 - section_2_080) : 0;
+  return result;
+  // let result = Number(this.EMPLOYERS_TAX) - Number(this.SECTION_2_070);
+  // return String(result);
 });
 
 /*
