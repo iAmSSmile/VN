@@ -713,8 +713,6 @@ declarationSchema.virtual('SECTION_2_060').get(function () {
   let section_2_030 = this.SECTION_2_030 || 0;
   let section_2_040 = this.SECTION_2_040 || 0;
   result += section_2_030 - section_2_040;
-  // let result = Number(this.SECTION_2_030) - Number(this.APPENDIX_5_200);
-  // if (result < 0) result = 0;
   return result;
 });
 
