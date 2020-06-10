@@ -341,7 +341,158 @@ block content
               each error in declaration.STEP_4_FULLNESS.errors
                 p #{ error }
             a.continue-edit(href='/declaration/' + declaration._id + '/step/4') заполнить
-    if declaration.STEP_3_FULLNESS.empty && declaration.STEP_4_FULLNESS.empty
+    if !declaration.STEP_5_FULLNESS.empty
+      .step
+        each estate in declaration.sell_estate
+          .form-part
+            .form-part-header
+              if estate.type === "house"
+                .header Продажа дома, квартиры, комнаты, садового домика, земельного участка
+              if estate.type === "fraction"
+                .header Продажа доли в доме, квартире, земельном участке
+              if estate.type === "garage"
+                .header Продажа гаража, сарая и прочего недвижимого имущества
+            .table-string
+              p.grey Стоимость покупки, руб.
+              if estate.buy_price !== null
+                p.data #{ estate.buy_price }
+              else
+                .empty не заполнено
+            .table-string
+              if estate.type === "fraction"
+                p.grey Стоимость продажи доли, руб.
+              else
+                p.grey Стоимость продажи, руб.
+              if estate.sell_price
+                p.data #{ estate.sell_price }
+              else
+                .empty не заполнено
+            if estate.type === "fraction"
+              .table-string
+                p.grey Размер доли
+                if estate.fraction_size !== null
+                  p.data #{ estate.fraction_size }
+                else
+                  .empty не заполнено
+            if estate.type !== "garage" && estate.buy_price > 0
+              .table-string
+                p.grey Сумма выплаченных процентов по ипотеке
+                if estate.fraction_size !== null
+                  p.data #{ estate.fraction_size }
+                else
+                  .empty не заполнено
+            if estate.type === "fraction"
+              .table-string
+                p.grey Как продана доля
+                if estate.contract === "multi"
+                  p.data Доля продана отдельным контрактом
+                if estate.contract === "single"
+                  p.data Все доли проданы одним контрактом
+            .table-string
+              p.grey Кадастровый номер
+              if estate.kadastr_number
+                p.data #{ estate.kadastr_number }
+              else
+                .empty не заполнено
+            .table-string
+              p.grey Кадастровая стоимость
+              if estate.kadastr_price
+                p.data #{ estate.kadastr_price }
+              else
+                .empty не заполнено
+            .table-string
+              p.grey Покупатель
+              if estate.face === "individual"
+                p.data Физическое лицо
+              if estate.face === "entity"
+                p.data Юридическое лицо
+            if estate.face === "individual"
+              .table-string
+                p.grey ФИО покупателя
+                if estate.individual_name
+                  p.data #{ estate.individual_name }
+                else
+                  .empty не заполнено
+            if estate.face === "entity"
+              .table-string
+                p.grey Наименование юр. лица
+                if estate.entity_name
+                  p.data #{ estate.entity_name }
+                else
+                  .empty не заполнено
+              .table-string
+                p.grey Код по ОКТМО
+                if estate.entity_oktmo
+                  p.data #{ estate.entity_oktmo }
+                else
+                  .empty не заполнено
+              .table-string
+                p.grey ИНН покупателя
+                if estate.entity_inn
+                  p.data #{ estate.entity_inn }
+                else
+                  .empty не заполнено
+              .table-string
+                p.grey КПП покупателя
+                if estate.entity_kpp
+                  p.data #{ estate.entity_kpp }
+                else
+                  .empty не заполнено
+        each transport in declaration.sell_transport
+          .form-part
+            .form-part-header
+              .header Продажа транпорта
+            .table-string
+              p.grey Стоимость покупки, руб.
+              if transport.buy_price !== null
+                p.data #{ transport.buy_price }
+              else
+                .empty не заполнено
+            .table-string
+              p.grey Стоимость продажи, руб.
+              if transport.sell_price !== null
+                p.data #{ transport.sell_price }
+              else
+                .empty не заполнено
+            .table-string
+              p.grey Покупатель
+              if transport.face === "individual"
+                p.data Физическое лицо
+              if transport.face === "entity"
+                p.data Юридическое лицо
+            if transport.face === "individual"
+              .table-string
+                p.grey ФИО покупателя
+                if transport.individual_name
+                  p.data #{ transport.individual_name }
+                else
+                  .empty не заполнено
+            if transport.face === "entity"
+              .table-string
+                p.grey Наименование юр. лица
+                if transport.entity_name
+                  p.data #{ transport.entity_name }
+                else
+                  .empty не заполнено
+              .table-string
+                p.grey Код по ОКТМО
+                if transport.entity_oktmo
+                  p.data #{ transport.entity_oktmo }
+                else
+                  .empty не заполнено
+              .table-string
+                p.grey ИНН покупателя
+                if transport.entity_inn
+                  p.data #{ transport.entity_inn }
+                else
+                  .empty не заполнено
+              .table-string
+                p.grey КПП покупателя
+                if transport.entity_kpp
+                  p.data #{ transport.entity_kpp }
+                else
+                  .empty не заполнено
+    if declaration.STEP_3_FULLNESS.empty && declaration.STEP_4_FULLNESS.empty && declaration.STEP_5_FULLNESS.empty
       .step
         .errors
           .content

@@ -1,5 +1,4 @@
 const moment = require('moment');
-// const {DateTime} = require('luxon');
 moment.locale('ru');
 
 const mongoose = require('mongoose');
@@ -269,7 +268,6 @@ declarationSchema.virtual('STEP_1_FULLNESS').get(function () {
   }
   return errors;
 });
-
 declarationSchema.virtual('STEP_2_FULLNESS').get(function () {
   let errors = [];
   if (!this.employers.length) {
@@ -287,7 +285,6 @@ declarationSchema.virtual('STEP_2_FULLNESS').get(function () {
   }
   return errors;
 });
-
 declarationSchema.virtual('STEP_3_FULLNESS').get(function () {
   let errors = {
     empty: false,
@@ -300,7 +297,6 @@ declarationSchema.virtual('STEP_3_FULLNESS').get(function () {
   }
   return errors;
 });
-
 declarationSchema.virtual('STEP_4_FULLNESS').get(function () {
   let errors = {
     empty: false,
@@ -317,7 +313,6 @@ declarationSchema.virtual('STEP_4_FULLNESS').get(function () {
   }
   return errors;
 });
-
 declarationSchema.virtual('STEP_5_FULLNESS').get(function () {
   let errors = {empty: false, errors: []};
   let fields = [];
@@ -358,7 +353,6 @@ declarationSchema.virtual('STEP_5_FULLNESS').get(function () {
   }
   return errors;
 });
-
 declarationSchema.virtual('FULLNESS').get(function () {
   let result = [];
   if (this.STEP_1_FULLNESS.length && this.STEP_2_FULLNESS.length) {
@@ -379,7 +373,6 @@ declarationSchema.virtual('FULLNESS').get(function () {
   }
   return result;
 });
-
 declarationSchema.virtual('NOT_FILLED_STEPS').get(function () {
   let result = [];
   if (this.STEP_1_FULLNESS.length) {
