@@ -116,7 +116,7 @@ module.exports = function (passport) {
             console.log('Error in Saving user: ' + err);
             throw err;
           }
-          if (process.env.NODE_ENV !== "development") bot.telegram.sendMessage(config.get('TopTaxBot.session'),"Зарегистрировался: " + user.username);
+          if (process.env.NODE_ENV === "production") bot.telegram.sendMessage(config.get('TopTaxBot.session'),"Зарегистрировался: " + user.username);
           res.redirect('/');
         });
       } else {
@@ -197,7 +197,7 @@ module.exports = function (passport) {
       }
     });
 
-    bot.telegram.sendMessage(config.get('TopTaxBot.session'),`Нам пишут:\n\nИмя: ${req.body.name}\nПочта: ${req.body.email}\n\n${req.body.topic_text}`);
+    if (process.env.NODE_ENV === "production") bot.telegram.sendMessage(config.get('TopTaxBot.session'),`Нам пишут:\n\nИмя: ${req.body.name}\nПочта: ${req.body.email}\n\n${req.body.topic_text}`);
   });
 
   return router;

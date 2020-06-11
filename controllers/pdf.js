@@ -715,66 +715,66 @@ async function modifyPdf(declaration) {
   /*
   ГЕНЕРАЦИЯ ЗАЯВЛЕНИЯ
   */
-  const [empty] = await pdfDoc.copyPages(srcDoc, [13]);
-  pdfDoc.addPage(empty);
-  empty.setFont(times);
-  empty.setFontColor(rgb(0, 0, 0));
-  height = empty.getHeight();
-  // width = empty.getWidth();
+  if (declaration.SECTION_2_160) {
+    const [empty] = await pdfDoc.copyPages(srcDoc, [13]);
+    pdfDoc.addPage(empty);
+    empty.setFont(times);
+    empty.setFontColor(rgb(0, 0, 0));
+    height = empty.getHeight();
 
-  empty.drawText(
-    `В: ${declaration.ifns_name} \n` +
-    `От: ${declaration.dadata.name.result_genitive} \n` +
-    `ИНН: ${declaration.inn} \n` +
-    `Проживающего по адресу: ${declaration.address} \n`,
-    {
-      x: 275,
-      y: height - 50,
-      size: 14,
-      lineHeight: 20,
-      maxWidth: 300
-    },
-  );
-  empty.drawText(`ЗАЯВЛЕНИЕ`, {x: 250, y: height - 300, size: 16});
-  empty.drawText(
-    `На основании пункта 6 статьи 78 Налогового кодекса Российской Федерации прошу вернуть мне сумму излишне уплаченного в ${declaration.year} году налога на доходы физических  лиц в размере ${declaration.SECTION_1_050} руб. (${rubles(declaration.SECTION_1_050)}) в связи с предоставлением мне имущественного/социального налогового вычета по налогу на доходы физических лиц.\n` +
-    `Указанную сумму налога прошу перечислить на мой банковский счет по следующим реквизитам:\n` +
-    `Наименование банка: ${declaration.bank_name}\n` +
-    `ИНН: ${declaration.bank_inn}, ` +
-    `БИК: ${declaration.bank_bik}, ` +
-    `КПП: ${declaration.bank_kpp}\n` +
-    `Корреспондентский счет: ${declaration.bank_correspondent_account}\n` +
-    `Лицевой счет налогоплательщика: ${declaration.bank_personal_account}\n`,
-    {
-      x: 50,
-      y: height - 350,
-      size: 14,
-      lineHeight: 20,
-      maxWidth: 495
-    },
-  );
-  empty.drawText(`Дата:`, {x: 50, y: height - 800, size: 14});
-  empty.drawText(`Подпись:`, {x: 266, y: height - 800, size: 14});
-  empty.drawText(`расшифровка подписи`, {x: 450, y: height - 810, size: 9});
-  empty.drawLine({
-    start: {x: 90, y: height - 800},
-    end: {x: 190, y: height - 800},
-    thickness: 0.5,
-    color: rgb(0.75, 0.75, 0.75)
-  });
-  empty.drawLine({
-    start: {x: 330, y: height - 800},
-    end: {x: 430, y: height - 800},
-    thickness: 0.5,
-    color: rgb(0.75, 0.75, 0.75)
-  });
-  empty.drawLine({
-    start: {x: 445, y: height - 800},
-    end: {x: 545, y: height - 800},
-    thickness: 0.5,
-    color: rgb(0.75, 0.75, 0.75)
-  });
-
+    empty.drawText(
+      `В: ${declaration.ifns_name} \n` +
+      `От: ${declaration.dadata.name.result_genitive} \n` +
+      `ИНН: ${declaration.inn} \n` +
+      `Проживающего по адресу: ${declaration.address} \n`,
+      {
+        x: 275,
+        y: height - 50,
+        size: 14,
+        lineHeight: 20,
+        maxWidth: 300
+      },
+    );
+    empty.drawText(`ЗАЯВЛЕНИЕ`, {x: 250, y: height - 300, size: 16});
+    empty.drawText(
+      `На основании пункта 6 статьи 78 Налогового кодекса Российской Федерации прошу вернуть мне сумму излишне уплаченного в ${declaration.year} году налога на доходы физических  лиц в размере ${declaration.SECTION_1_050} руб. (${rubles(declaration.SECTION_1_050)}) в связи с предоставлением мне имущественного/социального налогового вычета по налогу на доходы физических лиц.\n` +
+      `Указанную сумму налога прошу перечислить на мой банковский счет по следующим реквизитам:\n` +
+      `Наименование банка: ${declaration.bank_name}\n` +
+      `ИНН: ${declaration.bank_inn}, ` +
+      `БИК: ${declaration.bank_bik}, ` +
+      `КПП: ${declaration.bank_kpp}\n` +
+      `Корреспондентский счет: ${declaration.bank_correspondent_account}\n` +
+      `Лицевой счет налогоплательщика: ${declaration.bank_personal_account}\n`,
+      {
+        x: 50,
+        y: height - 350,
+        size: 14,
+        lineHeight: 20,
+        maxWidth: 495
+      },
+    );
+    empty.drawText(`Дата:`, {x: 50, y: height - 800, size: 14});
+    empty.drawText(`Подпись:`, {x: 266, y: height - 800, size: 14});
+    empty.drawText(`расшифровка подписи`, {x: 450, y: height - 810, size: 9});
+    empty.drawLine({
+      start: {x: 90, y: height - 800},
+      end: {x: 190, y: height - 800},
+      thickness: 0.5,
+      color: rgb(0.75, 0.75, 0.75)
+    });
+    empty.drawLine({
+      start: {x: 330, y: height - 800},
+      end: {x: 430, y: height - 800},
+      thickness: 0.5,
+      color: rgb(0.75, 0.75, 0.75)
+    });
+    empty.drawLine({
+      start: {x: 445, y: height - 800},
+      end: {x: 545, y: height - 800},
+      thickness: 0.5,
+      color: rgb(0.75, 0.75, 0.75)
+    });
+  }
 
   // ДОБАВЛЯЮ НОМЕРА СТРАНИЦ
   const pages = pdfDoc.getPages();

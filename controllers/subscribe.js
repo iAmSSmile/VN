@@ -18,7 +18,7 @@ module.exports = function (req, res, next) {
           res.json({"message": 'Неправильный адрес электронной почты'});
         } else {
           res.json({"message": 'Поздравляем! Мы будем своевременно оповещать вас о появлении новых функций на нашем сайте'});
-          bot.telegram.sendMessage(config.get('TopTaxBot.session'),"Подписался на новости: " + newSubscriber.email);
+          if (process.env.NODE_ENV === "production") bot.telegram.sendMessage(config.get('TopTaxBot.session'),"Подписался на новости: " + newSubscriber.email);
         }
       });
     }
