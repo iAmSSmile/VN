@@ -715,7 +715,7 @@ async function modifyPdf(declaration) {
   /*
   ГЕНЕРАЦИЯ ЗАЯВЛЕНИЯ
   */
-  if (declaration.SECTION_2_150) {
+  if (declaration.SECTION_2_160) {
     const [empty] = await pdfDoc.copyPages(srcDoc, [13]);
     pdfDoc.addPage(empty);
     empty.setFont(times);
