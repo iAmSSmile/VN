@@ -13,6 +13,8 @@
             <excludedPath local="true" path="$PROJECT_DIR$/ssl/top-tax.ru" />
             <excludedPath local="true" path="$PROJECT_DIR$/top-tax.ru.config.js" />
             <excludedPath local="true" path="$PROJECT_DIR$/sessions" />
+            <excludedPath local="true" path="$PROJECT_DIR$/bin/local" />
+            <excludedPath local="true" path="$PROJECT_DIR$/config/top-tax.ru.json" />
           </excludedPaths>
         </serverdata>
       </paths>
@@ -27,6 +29,8 @@
             <excludedPath local="true" path="$PROJECT_DIR$/ssl/top-tax.online" />
             <excludedPath local="true" path="$PROJECT_DIR$/top-tax.online.config.js" />
             <excludedPath local="true" path="$PROJECT_DIR$/.idea" />
+            <excludedPath local="true" path="$PROJECT_DIR$/bin/local" />
+            <excludedPath local="true" path="$PROJECT_DIR$/config/top-tax.online.json" />
           </excludedPaths>
         </serverdata>
       </paths>
