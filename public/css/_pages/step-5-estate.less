@@ -1,19 +1,47 @@
 #step-5-estate {
-  //display: flex;
-  //flex-direction: column;
-  //align-items: center;
-  //
-  //.forms {
-  //  width: 100%;
-  //
-  //  .checkboxes {
-  //    margin-bottom: 15px;
-  //  }
-  //}
-  //
-  //.add-form-menu {
-  //  @media only screen and (min-width: @sm) {
-  //    width: 400px;
-  //  }
-  //}
+
+  .show-more {
+    display: block;
+    font-weight: bold;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-top: 10px;
+
+    &:before {
+      content: "\f063";
+      display: inline-block;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 16px;
+      text-rendering: auto;
+      -webkit-font-smoothing: antialiased;
+      font-family: "Font Awesome 5 Pro";
+      color: black;
+      margin-right: 15px;
+      left: 0;
+    }
+  }
+
+  .hide-more {
+    display: block;
+    font-weight: bold;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-top: 10px;
+    color: black;
+
+    &:before {
+      content: "\f062";
+      display: inline-block;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 16px;
+      text-rendering: auto;
+      -webkit-font-smoothing: antialiased;
+      font-family: "Font Awesome 5 Pro";
+      color: black;
+      margin-right: 15px;
+      left: 0;
+    }
+  }
 }

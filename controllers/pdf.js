@@ -712,6 +712,59 @@ async function modifyPdf(declaration) {
     }
   }
 
+
+  /*
+  ПРИЛОЖЕНИЕ 7.
+  Расчет имущественных налоговых вычетов по расходам на новое строительство
+  либо приобретение объектов недвижимого имущества
+  */
+  for (let i = 0; i < declaration.APPENDIX_7.length; i++) {
+    let [appendix_7] = await pdfDoc.copyPages(srcDoc, [9]);
+    let item = declaration.APPENDIX_7[i];
+    pdfDoc.addPage(appendix_7);
+    appendix_7.setFont(courier);
+    appendix_7.setFontColor(rgb(0, 0, 0));
+    appendix_7.setFontSize(15);
+    height = appendix_7.getHeight();
+    //ИНН, ФАМИЛИЯ, ИМЯ, ОТЧЕСТВО
+    appendix_7.drawText(declaration.inn, {x: 184.5, y: height - 28.1});
+    appendix_7.drawText(declaration.dadata.name.surname, {x: 130, y: height - 70, font: courier_normal});
+    appendix_7.drawText(declaration.dadata.name.name.slice(0, 1) + ".", {
+      x: 475,
+      y: height - 70,
+      font: courier_normal
+    });
+    if (declaration.dadata.name.patronymic) appendix_7.drawText(declaration.dadata.name.patronymic.slice(0, 1) + ".", {
+      x: 530,
+      y: height - 70,
+      font: courier_normal
+    });
+    appendix_7.drawText(item.s010, {x: 159, y: height - 133});
+    appendix_7.drawText(item.s020, {x: 358, y: height - 133});
+    appendix_7.drawText(item.s030, {x: 301, y: height - 165});
+    breakToLines(item.s031, 40).forEach((line, line_index) => {
+      appendix_7.drawText(line.toUpperCase(), {
+        x: 15,
+        y: height - 201 - (line_index * 23)
+      });
+    });
+    breakToStrings(item.s032, 40).forEach((line, line_index) => {
+      appendix_7.drawText(line.toUpperCase(), {
+        x: 15,
+        y: height - 260 - (line_index * 24)
+      });
+    });
+    if (item.s040) {
+      appendix_7.drawText(item.s040, {x: 122, y: height - 425});
+    }
+    if (item.s050) {
+      appendix_7.drawText(item.s050, {x: 440, y: height - 425});
+    }
+    if (item.s060) {
+      appendix_7.drawText(item.s060, {x: 122, y: height - 452});
+    }
+  }
+
   /*
   ГЕНЕРАЦИЯ ЗАЯВЛЕНИЯ
   */
@@ -799,6 +852,8 @@ function breakNumber(num) {
   return arr;
 }
 
+
+//Разбивает строку на строки с переносом слов
 function breakToStrings(text, line_length) {
   let result = [];
   let current = "";
@@ -820,6 +875,15 @@ function breakToStrings(text, line_length) {
       }
     }
   }
-
   return result;
+}
+
+//Разбивает строку на строки без переноса слов
+function breakToLines(str, size) {
+  const numChunks = Math.ceil(str.length / size);
+  const chunks = new Array(numChunks);
+  for (let i = 0, o = 0; i < numChunks; ++i, o += size) {
+    chunks[i] = str.substr(o, size)
+  }
+  return chunks
 }

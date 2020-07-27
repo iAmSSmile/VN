@@ -39,7 +39,7 @@ block content
     a.step.forward(class=!declaration.STEP_5_FULLNESS.empty && !declaration.STEP_5_FULLNESS.errors.length?"step--filled":"" data-redirect='/declaration/' + declaration._id + '/step/5' href='#')
       .circle 5
       .line
-      .small вычет на продажу имущества
+      .small имущественный вычет
     .full-line
   form#step-1-individual
     .page-header
@@ -75,6 +75,10 @@ block content
             .input-block
               input.input-field(type="number" name='inn' value=declaration.inn class=declaration.inn ? 'input-filled' : '')
               .input-label ИНН
+          .col-xs-12
+            .checkbox-block
+              input.checkbox-field(type="checkbox" name="retiree:boolean" id="retiree" checked=declaration.retiree)
+              label.checkbox-label(for="retiree") пенсионер
     .form-part
       .form-part-header
         .header Паспортные данные

@@ -90,6 +90,53 @@ const sellEstateSchema = new Schema({
     maxlength: [9, "КПП состоит из 9 цифр"]
   }
 });
+const buyEstateSchema = new Schema({
+  type: {
+    type: String,
+    enum: ['room', 'flat', 'house', 'land', 'land_and_house']
+  },
+  type_fraction: Boolean,
+  land_and_house_together: Boolean,
+  address: String,
+  purchase_method: {
+    type: String,
+    enum: ['building', 'purchasing']
+  },
+  buy_price: Number,
+  mortgage: {
+    type: Number,
+    default: 0
+  },
+  land_date: {
+    type: String,
+    match: [/\d{2}.\d{2}.\d{4}/, "Неверная дата"]
+  },
+  registration_date: {
+    type: String,
+    match: [/\d{2}.\d{2}.\d{4}/, "Неверная дата"]
+  },
+  act_date: {
+    type: String,
+    match: [/\d{2}.\d{2}.\d{4}/, "Неверная дата"]
+  },
+  number_type: {
+    type: String,
+    enum: ['1', '2', '3', '4']
+  },
+  number: {
+    type: String,
+    maxlength: 80
+  },
+  owner_fraction: Boolean,
+  owner: {
+    type: String,
+    enum: ['you', 'partner', 'child']
+  },
+  owners: {
+    type: String,
+    enum: ['you_and_child', 'partner_and_child']
+  }
+});
 const sellTransportSchema = new Schema({
   sell_price: Number,
   buy_price: Number,
@@ -167,6 +214,7 @@ const declarationSchema = new Schema({
     match: [/\d{12}/, "ИНН состоит из 12 цифр"],
     maxlength: [12, "ИНН состоит из 12 цифр"]
   },
+  retiree: Boolean,
   passport_seria: {
     type: String,
     match: [/\d{4}/, "Серия паспорта состоит из 4 цифр"],
@@ -232,6 +280,9 @@ const declarationSchema = new Schema({
   }],
   heal_parent: [{
     type: healSchema
+  }],
+  buy_estate: [{
+    type: buyEstateSchema
   }],
   sell_estate: [{
     type: sellEstateSchema
@@ -316,6 +367,12 @@ declarationSchema.virtual('STEP_4_FULLNESS').get(function () {
 declarationSchema.virtual('STEP_5_FULLNESS').get(function () {
   let errors = {empty: false, errors: []};
   let fields = [];
+  this.buy_estate.forEach(estate => {
+    fields.push(estate.address);
+    fields.push(estate.buy_price);
+    fields.push(estate.mortgage);
+    if (estate.number_type !== "4") fields.push(estate.number);
+  });
   this.sell_estate.forEach(estate => {
     fields.push(estate.buy_price);
     fields.push(estate.sell_price);
@@ -1066,6 +1123,72 @@ declarationSchema.virtual('APPENDIX_6').get(function () {
     if (result.s070 > 250000) result.s070 = 250000;
     result.s160 = result.s010 + result.s020 + result.s030 + result.s040 + result.s050 + result.s060 + result.s070 + result.s080;
   }
+  return result;
+});
+
+
+/*
+ПРИЛОЖЕНИЕ 7
+Расчет имущественных налоговых вычетов по расходам на новое строительство
+либо приобретение объектов недвижимого имущества
+*/
+declarationSchema.virtual('APPENDIX_7').get(function () {
+  let result = [];
+  this.buy_estate.forEach(estate => {
+    let item = {};
+    if (estate.type_fraction) {
+      item.s010 = "4";
+    } else {
+      if (estate.type === "room") item.s010 = "1";
+      if (estate.type === "flat") item.s010 = "2";
+      if (estate.type === "house") item.s010 = "3";
+      if (estate.type === "land") item.s010 = "5";
+      if (estate.type === "land_and_house") {
+        if (estate.land_and_house_together) {
+          item.s010 = "7"
+        } else {
+          item.s010 = "6"
+        }
+      }
+    }
+    if (!estate.owner_fraction) {
+      if (estate.owner === "you") {
+        item.s020 = this.retiree ? "11" : "01";
+      }
+      if (estate.owner === "partner") {
+        item.s020 = this.retiree ? "12" : "02";
+      }
+      if (estate.owner === "child") {
+        item.s020 = this.retiree ? "04" : "03";
+      }
+    } else {
+      if (estate.owners === "you_and_child") {
+        item.s020 = this.retiree ? "14" : "13";
+      }
+      if (estate.owners === "partner_and_child") {
+        item.s020 = this.retiree ? "24" : "23";
+      }
+    }
+    item.s030 = estate.number_type;
+    item.s031 = estate.number_type !== "4" ? estate.number : "";
+    item.s032 = estate.address;
+    if (estate.type === "room" || estate.type === "flat") {
+      item.s050 = estate.registration_date;
+      if (estate.act_date) {
+        item.s040 = estate.act_date;
+      }
+    } else if (estate.type === "house") {
+      item.s050 = estate.registration_date;
+    } else if (estate.type === "land") {
+      item.s060 = estate.land_date;
+    } else if (estate.type === "land_and_house") {
+      item.s060 = estate.land_date;
+      if (estate.land_and_house_together) {
+        item.s050 = estate.registration_date;
+      }
+    }
+    result.push(item);
+  });
   return result;
 });
 

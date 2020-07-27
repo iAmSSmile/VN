@@ -13,12 +13,12 @@ form.form(name="sell_estate" id="sell_estate--" + index)
     .row
       .col-xs-12
         .radio-block.radio-vertical
-          input(type="radio" id="sell_estate--" + index + "-house" name="type" value="house" checked=(estate.type === "house"))
-          label(for="sell_estate--" + index + "-house") Продажа дома, квартиры, комнаты, садового домика, земельного участка
-          input(type="radio" id="sell_estate--" + index + "-fraction" name="type" value="fraction" checked=(estate.type === "fraction"))
-          label(for="sell_estate--" + index + "-fraction") Продажа доли в доме, квартире, земельном участке
-          input(type="radio" id="sell_estate--" + index + "-garage" name="type" value="garage" checked=(estate.type === "garage"))
-          label(for="sell_estate--" + index + "-garage") Продажа гаража, сарая и прочего недвижимого имущества
+          input(type="radio" id="sell_estate--" + index + "house" name="type" value="house" checked=(estate.type === "house"))
+          label(for="sell_estate--" + index + "house") Продажа дома, квартиры, комнаты, садового домика, земельного участка
+          input(type="radio" id="sell_estate--" + index + "fraction" name="type" value="fraction" checked=(estate.type === "fraction"))
+          label(for="sell_estate--" + index + "fraction") Продажа доли в доме, квартире, земельном участке
+          input(type="radio" id="sell_estate--" + index + "garage" name="type" value="garage" checked=(estate.type === "garage"))
+          label(for="sell_estate--" + index + "garage") Продажа гаража, сарая и прочего недвижимого имущества
     .row
       .col-xs-12.col-sm-6.col-md-3
         .input-block

@@ -43,6 +43,7 @@ exports.post_step_1 = (req, res, next) => {
     declaration.birthdate = req.body.birthdate;
     declaration.birthplace = req.body.birthplace;
     declaration.inn = req.body.inn;
+    declaration.retiree = req.body.retiree;
     declaration.passport_seria = req.body.passport_seria;
     declaration.passport_number = req.body.passport_number;
     declaration.passport_issue_date = req.body.passport_issue_date;
@@ -120,18 +121,13 @@ exports.post_step_4 = (req, res, next) => {
       } else {
         res.json({"redirect": '/declaration/' + declaration._id + '/step/5'});
       }
-
-      // if (declaration.FULLNESS.length) {
-      //   res.json({"redirect": "/declarations"});
-      // } else {
-      //   res.json({"redirect": "/declaration/" + declaration._id + "/generate"});
-      // }
     })
   });
 };
 
 exports.post_step_5 = (req, res, next) => {
   Declaration.findOne({'_id': req.params.declarationId}, (err, declaration) => {
+    declaration.buy_estate = req.body.buy_estate;
     declaration.sell_estate = req.body.sell_estate;
     declaration.sell_transport = req.body.sell_transport;
     declaration.last_edit = new Date();
@@ -145,7 +141,6 @@ exports.post_step_5 = (req, res, next) => {
     })
   });
 };
-
 
 exports.verify_declaration = function (req, res, next) {
   Declaration.findOne({'_id': req.params.declarationId}, (err, declaration) => {

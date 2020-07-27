@@ -1,8 +1,8 @@
 .checkbox-block {
-  position: relative;
-  margin-top: 20px;
-  display: flex;
-  align-items: center;
+  //position: relative;
+  margin-top: 40px;
+  //display: flex;
+  //align-items: center;
 
   [type="checkbox"]:checked,
   [type="checkbox"]:not(:checked) {
@@ -11,6 +11,8 @@
   }
   [type="checkbox"]:checked + label,
   [type="checkbox"]:not(:checked) + label {
+    margin-top: 20px;
+    margin-right: 40px;
     font-size: 1.25em;
     position: relative;
     padding-left: 38px;
@@ -93,5 +95,12 @@
   }
   .checkbox-help {
     display: none;
+  }
+}
+
+.checkbox-vertical {
+  [type="checkbox"]:checked + label,
+  [type="checkbox"]:not(:checked) + label {
+    display: block;
   }
 }

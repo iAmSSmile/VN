@@ -122,7 +122,7 @@ block content
               a.declaration-step(href='/declaration/' + declaration._id + '/step/5')
                 .content
                   .left
-                    .legend Вычет на продажу имущества
+                    .legend Имущественный вычет
                   if !declaration.STEP_5_FULLNESS.empty && declaration.STEP_5_FULLNESS.errors.length
                     +status-not-filled
                   else if declaration.STEP_5_FULLNESS.empty

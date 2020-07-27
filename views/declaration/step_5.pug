@@ -39,24 +39,24 @@ block content
     a.step.step--current
       .circle 5
       .line
-      .small вычет на продажу имущества
+      .small имущественный вычет
     .full-line
   #step-5-estate
     .page-header
-      h1 Вычет на продажу имущества
-      p Заполните этот шаг, если вы хотите получить налоговый вычет за продажу недвижимости или транспортного средства. Проданная недвижимость не должна находиться в вашей собственности более 5 лет, если она была куплена, и более 3 лет - если перешла к вам в результате дарения, приватизации, наследства или ренты. Проданное транспортное средство не должно находиться в вашей собственности более 3 лет.
-        br
-        br
-        strong В противных случаях декларация не подается, налог не платится.
+      h1 Имущественный вычет
+      p Заполните этот шаг, если вы хотите получить налоговый вычет за покупку/продажу недвижимости или продажу транспортного средства.
     .forms
+      each estate, index in declaration.buy_estate
+        include ../_forms/buy_estate
       each estate, index in declaration.sell_estate
         include ../_forms/sell_estate
       each transport, index in declaration.sell_transport
         include ../_forms/sell_transport
     .add-form
-      a.button.iconic-button.button--white.add-form-button Добавить продажу
+      a.button.iconic-button.button--white.add-form-button Добавить сделку
         i.far.fa-plus-circle
       .add-form-menu
+        a.menu-link(data-addform='buy_estate') Покупка недвижимости
         a.menu-link(data-addform='sell_estate') Продажа недвижимости
         a.menu-link(data-addform='sell_transport') Продажа транспорта
       .background

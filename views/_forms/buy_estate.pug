@@ -1,0 +1,105 @@
+form.form(name="buy_estate" id="buy_estate--" + index)
+  a.remove-form
+  .form-part
+    .form-part-header
+      .header Покупка недвижимости
+    .row
+      .col-xs-12
+        .radio-block.radio-vertical
+          input(type="radio" id="buy_estate--" + index + "-type1" name="type" value="room" checked=(estate.type === "room"))
+          label(for="buy_estate--" + index + "-type1") Комната
+          input(type="radio" id="buy_estate--" + index + "-type2" name="type" value="flat" checked=(estate.type === "flat"))
+          label(for="buy_estate--" + index + "-type2") Квартира
+          input(type="radio" id="buy_estate--" + index + "-type3" name="type" value="house" checked=(estate.type === "house"))
+          label(for="buy_estate--" + index + "-type3") Жилой дом
+          input(type="radio" id="buy_estate--" + index + "-type4" name="type" value="land" checked=(estate.type === "land"))
+          label(for="buy_estate--" + index + "-type4") Земельный участок
+          input(type="radio" id="buy_estate--" + index + "-type5" name="type" value="land_and_house" checked=(estate.type === "land_and_house"))
+          label(for="buy_estate--" + index + "-type5") Земельный участок c купленным жилым домом
+    .row
+      .col-xs-12
+        .checkbox-block
+          input.checkbox-field(type="checkbox" id="buy_estate--" + index + "-type_fraction" name="type_fraction:boolean" checked=(estate.type_fraction))
+          label.checkbox-label(for="buy_estate--" + index + "-type_fraction") Куплена доля в недвижимости
+          input.land_and_house_together.checkbox-field(type="checkbox" id="buy_estate--" + index + "-together" name="land_and_house_together:boolean" checked=(estate.land_and_house_together) class=estate.type === "land_and_house" ? "" : "hidden")
+          label.land_and_house_together.checkbox-label(for="buy_estate--" + index + "-together" class=estate.type === "land_and_house" ? "" : "hidden") Жилой дом куплен вместе с земельным участком по одному договору
+    .row
+      .col-xs-12
+        .input-block
+          input.input-field(type="text" name='address' value=estate.address class=estate.address ? 'input-filled' : '')
+          .input-label Адрес
+    .row
+      .col-xs-12.col-sm-6.col-md-4
+        .select-block
+          .select-wrapper
+            select.select-field(name='purchase_method')
+              option(value="building" selected=(estate.purchase_method === "building")) Новое строительство
+              option(value="purchasing" selected=(estate.purchase_method === "purchasing")) Приобретение
+          .select-label Способ приобретения
+      .col-xs-12.col-sm-6.col-md-4
+        .input-block
+          input.input-field(type="number" name='buy_price' value=estate.buy_price class=estate.buy_price ? 'input-filled' : '')
+          .input-label Стоимость покупки
+      .col-xs-12.col-sm-6.col-md-4
+        .input-block
+          input.input-field(type="number" name='mortgage' value=estate.mortgage class=estate.mortgage != null ? 'input-filled' : '')
+          a.input-help.mortrage-help
+          .input-label Сумма выплаченных процентов по ипотеке
+  .subform-part
+    .form-part-header
+      .header Даты регистрации права собственности
+    .row
+      .col-xs-12.col-sm-6.col-md-4(class = estate.type === "land" || estate.type === "land_and_house" ? "" : "hidden")
+        .input-block
+          input.datedropper.input-field(type="text" name='land_date' value=estate.land_date class=estate.land_date ? 'input-filled' : '')
+          .input-label На земельный участок
+      .col-xs-12.col-sm-6.col-md-4(class = estate.type === "room" || estate.type === "flat" || estate.type === "house" || (estate.type === "land_and_house" && estate.land_and_house_together)? "" : "hidden")
+        .input-block
+          input.datedropper.input-field(type="text" name='registration_date' value=estate.registration_date class=estate.registration_date ? 'input-filled' : '')
+          .input-label На жилой дом
+      .col-xs-12.col-sm-6.col-md-4(class = estate.type === "room" || estate.type === "flat" ? "" : "hidden")
+        .input-block
+          input.datedropper.input-field(type="text" name='act_date' value=estate.act_date class=estate.act_date ? 'input-filled' : '')
+          .input-label Дата акта о передаче
+  .subform-part
+    .form-part-header
+      .header Номер, присвоенный недвижимости
+    .row
+      .col-xs-12
+        .radio-block
+          input(type="radio" id="buy_estate--" + index + "-number1" name="number_type" value="1" checked=(estate.number_type === "1"))
+          label(for="buy_estate--" + index + "-number1") Кадастровый
+          input(type="radio" id="buy_estate--" + index + "-number2" name="number_type" value="2" checked=(estate.number_type === "2"))
+          label(for="buy_estate--" + index + "-number2") Условный
+          input(type="radio" id="buy_estate--" + index + "-number3" name="number_type" value="3" checked=(estate.number_type === "3"))
+          label(for="buy_estate--" + index + "-number3") Инвентарный
+          input(type="radio" id="buy_estate--" + index + "-number4" name="number_type" value="4" checked=(estate.number_type === "4"))
+          label(for="buy_estate--" + index + "-number4") Без номера
+    .row
+      .col-xs-12.col-sm-6.col-md-4
+        .input-block(class = estate.number_type === "4" ? "hidden" : "")
+          input.input-field(type="text" name='number' value=estate.number class=estate.number ? 'input-filled' : '')
+          .input-label Кадастровый номер
+  .subform-part
+    .form-part-header
+      .header Информация о владельце недвижимости
+    .row
+      .col-xs-12
+        .checkbox-block
+          input.checkbox-field(type="checkbox" id="buy_estate--" + index + "-fraction" name="owner_fraction:boolean" checked=(estate.fraction))
+          label.checkbox-label(for="buy_estate--" + index + "-fraction") Недвижимость приобретена в общую долевую собственность
+    .row
+      .col-xs-12
+        .select-block
+          .select-wrapper
+            select.select-field.single-owner(name='owner' class=estate.fraction ? "hidden" : "")
+              option(value="you" selected=(estate.owner === "you")) Вы
+              option(value="partner" selected=(estate.owner === "partner")) Ваш супруг
+              option(value="child" selected=(estate.owner === "child")) Ваш несовершеннолетний ребенок
+            select.select-field.multi-owner(name='owners' class=estate.fraction ? "" : "hidden")
+              option(value="you_and_child" selected=(estate.owners === "you_and_child")) Вы и ваш несовершеннолетний ребенок
+              option(value="partner_and_child" selected=(estate.owners === "partner_and_child")) Ваш супруг и ваш несовершеннолетний ребенок
+          if estate.fraction
+            .select-label.owner-label Владельцы недвижимости
+          else
+            .select-label.owner-label Владелец недвижимости
