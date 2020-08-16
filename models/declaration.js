@@ -91,12 +91,16 @@ const sellEstateSchema = new Schema({
   }
 });
 const buyEstateSchema = new Schema({
+  type_fraction: Boolean,
   type: {
     type: String,
-    enum: ['room', 'flat', 'house', 'land', 'land_and_house']
+    enum: ['room', 'flat', 'house', 'land']
   },
-  type_fraction: Boolean,
-  land_and_house_together: Boolean,
+  type3: Boolean,
+  type4: {
+    type: String,
+    enum: ['construction', 'house']
+  },
   address: String,
   purchase_method: {
     type: String,
@@ -135,6 +139,22 @@ const buyEstateSchema = new Schema({
   owners: {
     type: String,
     enum: ['you_and_child', 'partner_and_child']
+  },
+  prev_sum: {
+    type: Number,
+    default: 0
+  },
+  prev_percent: {
+    type: Number,
+    default: 0
+  },
+  prev_employer: {
+    type: Number,
+    default: 0
+  },
+  prev_employer_percent: {
+    type: Number,
+    default: 0
   }
 });
 const sellTransportSchema = new Schema({
@@ -1134,6 +1154,7 @@ declarationSchema.virtual('APPENDIX_6').get(function () {
 */
 declarationSchema.virtual('APPENDIX_7').get(function () {
   let result = [];
+  let prev_max_percent;
   this.buy_estate.forEach(estate => {
     let item = {};
     if (estate.type_fraction) {
@@ -1141,13 +1162,18 @@ declarationSchema.virtual('APPENDIX_7').get(function () {
     } else {
       if (estate.type === "room") item.s010 = "1";
       if (estate.type === "flat") item.s010 = "2";
-      if (estate.type === "house") item.s010 = "3";
-      if (estate.type === "land") item.s010 = "5";
-      if (estate.type === "land_and_house") {
-        if (estate.land_and_house_together) {
-          item.s010 = "7"
+      if (estate.type === "house") {
+        if (estate.type3) {
+          item.s010 = "7";
         } else {
-          item.s010 = "6"
+          item.s010 = "3";
+        }
+      }
+      if (estate.type === "land") {
+        if (estate.type4 === "construction") {
+          item.s010 = "5";
+        } else if (estate.type4 === "house"){
+          item.s010 = "6";
         }
       }
     }
@@ -1172,21 +1198,41 @@ declarationSchema.virtual('APPENDIX_7').get(function () {
     item.s030 = estate.number_type;
     item.s031 = estate.number_type !== "4" ? estate.number : "";
     item.s032 = estate.address;
-    if (estate.type === "room" || estate.type === "flat") {
+    if (item.s010 === "1" || item.s010 === "2" || item.s010 === "3" || item.s010 === "4" || item.s010 === "7") {
+      item.s040 = estate.act_date;
       item.s050 = estate.registration_date;
-      if (estate.act_date) {
+    }
+    if (item.s010 === "5" || item.s010 === "6") {
+      item.s060 = estate.land_date;
+    }
+    if (item.s010 === "4") {
+      if (estate.type === "land") {
+        item.s060 = estate.land_date;
+      } else {
         item.s040 = estate.act_date;
-      }
-    } else if (estate.type === "house") {
-      item.s050 = estate.registration_date;
-    } else if (estate.type === "land") {
-      item.s060 = estate.land_date;
-    } else if (estate.type === "land_and_house") {
-      item.s060 = estate.land_date;
-      if (estate.land_and_house_together) {
         item.s050 = estate.registration_date;
       }
     }
+    item.s080 = estate.buy_price > 2000000 ? 2000000 : estate.buy_price;
+    item.s090 = estate.mortgage > 3000000 ? 3000000 : estate.mortgage;
+    if (estate.mortgage > 0) {
+      if (prev_max_percent) {
+        if (item.s090 > prev_max_percent.s090 ) {
+          prev_max_percent.s090 = "";
+          prev_max_percent = item;
+        } else {
+          item.s090 = "";
+        }
+      } else {
+        prev_max_percent = item;
+      }
+    }
+    item.s100 = estate.prev_sum > 0 ? estate.prev_sum : "";
+    item.s110 = estate.prev_percent > 0 ? estate.prev_percent : "";
+    item.s120 = estate.prev_employer > 0 ? estate.prev_employer : "";
+    item.s130 = estate.prev_employer_percent > 0 ? estate.prev_employer_percent : "";
+    item.s140 = this.APPENDIX_1.reduce((acc, item) => acc + Number(item.s070), 0);
+    item.s150 = 0 + this.APPENDIX_6.s160 ? this.APPENDIX_6.s160 : 0 + this.APPENDIX_5_200 ? this.APPENDIX_5_200 : 0;
     result.push(item);
   });
   return result;

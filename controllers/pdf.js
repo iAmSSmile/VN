@@ -763,6 +763,50 @@ async function modifyPdf(declaration) {
     if (item.s060) {
       appendix_7.drawText(item.s060, {x: 122, y: height - 452});
     }
+    field = breakNumber(item.s080);
+    position = (9 - field[0].length) * 14.1;
+    appendix_7.drawText(field[0], {x: 411 + position, y: height - 507});
+    appendix_7.drawText(field[1], {x: 553, y: height - 507});
+
+    if (item.s090) {
+      field = breakNumber(item.s090);
+      position = (9 - field[0].length) * 14.1;
+      appendix_7.drawText(field[0], {x: 411 + position, y: height - 534});
+      appendix_7.drawText(field[1], {x: 553, y: height - 534});
+    }
+    if (item.s100) {
+      field = breakNumber(item.s100);
+      position = (9 - field[0].length) * 14.1;
+      appendix_7.drawText(field[0], {x: 411 + position, y: height - 567});
+      appendix_7.drawText(field[1], {x: 553, y: height - 567});
+    }
+    if (item.s110) {
+      field = breakNumber(item.s110);
+      position = (9 - field[0].length) * 14.1;
+      appendix_7.drawText(field[0], {x: 411 + position, y: height - 591});
+      appendix_7.drawText(field[1], {x: 553, y: height - 591});
+    }
+    if (item.s120) {
+      field = breakNumber(item.s120);
+      position = (9 - field[0].length) * 14.1;
+      appendix_7.drawText(field[0], {x: 411 + position, y: height - 615});
+      appendix_7.drawText(field[1], {x: 553, y: height - 615});
+    }
+    if (item.s130) {
+      field = breakNumber(item.s130);
+      position = (9 - field[0].length) * 14.1;
+      appendix_7.drawText(field[0], {x: 411 + position, y: height - 645});
+      appendix_7.drawText(field[1], {x: 553, y: height - 645});
+    }
+    field = breakNumber(item.s140);
+    position = (13 - field[0].length) * 14.1;
+    appendix_7.drawText(field[0], {x: 355 + position, y: height - 674.5});
+    appendix_7.drawText(field[1], {x: 553, y: height - 674.5});
+
+    field = breakNumber(item.s150);
+    position = (9 - field[0].length) * 14.1;
+    appendix_7.drawText(field[0], {x: 411 + position, y: height - 698.5});
+    appendix_7.drawText(field[1], {x: 553, y: height - 698.5});
   }
 
   /*
