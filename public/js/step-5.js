@@ -36,7 +36,7 @@ $(document).ready(function () {
           },
           outside: 'y',
           pointer: 'left:108',
-          content: `Если вы не покупали недвижимость в ипотеку - поставьте в этом поле 0`
+          content: `Укажите в этом поле сумму фактически произведенных вами расходов на погашение процентов по целевым займам (кредитам) или 0, если вы не пользовались кредитом при покупке`
         });
         new jBox('Tooltip', {
           attach: `form#${formID} .act-date-help`,
@@ -55,7 +55,83 @@ $(document).ready(function () {
           },
           outside: 'y',
           pointer: 'left:108',
-          content: `Необязательное поле`
+          content: `Необязательное поле, указывается если у вас есть акт передачи собственности`
+        });
+        new jBox('Tooltip', {
+          attach: `form#${formID} .prev-sum-help`,
+          target: `form#${formID} input[name="prev_sum"]`,
+          theme: 'TooltipBorder',
+          trigger: 'click',
+          responsiveWidth: true,
+          maxWidth: 500,
+          adjustTracker: true,
+          closeOnClick: 'body',
+          closeOnEsc: true,
+          animation: 'move',
+          position: {
+            x: 'center',
+            y: 'bottom'
+          },
+          outside: 'y',
+          pointer: 'left:108',
+          content: `Сумма имущественного налогового вычета по расходам на новое строительство или приобретение объекта, принятая к учету при определении налоговой базы за предыдущие налоговые периоды`
+        });
+        new jBox('Tooltip', {
+          attach: `form#${formID} .prev-percent-help`,
+          target: `form#${formID} input[name="prev_percent"]`,
+          theme: 'TooltipBorder',
+          trigger: 'click',
+          responsiveWidth: true,
+          maxWidth: 500,
+          adjustTracker: true,
+          closeOnClick: 'body',
+          closeOnEsc: true,
+          animation: 'move',
+          position: {
+            x: 'center',
+            y: 'bottom'
+          },
+          outside: 'y',
+          pointer: 'left:108',
+          content: `Сумма имущественного налогового вычета по уплаченным процентам по займам (кредитам), принятая к учету при определении налоговой базы за предыдущие налоговые периоды`
+        });
+        new jBox('Tooltip', {
+          attach: `form#${formID} .prev-employer-help`,
+          target: `form#${formID} input[name="prev_employer"]`,
+          theme: 'TooltipBorder',
+          trigger: 'click',
+          responsiveWidth: true,
+          maxWidth: 500,
+          adjustTracker: true,
+          closeOnClick: 'body',
+          closeOnEsc: true,
+          animation: 'move',
+          position: {
+            x: 'center',
+            y: 'bottom'
+          },
+          outside: 'y',
+          pointer: 'left:108',
+          content: `Сумма имущественного налогового вычета (без учета процентов по займам (кредитам), предоставленная в отчетном налоговом периоде налоговым(и) агентом(ами) на основании уведомления, выданного налоговым органом`
+        });
+        new jBox('Tooltip', {
+          attach: `form#${formID} .prev-employer-percent-help`,
+          target: `form#${formID} input[name="prev_employer_percent"]`,
+          theme: 'TooltipBorder',
+          trigger: 'click',
+          responsiveWidth: true,
+          maxWidth: 500,
+          adjustTracker: true,
+          closeOnClick: 'body',
+          closeOnEsc: true,
+          animation: 'move',
+          position: {
+            x: 'center',
+            y: 'bottom'
+          },
+          outside: 'y',
+          pointer: 'left:108',
+          content: `Сумма имущественного налогового вычета по уплаченным процентам по займам (кредитам), предоставленная в отчетном налоговом периоде налоговым(и) агентом(ами) на основании уведомления, выданного налоговым органом`
         });
         break;
       case "sell_estate":
@@ -95,7 +171,7 @@ $(document).ready(function () {
           },
           outside: 'y',
           pointer: 'left:108',
-          content: `Если вы не покупали проданную недвижимость в ипотеку - поставьте в этом поле 0`
+          content: `Если вы не покупали проданную недвижимость в ипотеку - поставьте в этом поле 0, в противном случае введите сумму выплаченных процентов по ипотеке`
         });
         break;
       case "sell_transport":
@@ -222,8 +298,6 @@ $(document).ready(function () {
 
   $(document).on("change", `form[id*="buy_estate"] input[type="radio"][name="type"]`, function (event) {
     let $form = $(this).parents('form');
-    let fraction = $form.find(`input[name*="type_fraction"]`).is(":checked");
-
     switch ($(this).val()) {
       case "room":
         $form.find(`input[name*="act_date"]`).val("").removeClass("input-filled").parent().parent().removeClass("hidden");
@@ -254,54 +328,10 @@ $(document).ready(function () {
         switchType_4($form, true);
         break;
     }
-
-    // if (fraction) {
-    //   if ($(this).val() === "land") {
-    //     $form.find(`input[name*="act_date"]`).val("").removeClass("input-filled").parent().parent().addClass("hidden");
-    //     $form.find(`input[name*="registration_date"]`).val("").removeClass("input-filled").parent().parent().addClass("hidden");
-    //     $form.find(`input[name*="land_date"]`).val("").removeClass("input-filled").parent().parent().removeClass("hidden");
-    //   } else {
-    //     $form.find(`input[name*="act_date"]`).val("").removeClass("input-filled").parent().parent().removeClass("hidden");
-    //     $form.find(`input[name*="registration_date"]`).val("").removeClass("input-filled").parent().parent().removeClass("hidden");
-    //     $form.find(`input[name*="land_date"]`).val("").removeClass("input-filled").parent().parent().addClass("hidden");
-    //   }
-    // } else {
-    //     switch ($(this).val()) {
-    //       case "room":
-    //         $form.find(`input[name*="act_date"]`).val("").removeClass("input-filled").parent().parent().removeClass("hidden");
-    //         $form.find(`input[name*="registration_date"]`).val("").removeClass("input-filled").parent().parent().removeClass("hidden");
-    //         $form.find(`input[name*="land_date"]`).val("").removeClass("input-filled").parent().parent().addClass("hidden");
-    //         switchType_3($form, false);
-    //         switchType_4($form, false);
-    //         break;
-    //       case "flat":
-    //         $form.find(`input[name*="act_date"]`).val("").removeClass("input-filled").parent().parent().removeClass("hidden");
-    //         $form.find(`input[name*="registration_date"]`).val("").removeClass("input-filled").parent().parent().removeClass("hidden");
-    //         $form.find(`input[name*="land_date"]`).val("").removeClass("input-filled").parent().parent().addClass("hidden");
-    //         switchType_3($form, false);
-    //         switchType_4($form, false);
-    //         break;
-    //       case "house":
-    //         $form.find(`input[name*="act_date"]`).val("").removeClass("input-filled").parent().parent().removeClass("hidden");
-    //         $form.find(`input[name*="registration_date"]`).val("").removeClass("input-filled").parent().parent().removeClass("hidden");
-    //         $form.find(`input[name*="land_date"]`).val("").removeClass("input-filled").parent().parent().addClass("hidden");
-    //         switchType_3($form, true);
-    //         switchType_4($form, false);
-    //         break;
-    //       case "land":
-    //         $form.find(`input[name*="act_date"]`).val("").removeClass("input-filled").parent().parent().addClass("hidden");
-    //         $form.find(`input[name*="registration_date"]`).val("").removeClass("input-filled").parent().parent().addClass("hidden");
-    //         $form.find(`input[name*="land_date"]`).val("").removeClass("input-filled").parent().parent().removeClass("hidden");
-    //         switchType_3($form, false);
-    //         switchType_4($form, true);
-    //         break;
-    //     }
-    // }
-
     changeDateNames($form);
   });
 
-  function switchType_3 ($form, state) {
+  function switchType_3($form, state) {
     if (state) {
       $form.find(`.type-3`).removeClass(`hidden`);
     } else {
@@ -310,7 +340,7 @@ $(document).ready(function () {
     }
   }
 
-  function switchType_4 ($form, state) {
+  function switchType_4($form, state) {
     if (state) {
       $form.find(`.type-4`).removeClass(`hidden`);
     } else {
@@ -422,7 +452,63 @@ $(document).ready(function () {
 
     switch (formName) {
       case "buy_estate":
-        $(".forms").append(`<form class="form" name="buy_estate" id="${formID}"><a class="remove-form"></a><div class="form-part"><div class="form-part-header"><div class="header">Покупка недвижимости</div></div><div class="row"><div class="col-xs-12"><div class="checkbox-block"><input class="checkbox-field" type="checkbox" id="${formID}-type_fraction" name="type_fraction:boolean"><label class="checkbox-label" for="${formID}-type_fraction">Куплена доля</label></div></div></div><div class="row type"><div class="col-xs-12"><div class="choose-block"><input type="radio" id="${formID}-type1" name="type" value="room" checked><label for="${formID}-type1">Комната</label><input type="radio" id="${formID}-type2" name="type" value="flat"><label for="${formID}-type2">Квартира</label><input type="radio" id="${formID}-type3" name="type" value="house"><label for="${formID}-type3">Жилой дом</label><input type="radio" id="${formID}-type4" name="type" value="land"><label for="${formID}-type4">Земельный участок</label></div></div></div><div class="row type-3 hidden"><div class="col-xs-12"><div class="checkbox-block"><input class="checkbox-field" type="checkbox" id="${formID}-type3_land" name="type3:boolean"><label class="checkbox-label" for="${formID}-type3_land">Жилой дом вместе с земельным участком</label></div></div></div><div class="row type-4 hidden"><div class="col-xs-12"><div class="radio-block"><input type="radio" id="${formID}-type4_construction" name="type4" value="construction" checked><label for="${formID}-type4_construction">под жилищное строительство</label><input type="radio" id="${formID}-type4_house" name="type4" value="house"><label for="${formID}-type4_house">с купленным ранее жилым домом</label></div></div></div><div class="row"><div class="col-xs-12"><div class="input-block"><input class="input-field" type="text" name="address"><div class="input-label">Адрес</div></div></div></div><div class="row"><div class="col-xs-12 col-sm-6 col-md-4"><div class="select-block"><div class="select-wrapper"><select class="select-field" name="purchase_method"><option value="building">Новое строительство</option><option value="purchasing" selected>Покупка</option></select></div><div class="select-label">Способ приобретения</div></div></div><div class="col-xs-12 col-sm-6 col-md-4"><div class="input-block"><input class="input-field" type="number" name="buy_price"><div class="input-label">Стоимость покупки</div></div></div><div class="col-xs-12 col-sm-6 col-md-4"><div class="input-block"><input class="input-field" type="number" name="mortgage"><a class="input-help mortgage-help"></a><div class="input-label">Сумма выплаченных процентов по ипотеке</div></div></div></div></div><div class="subform-part"><div class="form-part-header"><div class="header">Даты регистрации права собственности</div></div><div class="row"><div class="col-xs-12 col-sm-6 col-md-4 hidden"><div class="input-block"><input class="datedropper input-field" type="text" name="land_date"><div class="input-label">На земельный участок</div></div></div><div class="col-xs-12 col-sm-6 col-md-4"><div class="input-block"><input class="datedropper input-field" type="text" name="registration_date"><div class="input-label">На комнату</div></div></div><div class="col-xs-12 col-sm-6 col-md-4"><div class="input-block"><input class="datedropper input-field" type="text" name="act_date" value=""><a class="input-help act-date-help"></a><div class="input-label">Дата акта о передаче</div></div></div></div></div><div class="subform-part"><div class="form-part-header"><div class="header">Номер, присвоенный недвижимости</div></div><div class="row"><div class="col-xs-12 col-sm-6 col-md-4"><div class="select-block"><div class="select-wrapper"><select class="select-field" name="number_type"><option value="1" selected>Кадастровый</option><option value="2">Условный</option><option value="3">Инвентарный</option><option value="4">Нет номера</option></select></div><div class="select-label">Тип номера</div></div></div><div class="col-xs-12 col-sm-6 col-md-4"><div class="input-block"><input class="input-field" type="text" name="number"><div class="input-label">Номер</div></div></div></div></div><div class="subform-part"><div class="form-part-header"><div class="header">Информация о владельце недвижимости</div></div><div class="row"><div class="col-xs-12"><div class="checkbox-block"><input class="checkbox-field" type="checkbox" id="${formID}-fraction" name="owner_fraction:boolean"><label class="checkbox-label" for="${formID}-fraction">Недвижимость приобретена в общую долевую собственность</label></div></div></div><div class="row"><div class="col-xs-12"><div class="select-block"><div class="select-wrapper"><select class="select-field single-owner" name="owner"><option value="you" selected>Вы</option><option value="partner">Ваш супруг</option><option value="child">Ваш несовершеннолетний ребенок</option></select><select class="select-field multi-owner hidden" name="owners"><option value="you_and_child" selected>Вы и ваш несовершеннолетний ребенок</option><option value="partner_and_child">Ваш супруг и ваш несовершеннолетний ребенок</option></select></div><div class="select-label owner-label">Владелец недвижимости</div></div></div></div></div><div class="subform-part"><div class="form-part-header"><div class="header">Предыдущие вычеты за эту недвижимость</div><div class="description">В случае повторного предоставления декларации по данному имуществу (если вы уже начали пользоваться вычетом в предыдущих годах) внесите в эти поля суммы использованного за предыдущие периоды налоговых вычетов</div></div><div class="row"><div class="col-xs-12 col-sm-6 col-md-3"><div class="input-block"><input class="input-field input-filled" type="number" name="prev_sum" value="0"><a class="input-help prev-sum-help"></a><div class="input-label">Сумма предыдущих вычетов</div></div></div><div class="col-xs-12 col-sm-6 col-md-3"><div class="input-block"><input class="input-field input-filled" type="number" name="prev_percent" value="0"><a class="input-help prev-percent-help"></a><div class="input-label">Сумма процентов</div></div></div><div class="col-xs-12 col-sm-6 col-md-3"><div class="input-block"><input class="input-field input-filled" type="number" name="prev_employer" value="0"><a class="input-help prev-employer-help"></a><div class="input-label">Сумма от работодателя</div></div></div><div class="col-xs-12 col-sm-6 col-md-3"><div class="input-block"><input class="input-field input-filled" type="number" name="prev_employer_percent" value="0"><a class="input-help prev-employer-percent-help"></a><div class="input-label">Сумма процентов от работодателя</div></div></div></div></div></form>`
+        $(".forms").append(`
+            <form class="form" name="buy_estate" id="${formID}">
+                <a class="remove-form"></a>
+                    <div class="form-part">
+                        <div class="form-part-header">
+                            <div class="header">Покупка недвижимости</div>
+                        </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="checkbox-block">
+                                <input class="checkbox-field" type="checkbox" id="${formID}-type_fraction" name="type_fraction:boolean">
+                                <label class="checkbox-label" for="${formID}-type_fraction">Куплена доля</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row type">
+                        <div class="col-xs-12">
+                            <div class="choose-block">
+                                <input type="radio" id="${formID}-type1" name="type" value="room" checked>
+                                <label for="${formID}-type1">Комната</label>
+                                <input type="radio" id="${formID}-type2" name="type" value="flat">
+                                <label for="${formID}-type2">Квартира</label>
+                                <input type="radio" id="${formID}-type3" name="type" value="house">
+                                <label for="${formID}-type3">Жилой дом</label>
+                                <input type="radio" id="${formID}-type4" name="type" value="land">
+                                <label for="${formID}-type4">Земельный участок</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row type-3 hidden">
+                        <div class="col-xs-12">
+                            <div class="checkbox-block">
+                                <input class="checkbox-field" type="checkbox" id="${formID}-type3_land" name="type3:boolean">
+                                <label class="checkbox-label" for="${formID}-type3_land">Жилой дом вместе с земельным участком</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row type-4 hidden">
+                        <div class="col-xs-12">
+                            <div class="radio-block">
+                                <input type="radio" id="${formID}-type4_construction" name="type4" value="construction" checked>
+                                <label for="${formID}-type4_construction">под жилищное строительство</label>
+                                <input type="radio" id="${formID}-type4_house" name="type4" value="house">
+                                <label for="${formID}-type4_house">с купленным ранее жилым домом</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="input-block">
+                                <input class="input-field" type="text" name="address">
+                                <div class="input-label">Адрес</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6 col-md-4"><div class="input-block"><input class="input-field" type="number" name="buy_price"><div class="input-label">Стоимость покупки</div></div></div><div class="col-xs-12 col-sm-6 col-md-4"><div class="input-block"><input class="input-field" type="number" name="mortgage"><a class="input-help mortgage-help"></a><div class="input-label">Сумма выплаченных процентов по ипотеке</div></div></div></div></div><div class="subform-part"><div class="form-part-header"><div class="header">Даты регистрации права собственности</div></div><div class="row"><div class="col-xs-12 col-sm-6 col-md-4 hidden"><div class="input-block"><input class="datedropper input-field" type="text" name="land_date"><div class="input-label">На земельный участок</div></div></div><div class="col-xs-12 col-sm-6 col-md-4"><div class="input-block"><input class="datedropper input-field" type="text" name="registration_date"><div class="input-label">На комнату</div></div></div><div class="col-xs-12 col-sm-6 col-md-4"><div class="input-block"><input class="datedropper input-field" type="text" name="act_date" value=""><a class="input-help act-date-help"></a><div class="input-label">Дата акта о передаче</div></div></div></div></div><div class="subform-part"><div class="form-part-header"><div class="header">Номер, присвоенный недвижимости</div></div><div class="row"><div class="col-xs-12 col-sm-6 col-md-4"><div class="select-block"><div class="select-wrapper"><select class="select-field" name="number_type"><option value="1" selected>Кадастровый</option><option value="2">Условный</option><option value="3">Инвентарный</option><option value="4">Нет номера</option></select></div><div class="select-label">Тип номера</div></div></div><div class="col-xs-12 col-sm-6 col-md-4"><div class="input-block"><input class="input-field" type="text" name="number"><div class="input-label">Номер</div></div></div></div></div><div class="subform-part"><div class="form-part-header"><div class="header">Информация о владельце недвижимости</div></div><div class="row"><div class="col-xs-12"><div class="checkbox-block"><input class="checkbox-field" type="checkbox" id="${formID}-fraction" name="owner_fraction:boolean"><label class="checkbox-label" for="${formID}-fraction">Недвижимость приобретена в общую долевую собственность</label></div></div></div><div class="row"><div class="col-xs-12"><div class="select-block"><div class="select-wrapper"><select class="select-field single-owner" name="owner"><option value="you" selected>Вы</option><option value="partner">Ваш супруг</option><option value="child">Ваш несовершеннолетний ребенок</option></select><select class="select-field multi-owner hidden" name="owners"><option value="you_and_child" selected>Вы и ваш несовершеннолетний ребенок</option><option value="partner_and_child">Ваш супруг и ваш несовершеннолетний ребенок</option></select></div><div class="select-label owner-label">Владелец недвижимости</div></div></div></div></div><div class="subform-part"><div class="form-part-header"><div class="header">Предыдущие вычеты за эту недвижимость</div><div class="description">В случае повторного предоставления декларации по данному имуществу (если вы уже начали пользоваться вычетом в предыдущих годах) внесите в эти поля суммы использованного за предыдущие периоды налоговых вычетов</div></div><div class="row"><div class="col-xs-12 col-sm-6 col-md-3"><div class="input-block"><input class="input-field input-filled" type="number" name="prev_sum" value="0"><a class="input-help prev-sum-help"></a><div class="input-label">Сумма предыдущих вычетов</div></div></div><div class="col-xs-12 col-sm-6 col-md-3"><div class="input-block"><input class="input-field input-filled" type="number" name="prev_percent" value="0"><a class="input-help prev-percent-help"></a><div class="input-label">Сумма процентов</div></div></div><div class="col-xs-12 col-sm-6 col-md-3"><div class="input-block"><input class="input-field input-filled" type="number" name="prev_employer" value="0"><a class="input-help prev-employer-help"></a><div class="input-label">Сумма от работодателя</div></div></div><div class="col-xs-12 col-sm-6 col-md-3"><div class="input-block"><input class="input-field input-filled" type="number" name="prev_employer_percent" value="0"><a class="input-help prev-employer-percent-help"></a><div class="input-label">Сумма процентов от работодателя</div></div></div></div></div></form>`
         );
         break;
       case "sell_estate":

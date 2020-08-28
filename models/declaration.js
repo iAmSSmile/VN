@@ -102,10 +102,6 @@ const buyEstateSchema = new Schema({
     enum: ['construction', 'house']
   },
   address: String,
-  purchase_method: {
-    type: String,
-    enum: ['building', 'purchasing']
-  },
   buy_price: Number,
   mortgage: {
     type: Number,

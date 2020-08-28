@@ -12,13 +12,17 @@ form.form(name="buy_estate" id="buy_estate--" + index)
       .col-xs-12
         .choose-block
           input(type="radio" id="buy_estate--" + index + "-type1" name="type" value="room" checked=(estate.type === "room"))
-          label(for="buy_estate--" + index + "-type1") Комната
+          label(for="buy_estate--" + index + "-type1")
+            != estate.type_fraction ? "В комнате" : "Комната"
           input(type="radio" id="buy_estate--" + index + "-type2" name="type" value="flat" checked=(estate.type === "flat"))
-          label(for="buy_estate--" + index + "-type2") Квартира
+          label(for="buy_estate--" + index + "-type2")
+            != estate.type_fraction ? "В квартире" : "Квартира"
           input(type="radio" id="buy_estate--" + index + "-type3" name="type" value="house" checked=(estate.type === "house"))
-          label(for="buy_estate--" + index + "-type3") Жилой дом
+          label(for="buy_estate--" + index + "-type3")
+            != estate.type_fraction ? "В жилом доме" : "Жилой дом"
           input(type="radio" id="buy_estate--" + index + "-type4" name="type" value="land" checked=(estate.type === "land"))
-          label(for="buy_estate--" + index + "-type4") Земельный участок
+          label(for="buy_estate--" + index + "-type4")
+            != estate.type_fraction ? "В земельном участке" : "Земельный участок"
     .row.type-3(class=estate.type === "house" ? "" : "hidden")
       .col-xs-12
         .checkbox-block
@@ -38,13 +42,6 @@ form.form(name="buy_estate" id="buy_estate--" + index)
           .input-label Адрес
     .row
       .col-xs-12.col-sm-6.col-md-4
-        .select-block
-          .select-wrapper
-            select.select-field(name='purchase_method')
-              option(value="building" selected=(estate.purchase_method === "building")) Новое строительство
-              option(value="purchasing" selected=(estate.purchase_method === "purchasing")) Покупка
-          .select-label Способ приобретения
-      .col-xs-12.col-sm-6.col-md-4
         .input-block
           input.input-field(type="number" name='buy_price' value=estate.buy_price class=estate.buy_price ? 'input-filled' : '')
           .input-label Стоимость покупки
@@ -61,7 +58,7 @@ form.form(name="buy_estate" id="buy_estate--" + index)
         .input-block
           input.datedropper.input-field(type="text" name='land_date' value=estate.land_date class=estate.land_date ? 'input-filled' : '')
           .input-label На земельный участок
-      .col-xs-12.col-sm-6.col-md-4(class = estate.type === "room" || estate.type === "flat" || estate.type === "house" || (estate.type === "land_and_house" && estate.land_and_house_together)? "" : "hidden")
+      .col-xs-12.col-sm-6.col-md-4(class = estate.type === "room" || estate.type === "flat" || estate.type === "house" || (estate.type === "land_and_house" && estate.land_and_house_together) ? "" : "hidden")
         .input-block
           input.datedropper.input-field(type="text" name='registration_date' value=estate.registration_date class=estate.registration_date ? 'input-filled' : '')
           .input-label На жилой дом

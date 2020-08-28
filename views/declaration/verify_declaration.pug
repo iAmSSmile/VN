@@ -343,6 +343,105 @@ block content
             a.continue-edit(href='/declaration/' + declaration._id + '/step/4') заполнить
     if !declaration.STEP_5_FULLNESS.empty
       .step
+        each estate in declaration.buy_estate
+          .form-part
+            .form-part-header
+              if estate.type_fraction
+                if estate.type === "room"
+                  .header Продажа доли в комнате
+                if estate.type === "flat"
+                  .header Продажа доли в квартире
+                if estate.type === "house"
+                  .header Продажа доли в доме
+                if estate.type === "land"
+                  .header Продажа доли в земельном участке
+              if !estate.type_fraction
+                if estate.type === "room"
+                  .header Продажа комнаты
+                if estate.type === "flat"
+                  .header Продажа квартиры
+                if estate.type === "house"
+                  .header Продажа дома
+                if estate.type === "land"
+                  .header Продажа земельного участка
+            .table-string
+              p.grey Адрес
+              if estate.address !== null
+                p.data #{ estate.address }
+              else
+                .empty не заполнено
+            .table-string
+              p.grey Стоимость покупки, руб.
+              if estate.buy_price !== null
+                p.data #{ estate.buy_price }
+              else
+                .empty не заполнено
+            .table-string
+              p.grey Сумма выплаченных процентов по ипотеке, руб.
+              if estate.mortgage !== null
+                p.data #{ estate.mortgage }
+              else
+                .empty не заполнено
+            if estate.registration_date
+              .table-string
+                p.grey Дата регистрации права собственности
+                if estate.registration_date !== null
+                  p.data #{ estate.registration_date }
+                else
+                  .empty не заполнено
+            if estate.land_date
+              .table-string
+                p.grey Дата регистрации права собственности
+                if estate.land_date !== null
+                  p.data #{ estate.land_date }
+                else
+                  .empty не заполнено
+            if estate.act_date
+              .table-string
+                p.grey Дата регистрации права собственности
+                if estate.act_date !== null
+                  p.data #{ estate.act_date }
+                else
+                  .empty не заполнено
+            if estate.number_type === "1"
+              .table-string
+                p.grey Кадастровый номер
+                if estate.number !== null
+                  p.data #{ estate.number }
+                else
+                  .empty не заполнено
+            if estate.number_type === "2"
+              .table-string
+                p.grey Условный номер
+                if estate.number !== null
+                  p.data #{ estate.number }
+                else
+                  .empty не заполнено
+            if estate.number_type === "3"
+              .table-string
+                p.grey Инвентарный номер
+                if estate.number !== null
+                  p.data #{ estate.number }
+                else
+                  .empty не заполнено
+            if estate.number_type === "4"
+              .table-string
+                p.grey Номер, присвоенный недвижимости
+                p.data Без номера
+            .table-string
+              p.grey Владелец недвижимости
+              if estate.owner_fraction
+                if estate.owners === "you_and_child"
+                  p.data Вы и ваш несовершеннолетний ребенок
+                if estate.owners === "partner_and_child"
+                  p.data Ваш супруг и ваш несовершеннолетний ребенок
+              if !estate.owner_fraction
+                if estate.owner === "you"
+                  p.data Вы
+                if estate.owner === "partner"
+                  p.data Ваш супруг
+                if estate.owner === "child"
+                  p.data Ваш несовершеннолетний ребенок
         each estate in declaration.sell_estate
           .form-part
             .form-part-header
