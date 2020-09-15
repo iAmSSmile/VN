@@ -1,4 +1,5 @@
 const async = require('async');
+const config = require('config');
 const Declaration = require('../models/declaration');
 const {PDFDocument, rgb} = require('pdf-lib');
 const fontkit = require('@pdf-lib/fontkit');
@@ -9,7 +10,8 @@ const axios = require('axios');
 
 exports.checkForDownload = function (req, res, next) {
   Declaration.findOne({'_id': req.params.declarationId}, (err, declaration) => {
-    if (process.env.NODE_ENV !== "production" && !declaration.FULLNESS.length) {
+    // if (process.env.NODE_ENV !== "production" && !declaration.FULLNESS.length) {
+    if (config.get('paid') === false && !declaration.FULLNESS.length) {
       next();
     } else if (declaration.payment && declaration.payment.status === "succeeded") {
       next();

@@ -135,7 +135,8 @@ block content
                   each info in declaration.FULLNESS
                     p #{ info }
               if !declaration.FULLNESS.length
-                if env.NODE_ENV === "production"
+                //if env.NODE_ENV === "production"
+                if paid
                   a.continue-edit(href='/declaration/' + declaration._id + '/verify') Получить декларацию
                 else
                   a.continue-edit(href='/declaration/' + declaration._id + '/generate') Тестовая загрузка

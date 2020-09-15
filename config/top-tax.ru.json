@@ -2,5 +2,6 @@
   "ssl": {
     "key": "./ssl/top-tax.ru/private.key",
     "certificate": "./ssl/top-tax.ru/certificate.crt"
-  }
+  },
+  "paid": false
 }

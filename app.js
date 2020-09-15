@@ -4,6 +4,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const lessMiddleware = require('less-middleware');
 const favicon = require('serve-favicon');
+const config = require('config');
 
 const mongoose = require('mongoose');
 mongoose.set('debug', false);
@@ -15,6 +16,7 @@ mongoose.connect('mongodb://localhost/vn', {useNewUrlParser: true})
 
 var app = express();
 app.locals.env = process.env;
+app.locals.paid = config.get('paid');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

@@ -599,7 +599,8 @@ block content
           a.continue-edit(href='/declaration/' + declaration._id + '/step/3') заполнить
     .verify-footer
       if !declaration.FULLNESS.length
-        if env.NODE_ENV === "production"
+        //if env.NODE_ENV === "production"
+        if paid
           a(href='/declaration/' + declaration._id + '/buy') Оплатить и скачать
         else
           a(href='/declaration/' + declaration._id + '/generate') Тестовая загрузка
